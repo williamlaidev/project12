@@ -1,5 +1,4 @@
 package test.entity;
-
 import main.entity.RestaurantList;
 import main.entity.RestaurantListItem;
 import org.junit.jupiter.api.Test;
