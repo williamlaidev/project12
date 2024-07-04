@@ -1,4 +1,4 @@
-package main.entity;
+package main.java.entity;
 
 /**
  * Factory class for creating RestaurantListItem instances.

@@ -1,7 +1,7 @@
 package test.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import main.entity.SearchResult;
+import main.java.entity.SearchResult;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;

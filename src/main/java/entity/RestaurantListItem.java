@@ -1,4 +1,4 @@
-package main.entity;
+package main.java.entity;
 
 /**
  * Represents a relationship between a restaurant and a restaurant list.

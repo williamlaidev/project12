@@ -1,7 +1,7 @@
 package test.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import main.entity.User;
+import main.java.entity.User;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {

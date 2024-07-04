@@ -1,6 +1,6 @@
 package test.entity;
-import main.entity.RestaurantList;
-import main.entity.RestaurantListItem;
+import main.java.entity.RestaurantList;
+import main.java.entity.RestaurantListItem;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;

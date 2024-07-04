@@ -1,0 +1,20 @@
+{
+  "listId": "list1",
+  "userId": "user1",
+  "restaurants": [
+    {
+      "restaurantId": "restaurant1",
+      "name": "The Fancy Steakhouse",
+      "rating": 4.5,
+      "distance": 2.4,
+      "cuisine": "Steak"
+    },
+    {
+      "restaurantId": "restaurant2",
+      "name": "Sushi World",
+      "rating": 4.8,
+      "distance": 1.8,
+      "cuisine": "Japanese"
+    }
+  ]
+}
