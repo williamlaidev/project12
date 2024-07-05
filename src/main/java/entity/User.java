@@ -13,7 +13,7 @@ public class User {
      * @param userId   the unique user identifier
      * @param userName the user's name
      * @param latitude the user's current or selected latitude
-     * @param longitude the user's current or selected longitu
+     * @param longitude the user's current or selected longitude
      */
     public User(int userId, String userName, double latitude, double longitude) {
         this.userId = userId;
