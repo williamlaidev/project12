@@ -1,66 +1,21 @@
 package main.java.entity;
 
-/**
- * Represents a user of the app.
- */
-public class User {
-    private int userId;
-    private String userName;
-    private double latitude;
-    private double longitude;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-    /**
-     * @param userId   the unique user identifier
-     * @param userName the user's name
-     * @param latitude the user's current or selected latitude
-     * @param longitude the user's current or selected longitude
-     */
-    public User(int userId, String userName, double latitude, double longitude) {
-        this.userId = userId;
-        this.userName = userName;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+public interface User {
 
-    public int getUserId() {
-        return userId;
-    }
+    String getName();
 
-    public String getUserName() {
-        return userName;
-    }
+    Location getLocation();
 
-    public double getLatitude() {
-        return latitude;
-    }
+    LocalDateTime getCreationTime();
 
-    public double getLongitude() {
-        return longitude;
-    }
+    ArrayList<RestaurantList> getSavedRestaurantList();
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    void setLocation(Location location);
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    void addSavedRestaurantList(RestaurantList restaurantList);
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
-    }
+    boolean removeSavedRestaurantList(RestaurantList restaurantList);
 }

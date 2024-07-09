@@ -6,39 +6,41 @@ package main.java.entity;
 public class Restaurant {
     private int restaurantId;
     private String name;
-    private String cuisineType;
-    private double averageRating;
-    private double latitude;
-    private double longitude;
+    private Location location;
     private String address;
+    private DishType dishType;
+    private double averageRating;
     private String photoUrl;
     private String summarizedReview;
 
     /**
-     * @param restaurantId    the unique restaurant identifier
-     * @param name            the official name of the restaurant
-     * @param cuisineType     the cuisine offered by the restaurant
-     * @param averageRating   the average user rating of the restaurant
-     * @param latitude        the geographical latitude of the restaurant
-     * @param longitude       the geographical longitude of the restaurant
-     * @param address         the physical address of the restaurant
-     * @param photoUrl        the URL link to a photo of the restaurant
-     * @param summarizedReview the AI-generated review summary of the restaurant
+     * Constructs a new Restaurant with the specified details.
+     *
+     * @param restaurantId the ID of the restaurant
+     * @param name the name of the restaurant
+     * @param location the location of the restaurant
+     * @param address the address of the restaurant
+     * @param dishType the type of dishes the restaurant serves
+     * @param averageRating the average rating of the restaurant
+     * @param photoUrl the URL of the restaurant's photo (optional)
+     * @param summarizedReview a summarized review of the restaurant (optional)
+     * @throws IllegalArgumentException if any parameter constraints are violated
      */
-    public Restaurant(int restaurantId, String name, String cuisineType, double averageRating,
-                      double latitude, double longitude, String address,
-                      String photoUrl, String summarizedReview) {
+    public Restaurant(int restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
+        validateRestaurantId(restaurantId);
+        validateName(name);
+        validateAddress(address);
+        validateAverageRating(averageRating);
+
         this.restaurantId = restaurantId;
         this.name = name;
-        this.cuisineType = cuisineType;
-        this.averageRating = averageRating;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = location;
         this.address = address;
-        this.photoUrl = photoUrl;
-        this.summarizedReview = summarizedReview;
+        this.dishType = dishType;
+        this.averageRating = averageRating;
+        this.photoUrl = (photoUrl == null) ? "" : photoUrl;
+        this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
     }
-
     public int getRestaurantId() {
         return restaurantId;
     }
@@ -47,24 +49,20 @@ public class Restaurant {
         return name;
     }
 
-    public String getCuisineType() {
-        return cuisineType;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
+    public Location getLocation() {
+        return location;
     }
 
     public String getAddress() {
         return address;
+    }
+
+    public DishType getDishType() {
+        return dishType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
     }
 
     public String getPhotoUrl() {
@@ -76,39 +74,39 @@ public class Restaurant {
     }
 
     public void setRestaurantId(int restaurantId) {
+        validateRestaurantId(restaurantId);
         this.restaurantId = restaurantId;
     }
 
     public void setName(String name) {
+        validateName(name);
         this.name = name;
     }
 
-    public void setCuisineType(String cuisineType) {
-        this.cuisineType = cuisineType;
-    }
-
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void setAddress(String address) {
+        validateAddress(address);
         this.address = address;
     }
 
+    public void setDishType(DishType dishType) {
+        this.dishType = dishType;
+    }
+
+    public void setAverageRating(double averageRating) {
+        validateAverageRating(averageRating);
+        this.averageRating = averageRating;
+    }
+
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+        this.photoUrl = (photoUrl == null) ? "" : photoUrl;
     }
 
     public void setSummarizedReview(String summarizedReview) {
-        this.summarizedReview = summarizedReview;
+        this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
     }
 
     @Override
@@ -116,13 +114,37 @@ public class Restaurant {
         return "Restaurant{" +
                 "restaurantId=" + restaurantId +
                 ", name='" + name + '\'' +
-                ", cuisineType='" + cuisineType + '\'' +
-                ", averageRating=" + averageRating +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
+                ", location=" + location +
                 ", address='" + address + '\'' +
+                ", dishType=" + dishType +
+                ", averageRating=" + averageRating +
                 ", photoUrl='" + photoUrl + '\'' +
                 ", summarizedReview='" + summarizedReview + '\'' +
                 '}';
+    }
+
+    // Private helper methods for validation
+    private void validateRestaurantId(int restaurantId) {
+        if (restaurantId < 0) {
+            throw new IllegalArgumentException("Restaurant ID cannot be negative.");
+        }
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Restaurant name cannot be null or empty.");
+        }
+    }
+
+    private void validateAddress(String address) {
+        if (address == null || address.trim().isEmpty()) {
+            throw new IllegalArgumentException("Restaurant address cannot be null or empty.");
+        }
+    }
+
+    private void validateAverageRating(double averageRating) {
+        if (averageRating < 0 || averageRating > 5) {
+            throw new IllegalArgumentException("Average rating must be between 0 and 5.");
+        }
     }
 }
