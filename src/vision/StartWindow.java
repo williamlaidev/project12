@@ -18,7 +18,11 @@ public class StartWindow {
         JButton searchButton=new JButton("Search");
         int[] searchPosition = CalculatePosition.Search(width, height);
         searchButton.setBounds(searchPosition[0],searchPosition[1],searchPosition[2],searchPosition[3]);
-        searchButton.addActionListener(e -> searchField.setText("Welcome to Javatpoint."));
+        searchButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                searchField.setText("Welcome to Javatpoint.");
+            }
+        });
 
         JLabel searchHint = new JLabel("Add your desired dish here!");
         searchHint.setBounds(100,200, 500,30);
