@@ -1,24 +1,13 @@
 package vision;
-import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class StartWindow {
-    private static int width;
-    private static int height;
-    private ArrayList CalculatePosition(String type) {
-        ArrayList result = new ArrayList();
-        if (type.equals("Search")) {
-            result.add(width/3*2);
-            result.add(height/3*2);
-        }
-        return result;
-    };
+
     public static void main(String[] args) {
 
-        width = 1920;
-        height = 1080;
+        int width = 1920;
+        int height = 1080;
 
 
         JFrame startMenu=new JFrame("Start Window");
@@ -41,7 +30,7 @@ public class StartWindow {
         startMenu.add(searchButton);
         startMenu.add(searchField);
         startMenu.add(searchHint);
-        startMenu.setSize(width,height);
+        startMenu.setSize(width, height);
         startMenu.setLayout(null);
         startMenu.setVisible(true);
         startMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
