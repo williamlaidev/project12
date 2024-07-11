@@ -1,6 +1,6 @@
 package vision;
 
-public class main {
+public class Start {
     public static void main(String[] args) {
         new StartFrame();
     }
