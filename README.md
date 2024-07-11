@@ -8,6 +8,7 @@ Project 12 aims to provide users with a tool to quickly get a glance at the pros
 - [Features](#features)
 - [Usage](#usage)
 - [Roadmap](#roadmap)
+- [UML Diagram](#uml-diagram)
 - [Technologies Used](#technologies-used)
 - [API Documentation](#api-documentation)
 
@@ -63,6 +64,9 @@ Project 12 aims to provide users with a tool to quickly get a glance at the pros
     - Add multiple users (create and switch between users).
 
 - **Enhance the user interface:**
+
+## UML Diagrams
+Visual representations of class and sequence diagrams created using [Lucidchart](https://lucid.app/lucidchart/a25d3238-67e7-49fb-b829-9c842485de22/edit?invitationId=inv_403f0f3f-3919-487a-9133-a82ce071034f).
 
 ## Technologies Used
 - **Programming Language:** Java
