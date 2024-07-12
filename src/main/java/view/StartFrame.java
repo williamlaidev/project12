@@ -1,4 +1,4 @@
-package vision;
+package main.java.view;
 import java.awt.event.*;
 import javax.swing.*;
 

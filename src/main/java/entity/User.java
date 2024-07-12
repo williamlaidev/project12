@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 public interface User {
 
+    int getId();
+
     String getName();
 
     Location getLocation();
@@ -13,7 +15,7 @@ public interface User {
 
     ArrayList<RestaurantList> getSavedRestaurantList();
 
-    void setLocation(Location location);
+    void resetLocation(Location location);
 
     void addSavedRestaurantList(RestaurantList restaurantList);
 
