@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class API {
+public class NearbyRestaurantFinder {
     private static final String GEOLOCATION_API_URL = "https://www.googleapis.com/geolocation/v1/geolocate?key="; //put your API key after key=
     private static final String PLACES_API_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"; // end point
     private static final String API_KEY = ""; // put your API key
