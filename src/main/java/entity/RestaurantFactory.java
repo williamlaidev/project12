@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import java.util.List;
+
 /**
  * Factory class for creating Restaurant instances.
  */
@@ -17,7 +19,7 @@ public class RestaurantFactory {
      * @param summarizedReview the AI-generated review summary of the restaurant
      * @return a new Restaurant object
      */
-    public static Restaurant create(int restaurantId, String name, String cuisineType,
+    public static Restaurant create(String restaurantId, String name, List<String> cuisineType,
                                     double averageRating, double latitude, double longitude,
                                     String address, String photoUrl, String summarizedReview) {
         return new Restaurant(restaurantId, name, cuisineType, averageRating, latitude, longitude, address, photoUrl, summarizedReview);

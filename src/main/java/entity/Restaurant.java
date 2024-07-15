@@ -1,12 +1,14 @@
 package main.java.entity;
 
+import java.util.List;
+
 /**
  * Represents a dining establishment.
  */
 public class Restaurant {
-    private int restaurantId;
+    private String restaurantId;
     private String name;
-    private String cuisineType;
+    private List<String> cuisineType;
     private double averageRating;
     private double latitude;
     private double longitude;
@@ -25,7 +27,7 @@ public class Restaurant {
      * @param photoUrl        the URL link to a photo of the restaurant
      * @param summarizedReview the AI-generated review summary of the restaurant
      */
-    public Restaurant(int restaurantId, String name, String cuisineType, double averageRating,
+    public Restaurant(String restaurantId, String name, List<String> cuisineType, double averageRating,
                       double latitude, double longitude, String address,
                       String photoUrl, String summarizedReview) {
         this.restaurantId = restaurantId;
@@ -39,7 +41,7 @@ public class Restaurant {
         this.summarizedReview = summarizedReview;
     }
 
-    public int getRestaurantId() {
+    public String getRestaurantId() {
         return restaurantId;
     }
 
@@ -47,7 +49,7 @@ public class Restaurant {
         return name;
     }
 
-    public String getCuisineType() {
+    public List<String> getCuisineType() {
         return cuisineType;
     }
 
@@ -75,7 +77,7 @@ public class Restaurant {
         return summarizedReview;
     }
 
-    public void setRestaurantId(int restaurantId) {
+    public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
     }
 
@@ -83,7 +85,7 @@ public class Restaurant {
         this.name = name;
     }
 
-    public void setCuisineType(String cuisineType) {
+    public void setCuisineType(List<String> cuisineType) {
         this.cuisineType = cuisineType;
     }
 
