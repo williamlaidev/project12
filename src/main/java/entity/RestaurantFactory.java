@@ -15,7 +15,7 @@ public class RestaurantFactory {
      * @param summarizedReview a summarized review of the restaurant
      * @return a new Restaurant object initialized with the given parameters
      */
-    public static Restaurant createRestaurant(int restaurantId, String name, Location location, String address,
+    public static Restaurant createRestaurant(String restaurantId, String name, Location location, String address,
                                               DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
         return new Restaurant(restaurantId, name, location, address, dishType, averageRating, photoUrl, summarizedReview);
     }
