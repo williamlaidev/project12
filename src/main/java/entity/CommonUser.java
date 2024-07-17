@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Represents a common user of the application.
  */
 public class CommonUser implements User {
+    private int id;
     private String name;
     private Location location;
     private LocalDateTime creationTime;
@@ -20,13 +21,19 @@ public class CommonUser implements User {
      * @param creationTime The creation time of the user.
      * @throws IllegalArgumentException if any parameter constraints are violated
      */
-    public CommonUser(String name, Location location, LocalDateTime creationTime) {
+    public CommonUser(int id, String name, Location location, LocalDateTime creationTime) {
         validateName(name);
 
+        this.id = id;
         this.name = name;
         this.location = location;
         this.creationTime = creationTime;
         this.savedRestaurantList = new ArrayList<>();
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -50,7 +57,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void setLocation(Location location) {
+    public void resetLocation(Location location) {
         this.location = location;
     }
 

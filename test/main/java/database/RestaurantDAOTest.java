@@ -22,17 +22,17 @@ class RestaurantDAOTest {
             conn = DriverManager.getConnection(url);
             restaurantDAO = new RestaurantDAO(conn);
 
-            // Create a test table (if needed)
+            // Create a testapi table (if needed)
             restaurantDAO.createRestaurantTable(); // This method should create your restaurants table
         } catch (SQLException e) {
             e.printStackTrace();
-            fail("Failed to connect to database or create test table.");
+            fail("Failed to connect to database or create testapi table.");
         }
     }
 
     @AfterEach
     void tearDown() {
-        // Close connection after each test
+        // Close connection after each testapi
         try {
             if (conn != null) {
                 conn.close();
@@ -44,7 +44,7 @@ class RestaurantDAOTest {
 
     @Test
     void testInsertRestaurant() {
-        // Create a test restaurant object
+        // Create a testapi restaurant object
         Restaurant restaurant = new Restaurant();
         restaurant.setName("Test Restaurant");
         restaurant.setLatitude(37.7749);
