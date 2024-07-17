@@ -4,7 +4,7 @@ package main.java.entity;
  * Represents a dining establishment.
  */
 public class Restaurant {
-    private int restaurantId;
+    private String restaurantId;
     private String name;
     private Location location;
     private String address;
@@ -26,8 +26,8 @@ public class Restaurant {
      * @param summarizedReview a summarized review of the restaurant (optional)
      * @throws IllegalArgumentException if any parameter constraints are violated
      */
-    public Restaurant(int restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
-        validateRestaurantId(restaurantId);
+    public Restaurant(String restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
+//        validateRestaurantId(Integer.parseInt(restaurantId));
         validateName(name);
         validateAddress(address);
         validateAverageRating(averageRating);
@@ -38,10 +38,10 @@ public class Restaurant {
         this.address = address;
         this.dishType = dishType;
         this.averageRating = averageRating;
-        this.photoUrl = (photoUrl == null) ? "" : photoUrl;
+        this.photoUrl = photoUrl;
         this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
     }
-    public int getRestaurantId() {
+    public String getRestaurantId() {
         return restaurantId;
     }
 
@@ -73,8 +73,8 @@ public class Restaurant {
         return summarizedReview;
     }
 
-    public void setRestaurantId(int restaurantId) {
-        validateRestaurantId(restaurantId);
+    public void setRestaurantId(String restaurantId) {
+        validateRestaurantId(Integer.parseInt(restaurantId));
         this.restaurantId = restaurantId;
     }
 
