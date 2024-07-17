@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="site-packages">
+    <CLASSES />
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/myenv/lib/python3.10/site-packages" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>
