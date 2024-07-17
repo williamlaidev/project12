@@ -1,31 +1,32 @@
 package main.java.interface_adapter;
 
-import main.java.use_case.SearchInputBoundary;
-import main.java.use_case.SearchInputData;
+
+
+import main.java.interface_adapter.SearchController;
+import main.java.interface_adapter.SearchViewModel;
 import main.java.view.SearchView;
+import main.java.use_case.SimpleSearchInteractor;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Start {
     public static void main(String[] args) {
-        JFrame application = new JFrame("Search Example");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // Create the SimpleSearchInteractor
+        SimpleSearchInteractor simpleSearchInteractor = new SimpleSearchInteractor();
 
-        CardLayout cardLayout = new CardLayout();
-        JPanel views = new JPanel(cardLayout);
-        application.add(views);
-
+        // Create the controller and view model
+        SearchController searchController = new SearchController(simpleSearchInteractor);
         SearchViewModel searchViewModel = new SearchViewModel();
-        SearchInputBoundary searchInputBoundary = new SearchInputBoundary() {
-            @Override
-            public void execute(SearchInputData searchInputData) {
 
-            }
-        };
-        SearchController searchController = new SearchController(searchInputBoundary);
+        // Create the SearchView
         SearchView searchView = new SearchView(searchController, searchViewModel);
-        views.add(searchView, searchView.viewName);
+
+        // Set up the JFrame
+        JFrame frame = new JFrame("Search Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+        frame.setContentPane(searchView);
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.setVisible(true);
     }
 }
-
