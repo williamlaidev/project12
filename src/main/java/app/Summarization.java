@@ -15,7 +15,7 @@ public class Summarization {
 
     private static final Logger LOGGER = Logger.getLogger(Summarization.class.getName());
     private static final String API_URL = "https://api.openai.com/v1/completions";
-    private static final String API_KEY = "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";
+    private static final String API_KEY =
 
     public static Summary summarizeText(String text) throws IOException {
         OkHttpClient client = new OkHttpClient();
