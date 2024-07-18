@@ -30,7 +30,7 @@ public class GeminiAPIImpl implements GeminiAPI {
      * @throws InterruptedException If the thread is interrupted while waiting.
      */
     public String summarizeText(String inputString) throws InterruptedException {
-        String inputPrompt = "Please summarize the following text, or make it shorter: " + inputString;
+        String inputPrompt = "Please summarize the following text in one sentence: " + inputString;
 
         String output = null;
         Instant lastRequestTime = Instant.now().minusMillis(REQUEST_INTERVAL_MS);
