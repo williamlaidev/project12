@@ -123,6 +123,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
             g.setColor(Color.RED);
             g.drawOval(mousePosition.x - 5, mousePosition.y - 5, 10, 10);
             g.drawString("Click Position", mousePosition.x + 10, mousePosition.y);
+
         }
     }
 }
