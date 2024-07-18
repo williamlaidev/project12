@@ -1,9 +1,9 @@
 package main;
 
-import main.java.entity.DishType;
-import main.java.entity.Location;
-import main.java.entity.Restaurant;
-import main.java.entity.RestaurantFactory;
+import entity.DishType;
+import entity.Location;
+import entity.Restaurant;
+import entity.RestaurantFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
