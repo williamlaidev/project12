@@ -1,6 +1,6 @@
-package main.java.app.dao;
+package app.dao;
 
-import main.java.entity.CommonUser;
+import entity.CommonUser;
 import java.util.List;
 
 public interface UserDao {

@@ -1,6 +1,6 @@
-package main.java.app.dao;
+package app.dao;
 
-import main.java.entity.Review;
+import entity.Review;
 import java.util.List;
 
 public interface ReviewDao {

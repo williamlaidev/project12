@@ -1,7 +1,7 @@
-package main.java.view;
+package view;
 
-import main.java.interface_adapter.SearchController;
-import main.java.interface_adapter.SearchViewModel;
+import interface_adapter.SearchController;
+import interface_adapter.SearchViewModel;
 
 import javax.swing.*;
 import java.awt.*;

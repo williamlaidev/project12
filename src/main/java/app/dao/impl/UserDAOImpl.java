@@ -1,8 +1,8 @@
-package main.java.app.dao.impl;
+package app.dao.impl;
 
 import app.dao.UserDao;
-import main.java.entity.CommonUser;
-import main.java.entity.Location;
+import entity.CommonUser;
+import entity.Location;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

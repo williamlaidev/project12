@@ -1,7 +1,7 @@
-package main.java.app.dao.impl;
+package app.dao.impl;
 
 import app.dao.SearchQueryDao;
-import main.java.entity.SearchQuery;
+import entity.SearchQuery;
 
 import java.sql.Connection;
 import java.util.ArrayList;

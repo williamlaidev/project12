@@ -1,11 +1,7 @@
-package main.java.interface_adapter;
+package interface_adapter;
 
-
-
-import main.java.interface_adapter.SearchController;
-import main.java.interface_adapter.SearchViewModel;
-import main.java.view.SearchView;
-import main.java.use_case.SimpleSearchInteractor;
+import view.SearchView;
+import use_case.SimpleSearchInteractor;
 
 import javax.swing.*;
 

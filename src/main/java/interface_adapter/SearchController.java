@@ -1,7 +1,7 @@
-package main.java.interface_adapter;
+package interface_adapter;
 
-import main.java.use_case.SearchInputBoundary;
-import main.java.use_case.SearchInputData;
+import use_case.SearchInputBoundary;
+import use_case.SearchInputData;
 
 import java.awt.*;
 

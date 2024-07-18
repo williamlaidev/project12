@@ -1,8 +1,6 @@
-package main.java.view;
-
+package view;
 
 public class CalculatePosition {
-
 
     public static int[] SearchButton(int windowWidth, int windowHeight)  {
         int x = windowWidth / 5 + 500;

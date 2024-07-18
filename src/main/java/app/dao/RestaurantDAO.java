@@ -1,6 +1,6 @@
-package main.java.app.dao;
+package app.dao;
 
-import main.java.entity.Restaurant;
+import entity.Restaurant;
 import java.util.List;
 
 public interface RestaurantDao {

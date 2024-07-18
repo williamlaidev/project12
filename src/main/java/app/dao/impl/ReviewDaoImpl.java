@@ -1,7 +1,7 @@
-package main.java.app.dao.impl;
+package app.dao.impl;
 
 import app.dao.ReviewDao;
-import main.java.entity.Review;
+import entity.Review;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

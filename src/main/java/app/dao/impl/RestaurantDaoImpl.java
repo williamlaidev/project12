@@ -1,9 +1,9 @@
-package main.java.app.dao.impl;
+package app.dao.impl;
 
 import app.dao.RestaurantDao;
-import main.java.entity.Restaurant;
-import main.java.entity.Location;
-import main.java.entity.DishType;
+import entity.Restaurant;
+import entity.Location;
+import entity.DishType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

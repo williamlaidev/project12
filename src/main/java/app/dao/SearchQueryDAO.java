@@ -1,6 +1,6 @@
-package main.java.app.dao;
+package app.dao;
 
-import main.java.entity.SearchQuery;
+import entity.SearchQuery;
 import java.util.List;
 
 public interface SearchQueryDao {
