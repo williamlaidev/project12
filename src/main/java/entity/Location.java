@@ -1,4 +1,4 @@
-package main.java.entity;
+package entity;
 
 /**
  * Represents a geographical location with latitude and longitude coordinates.

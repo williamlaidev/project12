@@ -1,4 +1,4 @@
-package main.java.entity;
+package entity;
 
 /**
  * Enum representing different types of dishes that a restaurant can offer.
