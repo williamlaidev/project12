@@ -43,4 +43,8 @@ public class PlacesAPI {
 
         return new JSONObject(response.toString());
     }
+
+    public String getPhotoUrl(String photoReference) {
+        return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&key=" + API_KEY;
+    }
 }
