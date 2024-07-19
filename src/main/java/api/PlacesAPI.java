@@ -44,6 +44,12 @@ public class PlacesAPI {
         return new JSONObject(response.toString());
     }
 
+    /**
+     * Make the photo URL for a given photo reference.
+     *
+     * @param photoReference the photo reference from the Places API
+     * @return the complete URL to access the photo
+     */
     public String getPhotoUrl(String photoReference) {
         return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&key=" + API_KEY;
     }
