@@ -1,81 +1,136 @@
 # Project 12
 
-Project 12 is a Java-based software project developed as part of the CSC207 Software Design course. This project allows users to search for highly-rated restaurants and view summarized reviews sourced from Yelp. It features a map interface for searching, summarized reviews for each restaurant, and the ability to save unlimited lists of restaurants.
+Project 12 is a Java-based software application developed for the CSC207 Software Design course. It allows users to search for highly-rated restaurants, view their locations on a map, and read summarized reviews. The application integrates Google Maps and Gemini APIs, featuring an interactive map interface, summarized restaurant reviews, the ability to save unlimited restaurant lists, and support for multiple users.
 
-Project 12 aims to provide users with a tool to quickly get a glance at the pros and cons of highly-rated restaurants without having to read multiple reviews.
+Currently, users can search for restaurants and view summarized reviews with map visualization. Integration of these features is still in progress. Future updates will focus on finalizing the user interface, implementing saved list functionality, and adding support for multiple users.
 
 ## Table of Contents
-- [Features](#features)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [UML Diagram](#uml-diagram)
-- [Technologies Used](#technologies-used)
-- [API Documentation](#api-documentation)
 
-## Features
-- Displays restaurants with ratings higher than 3 stars.
-- Map view for searching restaurants.
-- Summarized reviews for each restaurant.
-- Customizable saved lists for users.
-- Supports multiple user accounts on one device.
+1. [Installation](#installation)
+2. [Configuration](#configuration)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [Credits](#credits)
+6. [Additional Information](#additional-information)
+
+## Installation
+
+To set up Project 12 on your local machine, follow these steps:
+
+### 1. Clone the Repository
+
+Open your terminal or command prompt and run:
+```bash
+git clone https://github.com/your-repository-url.git
+```
+
+### 2. Set Up Python Virtual Environment
+
+**2.1 Navigate to the Project Directory**
+
+Change to the project directory:
+```bash
+cd /path/to/project12
+```
+
+**2.2 Create a Python Virtual Environment**
+
+Create a virtual environment with:
+```bash
+python -m venv myenv
+```
+
+**2.3 Activate the Virtual Environment**
+
+- On Windows:
+  ```bash
+  myenv\Scripts\activate
+  ```
+- On Unix or MacOS:
+  ```bash
+  source myenv/bin/activate
+  ```
+
+**2.4 Install Required Python Packages**
+
+Install the necessary Python packages:
+```bash
+pip install -r requirements.txt
+```
+
+## Configuration
+
+Before running the program, configure the following settings:
+
+### Setting Up API Keys
+
+1. Navigate to the `.env` file in the project directory.
+2. Obtain API keys from the Gemini API and Google Maps API, and add them to the `.env` file in the following format:
+   ```
+   GEMINI_API_KEY=your_gemini_api_key
+   GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+   ```
 
 ## Usage
-### Searching Restaurants
-1. Select a point on the map.
-2. Choose a distance range and cuisine type.
-3. The map will display restaurants within the selected range and cuisine type.
-4. Click on a restaurant to view more information, including a summarized review.
 
-### Saving Restaurants
-1. Users can create multiple lists to save their favorite restaurants.
+Here's how to use the program, along with common use cases:
 
-### User Switch
-1. Multiple users can be created and switched between on a single device, allowing multiple people to use the application independently.
+### Search Restaurants by Distance and Dish Type
 
-## Roadmap
-- **Identify and create entities:**
-    - Set up entity and attributes for users.
-    - Set up entity and attributes for restaurants.
-    - Set up entity and attributes for searches.
-    - Set up entity and attributes for the map.
+1. Navigate to the use case package in your IDE.
+2. Run the relevant class for searching restaurants based on distance and dish type.
 
-- **Set up API and database usage:**
-    - Set up API for getting reviews (Yelp).
-    - Set up API for summarizing text (ChatGPT).
-    - Set up database for storing restaurant information (SQLite).
+### Search Restaurants by Distance and Nearest/Top Rated
 
-- **Set up the view window:**
-    - Create a search view with map, filter, and result list (Java Swing).
-    - Create a view for restaurant information (Java Swing).
+1. Navigate to the use case package in your IDE.
+2. Run the relevant class for searching restaurants based on distance and rating.
 
-- **Set up DAO (Data Access Object):**
-    - DAO for connecting entities to the database.
-    - DAO for entity and API usage.
+### Get Restaurant Summarized Review
 
-- **Implement use cases for Minimum Viable Product:**
-    - Implement searching for restaurants with certain criteria from API (Yelp).
-    - Implement generating summarized reviews with pros and cons from multiple reviews (ChatGPT).
-    - Implement a map view with moving and displaying restaurants.
+1. Navigate to the use case package in your IDE.
+2. Run the relevant class to get summarized reviews for a restaurant.
 
-- **Implement advanced functions:**
-    - Add set point on the map for users.
-    - Add filtering options (distance, cuisine type, open hours, price).
-    - Add saved list function for users.
-    - Add multiple users (create and switch between users).
+### Navigate on Map View
 
-- **Enhance the user interface:**
+1. Navigate to the use case package in your IDE.
+2. Run the relevant class to view restaurant locations on the map.
 
-## UML Diagrams
-Visual representations of class and sequence diagrams created using [Lucidchart](https://lucid.app/lucidchart/a25d3238-67e7-49fb-b829-9c842485de22/edit?invitationId=inv_403f0f3f-3919-487a-9133-a82ce071034f).
+## Contributing
 
-## Technologies Used
-- **Programming Language:** Java
-- **Libraries Used:** [List specific Java libraries here]
-- **APIs Used:**
-    - Yelp API
-    - ChatGPT API
-- **Database Used:** SQLite
+For guidelines on contributing to the project, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## API Documentation
-- **Yelp API:** Used to fetch restaurant data and reviews.
-- **ChatGPT API:** Used for generating summarized reviews.
+## Credits
+
+Contributors to this project, listed in alphabetical order:
+
+**Brynn**
+- Project Design
+- Entity Implementation
+- OpenAI API Integration
+
+**Frank**
+- Project Design
+- Entity Implementation
+- Google Maps API Integration
+- Java Swing View Module
+
+**Kera**
+- Project Design
+- Entity Implementation
+- Google Maps API Integration
+
+**William**
+- Project Management
+- Documentation
+- Project Design
+- Entity Implementation
+- Gemini API Integration
+- SQLite Database Integration
+
+Special thanks to TA Howard and Instructor Yasaman for their guidance.
+
+## Additional Information
+
+### UML Diagrams
+
+Visual representations of class and sequence diagrams are available [here](https://lucid.app/lucidchart/a25d3238-67e7-49fb-b829-9c842485de22/edit?invitationId=inv_403f0f3f-3919-487a-9133-a82ce071034f).
