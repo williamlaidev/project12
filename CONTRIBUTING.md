@@ -11,7 +11,7 @@
 
 Project12 mainly uses Java, with some Python for the Gemini API integration. We utilize the following technologies and tools:
 
-- **APIs**: Gemini API, Yelp API
+- **APIs**: Gemini API, Yelp API, Google Places API, GeoLocation API
 - **Database**: SQLite
 - **View**: Java Swing
 
