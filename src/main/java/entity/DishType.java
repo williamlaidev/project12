@@ -2,8 +2,11 @@ package entity;
 
 /**
  * Enum representing different types of dishes that a restaurant can offer.
+ * Each type is associated with one or more API types used to query restaurant information.
  */
 public enum DishType {
+
+    // Enum constants, each associated with one or more API type strings.
     AMERICAN("american_restaurant"),
     BAKERY("bakery"),
     BAR("bar"),
@@ -35,16 +38,33 @@ public enum DishType {
     VEGETARIAN("vegetarian_restaurant", "vegan_restaurant"),
     VIETNAMESE("vietnamese_restaurant");
 
+    // Array of API types associated with each DishType enum constant.
     private final String[] apiTypes;
 
+    /**
+     * Constructor for the enum. Associates one or more API type strings with the DishType.
+     *
+     * @param apiTypes Array of API type strings.
+     */
     DishType(String... apiTypes) {
         this.apiTypes = apiTypes;
     }
 
+    /**
+     * Gets the array of API types associated with this DishType.
+     *
+     * @return Array of API type strings.
+     */
     public String[] getApiTypes() {
         return apiTypes;
     }
 
+    /**
+     * Finds the DishType corresponding to the given API type string.
+     *
+     * @param apiType The API type string to match.
+     * @return The corresponding DishType if a match is found, otherwise null.
+     */
     public static DishType fromApiType(String apiType) {
         for (DishType type : values()) {
             for (String typeString : type.apiTypes) {
@@ -53,6 +73,6 @@ public enum DishType {
                 }
             }
         }
-        return null;
+        return null; // Return null if no match is found.
     }
 }
