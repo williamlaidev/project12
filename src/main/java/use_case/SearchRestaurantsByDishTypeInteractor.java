@@ -2,25 +2,26 @@ package use_case;
 
 import entity.Location;
 import entity.Restaurant;
-import interface_adapter.PlacesAPIGateway;
+import interface_adapter.IPlacesAPIGateway;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchRestaurantsByDishTypeInteractor implements SearchRestaurantsByDishType {
 
-    private final PlacesAPIGateway placesAPIGateway;
+    private final IPlacesAPIGateway placesAPIGateway;
 
-    public SearchRestaurantsByDishTypeInteractor(PlacesAPIGateway placesAPIGateway) {
+    public SearchRestaurantsByDishTypeInteractor(IPlacesAPIGateway placesAPIGateway) {
         this.placesAPIGateway = placesAPIGateway;
     }
 
     @Override
     public List<Restaurant> search(Location location, String dishType, int radius, int maxResults) {
+        List<Restaurant> results = new ArrayList<>();
         try {
-            return placesAPIGateway.getNearbyRestaurantsByDishType(location, dishType, radius, maxResults);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            results = placesAPIGateway.getNearbyRestaurantsByDishType(location, dishType, radius, maxResults);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        return results;
     }
 }
