@@ -4,16 +4,24 @@ import domain.RestaurantRepository;
 import data_access.RestaurantDataAccess;
 import entity.Location;
 import entity.Restaurant;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * In-memory implementation of {@link RestaurantRepository} that stores restaurants in a list.
+ * This class supports CRUD operations on restaurants and can persist data to a data source if needed.
+ */
 public class InMemoryRestaurantRepository implements RestaurantRepository {
     private final List<Restaurant> restaurantStore = new ArrayList<>();
     private final RestaurantDataAccess dataAccess;
     private boolean isDirty = false;
 
+    /**
+     * Constructs an {@link InMemoryRestaurantRepository} with the specified data access object.
+     *
+     * @param dataAccess the {@link RestaurantDataAccess} used for loading and saving restaurant data.
+     */
     public InMemoryRestaurantRepository(RestaurantDataAccess dataAccess) {
         this.dataAccess = dataAccess;
         this.restaurantStore.addAll(dataAccess.loadRestaurants());
@@ -51,10 +59,8 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
             return false; // Restaurant with the same ID already exists
         }
         boolean added = restaurantStore.add(restaurant);
-        if (added) {
-            isDirty = true;
-        }
-        return added;
+        isDirty = true;
+        return true;
     }
 
     @Override
@@ -94,6 +100,10 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
         return removed;
     }
 
+    /**
+     * Saves the current state of the repository to the data source if changes have been made.
+     * This method is called to persist any updates made to the in-memory data store.
+     */
     public void saveIfDirty() {
         if (isDirty) {
             dataAccess.saveRestaurants(restaurantStore);
