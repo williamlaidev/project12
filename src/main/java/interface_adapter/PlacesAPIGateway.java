@@ -1,19 +1,17 @@
 package interface_adapter;
 
-import api.GeolocationAPI;
-import api.PlacesAPI;
 import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
 import entity.RestaurantFactory;
+import api.GeolocationAPI;
+import api.PlacesAPI;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
-public class PlacesAPIGateway {
+public class PlacesAPIGateway implements IPlacesAPIGateway {
     private final GeolocationAPI geolocationAPI;
     private final PlacesAPI placesAPI;
 
@@ -22,6 +20,7 @@ public class PlacesAPIGateway {
         this.placesAPI = new PlacesAPI();
     }
 
+    @Override
     public Location getCurrentLocation() throws Exception {
         JSONObject locationJson = geolocationAPI.getCurrentLocation();
         double latitude = locationJson.getJSONObject("location").getDouble("lat");
@@ -29,25 +28,23 @@ public class PlacesAPIGateway {
         return new Location(latitude, longitude);
     }
 
-    public List<Restaurant> getNearbyRestaurants(Location currentLocation, int radius, int maxResults) throws Exception {
+    @Override
+    public List<Restaurant> getNearbyRestaurants(Location location, int radius, int maxResults) throws Exception {
         List<Restaurant> restaurants = new ArrayList<>();
-        JSONObject response = placesAPI.getNearbyRestaurants(currentLocation.getLatitude(), currentLocation.getLongitude(), radius);
-
+        JSONObject response = placesAPI.getNearbyRestaurants(location.getLatitude(), location.getLongitude(), radius);
         parseRestaurantsFromResponse(restaurants, response, maxResults, null);
-
         return restaurants;
     }
 
-    public List<Restaurant> getNearbyRestaurantsByDishType(Location currentLocation, String dishType, int radius, int maxResults) throws Exception {
+    @Override
+    public List<Restaurant> getNearbyRestaurantsByDishType(Location location, String dishType, int radius, int maxResults) throws Exception {
         List<Restaurant> restaurants = new ArrayList<>();
-        JSONObject response = placesAPI.getNearbyRestaurants(currentLocation.getLatitude(), currentLocation.getLongitude(), radius);
-
+        JSONObject response = placesAPI.getNearbyRestaurants(location.getLatitude(), location.getLongitude(), radius);
         parseRestaurantsFromResponse(restaurants, response, maxResults, dishType);
-
         return restaurants;
     }
 
-    private void parseRestaurantsFromResponse(List<Restaurant> restaurants, JSONObject response, int maxResults, String dishTypeFilter) throws JSONException {
+    private void parseRestaurantsFromResponse(List<Restaurant> restaurants, JSONObject response, int maxResults, String dishTypeFilter) throws Exception {
         JSONArray places = response.getJSONArray("results");
 
         for (int i = 0; i < Math.min(places.length(), maxResults); i++) {
