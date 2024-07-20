@@ -28,13 +28,15 @@ public class MapImageInteractor {
      * @param latitude  The latitude of the location.
      * @param longitude The longitude of the location.
      * @param zoom      The zoom level of the map.
+     * @param width     The width of the desired map image in pixels.
+     * @param height    The height of the desired map image in pixels.
      * @return boolean indicating the success of the operation.
      */
-    public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom) {
+    public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom, int width, int height) {
         try {
             ApiKeyReader apiKeyReader = new ApiKeyReader("MapImageAPI", "src/main/java/api/API_KEYS.txt");
             String apiKey = apiKeyReader.readApiKey();
-            byte[] imageData = mapImageAPI.getMapImage(latitude, longitude, zoom, apiKey);
+            byte[] imageData = mapImageAPI.getMapImage(latitude, longitude, zoom, width, height, apiKey);
             saveImage(imageData, "src/main/java/map_images/map.png");
             return true;
         } catch (ApiKeyReader.ApiKeyFileNotFoundException e) {

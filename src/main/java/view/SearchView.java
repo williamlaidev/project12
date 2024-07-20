@@ -9,6 +9,10 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * SearchView class is responsible for presenting the components of the search interface.
+ * It includes input fields, buttons, and a map area where users can click to set a location.
+ */
 public class SearchView extends JPanel implements ActionListener, PropertyChangeListener, MouseListener {
     public final String viewName = "search";
 
@@ -20,14 +24,15 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
     private JButton searchButton = new JButton("Search");
 
-    private static final int MAP_AREA_X = 10;
-    private static final int MAP_AREA_Y = 30;
-    private static final int MAP_AREA_WIDTH = 200;
-    private static final int MAP_AREA_HEIGHT = 200;
-
     private JComboBox<String> dishTypeComboBox;
     private static final String[] dishTypeList = {"dish1", "dish2", "dish3", "dish4", "dish5"};
 
+    /**
+     * Constructs a SearchView with the specified controller and view model.
+     *
+     * @param controller      The controller to handle actions.
+     * @param searchViewModel The view model to manage data and state.
+     */
     public SearchView(SearchController controller, SearchViewModel searchViewModel) {
         this.searchController = controller;
         this.searchViewModel = searchViewModel;
@@ -36,30 +41,36 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         setLayout(null); // Disable layout manager for absolute positioning
 
         JLabel title = new JLabel(searchViewModel.TITLE_LABEL);
-        title.setBounds(10, 0, 200, 20); // Manually set position and size
+        title.setBounds(SearchViewComponentsPosition.TITLE_X, SearchViewComponentsPosition.TITLE_Y,
+                SearchViewComponentsPosition.TITLE_WIDTH, SearchViewComponentsPosition.TITLE_HEIGHT);
         add(title);
 
         JLabel distanceLabel = new JLabel(searchViewModel.DISTANCE_LABEL);
-        distanceLabel.setBounds(10, 250, 100, 20); // Manually set position and size
+        distanceLabel.setBounds(SearchViewComponentsPosition.DISTANCE_LABEL_X, SearchViewComponentsPosition.DISTANCE_LABEL_Y,
+                SearchViewComponentsPosition.DISTANCE_LABEL_WIDTH, SearchViewComponentsPosition.DISTANCE_LABEL_HEIGHT);
         add(distanceLabel);
 
-        distanceInputField.setBounds(120, 250, 150, 20); // Manually set position and size
+        distanceInputField.setBounds(SearchViewComponentsPosition.DISTANCE_INPUT_X, SearchViewComponentsPosition.DISTANCE_INPUT_Y,
+                SearchViewComponentsPosition.DISTANCE_INPUT_WIDTH, SearchViewComponentsPosition.DISTANCE_INPUT_HEIGHT);
         add(distanceInputField);
 
         JLabel dishTypeLabel = new JLabel("Choose Dish Type:");
-        dishTypeLabel.setBounds(10, 280, 200, 20); // Manually set position and size
+        dishTypeLabel.setBounds(SearchViewComponentsPosition.DISH_TYPE_LABEL_X, SearchViewComponentsPosition.DISH_TYPE_LABEL_Y,
+                SearchViewComponentsPosition.DISH_TYPE_LABEL_WIDTH, SearchViewComponentsPosition.DISH_TYPE_LABEL_HEIGHT);
         add(dishTypeLabel);
 
         dishTypeComboBox = new JComboBox<>(dishTypeList);
-        dishTypeComboBox.setBounds(120, 280, 150, 20); // Manually set position and size
+        dishTypeComboBox.setBounds(SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_X, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_Y,
+                SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_WIDTH, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_HEIGHT);
         add(dishTypeComboBox);
 
         searchButton = new JButton(searchViewModel.SEARCH_BUTTON_LABEL);
-        searchButton.setBounds(10, 310, 100, 20); // Manually set position and size
+        searchButton.setBounds(SearchViewComponentsPosition.SEARCH_BUTTON_X, SearchViewComponentsPosition.SEARCH_BUTTON_Y,
+                SearchViewComponentsPosition.SEARCH_BUTTON_WIDTH, SearchViewComponentsPosition.SEARCH_BUTTON_HEIGHT);
         searchButton.addActionListener(
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(searchButton)) {
+                    public void actionPerformed(ActionEvent event) {
+                        if (event.getSource().equals(searchButton)) {
                             searchController.execute(mousePosition,
                                     distanceInputField.getText(),
                                     (String) dishTypeComboBox.getSelectedItem()
@@ -73,56 +84,99 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         addMouseListener(this);
     }
 
+    /**
+     * Handles mouse click events to set the mouse position if within the map area.
+     *
+     * @param mouseEvent The mouse event.
+     */
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
-        if (x >= MAP_AREA_X && x <= MAP_AREA_X + MAP_AREA_WIDTH && y >= MAP_AREA_Y && y <= MAP_AREA_Y + MAP_AREA_HEIGHT) {
+        if (x >= SearchViewComponentsPosition.MAP_AREA_X && x <= SearchViewComponentsPosition.MAP_AREA_X + SearchViewComponentsPosition.MAP_AREA_WIDTH
+                && y >= SearchViewComponentsPosition.MAP_AREA_Y && y <= SearchViewComponentsPosition.MAP_AREA_Y + SearchViewComponentsPosition.MAP_AREA_HEIGHT) {
             this.mousePosition = mouseEvent.getPoint();
             System.out.println("Mouse clicked at: " + mousePosition);
         }
         repaint();
     }
 
+    /**
+     * Placeholder for mouse pressed event.
+     *
+     * @param mouseEvent The mouse event.
+     */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent mouseEvent) {
     }
 
+    /**
+     * Placeholder for mouse released event.
+     *
+     * @param mouseEvent The mouse event.
+     */
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent mouseEvent) {
     }
 
+    /**
+     * Placeholder for mouse entered event.
+     *
+     * @param mouseEvent The mouse event.
+     */
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent mouseEvent) {
     }
 
+    /**
+     * Placeholder for mouse exited event.
+     *
+     * @param mouseEvent The mouse event.
+     */
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent mouseEvent) {
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    /**
+     * Placeholder for action performed event.
+     *
+     * @param actionEvent The action event.
+     */
+    public void actionPerformed(ActionEvent actionEvent) {
         System.out.println("Not implemented yet.");
     }
 
+    /**
+     * Placeholder for property change event.
+     *
+     * @param propertyChangeEvent The property change event.
+     */
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
     }
 
+    /**
+     * Paints the component, including the map area and the click position if available.
+     *
+     * @param graphics The graphics context to use for painting.
+     */
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
         // Draw the map area
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(MAP_AREA_X, MAP_AREA_Y, MAP_AREA_WIDTH, MAP_AREA_HEIGHT);
-        g.setColor(Color.BLACK);
-        g.drawRect(MAP_AREA_X, MAP_AREA_Y, MAP_AREA_WIDTH, MAP_AREA_HEIGHT);
-        g.drawString("Map Area", MAP_AREA_X + 10, MAP_AREA_Y + 20);
+        graphics.setColor(Color.LIGHT_GRAY);
+        graphics.fillRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
+                SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
+                SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
+        graphics.drawString("Map Area", SearchViewComponentsPosition.MAP_AREA_X + 10, SearchViewComponentsPosition.MAP_AREA_Y + 20);
 
         // Draw the mouse position if available
         if (mousePosition != null) {
-            g.setColor(Color.RED);
-            g.drawOval(mousePosition.x - 5, mousePosition.y - 5, 10, 10);
-            g.drawString("Click Position", mousePosition.x + 10, mousePosition.y);
+            graphics.setColor(Color.RED);
+            graphics.drawOval(mousePosition.x - 5, mousePosition.y - 5, 10, 10);
+            graphics.drawString("Click Position", mousePosition.x + 10, mousePosition.y);
         }
     }
 }
