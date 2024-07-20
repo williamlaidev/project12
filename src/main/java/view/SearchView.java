@@ -24,18 +24,22 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
     private JButton searchButton = new JButton("Search");
 
-    private JComboBox<String> dishTypeComboBox;
-    private static final String[] dishTypeList = {"dish1", "dish2", "dish3", "dish4", "dish5"};
+    private final JComboBox<String> dishTypeComboBox;
+
+    private Image mapImage;
 
     /**
      * Constructs a SearchView with the specified controller and view model.
      *
      * @param controller      The controller to handle actions.
      * @param searchViewModel The view model to manage data and state.
+     * @param dishTypeList    The list of dish types.
+     * @param mapImage        The map image to display.
      */
-    public SearchView(SearchController controller, SearchViewModel searchViewModel) {
+    public SearchView(SearchController controller, SearchViewModel searchViewModel, String[] dishTypeList, Image mapImage) {
         this.searchController = controller;
         this.searchViewModel = searchViewModel;
+        this.mapImage = mapImage;
         searchViewModel.addPropertyChangeListener(this);
 
         setLayout(null); // Disable layout manager for absolute positioning
@@ -59,7 +63,13 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 SearchViewComponentsPosition.DISH_TYPE_LABEL_WIDTH, SearchViewComponentsPosition.DISH_TYPE_LABEL_HEIGHT);
         add(dishTypeLabel);
 
-        dishTypeComboBox = new JComboBox<>(dishTypeList);
+        // Add "ALL" option to the dish type list
+        String[] extendedDishTypeList = new String[dishTypeList.length + 1];
+        extendedDishTypeList[0] = "ALL";
+        System.arraycopy(dishTypeList, 0, extendedDishTypeList, 1, dishTypeList.length);
+
+        dishTypeComboBox = new JComboBox<>(extendedDishTypeList);
+        dishTypeComboBox.setSelectedIndex(0); // Set default selection to "ALL"
         dishTypeComboBox.setBounds(SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_X, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_Y,
                 SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_WIDTH, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_HEIGHT);
         add(dishTypeComboBox);
@@ -163,14 +173,25 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        // Draw the map area
-        graphics.setColor(Color.LIGHT_GRAY);
-        graphics.fillRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
-                SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
+        // Draw the map image if available
+        if (mapImage != null) {
+            graphics.drawImage(mapImage, SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
+                    SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT, this);
+        } else {
+            // Draw the map area if image is not available
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.fillRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
+                    SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
+            graphics.setColor(Color.BLACK);
+            graphics.drawRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
+                    SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
+            graphics.drawString("Map Area", SearchViewComponentsPosition.MAP_AREA_X + 10, SearchViewComponentsPosition.MAP_AREA_Y + 20);
+        }
+
+        // Draw the map area border
         graphics.setColor(Color.BLACK);
-        graphics.drawRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
-                SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
-        graphics.drawString("Map Area", SearchViewComponentsPosition.MAP_AREA_X + 10, SearchViewComponentsPosition.MAP_AREA_Y + 20);
+        graphics.drawRect(SearchViewComponentsPosition.MAP_AREA_X - 1, SearchViewComponentsPosition.MAP_AREA_Y - 1,
+                SearchViewComponentsPosition.MAP_AREA_WIDTH + 1, SearchViewComponentsPosition.MAP_AREA_HEIGHT + 1);
 
         // Draw the mouse position if available
         if (mousePosition != null) {
@@ -180,3 +201,4 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         }
     }
 }
+
