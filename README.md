@@ -134,16 +134,3 @@ Special thanks to TA Howard and Instructor Yasaman for their guidance.
 ### UML Diagrams
 
 Visual representations of class and sequence diagrams are available [here](https://lucid.app/lucidchart/a25d3238-67e7-49fb-b829-9c842485de22/edit?invitationId=inv_403f0f3f-3919-487a-9133-a82ce071034f).
-
-### Clean Architecture Design
-
-- Enterprise Business Rule
-  - Entity
-  - Domain
-- Application Business Rule
-  - UseCase
-- Interface Adapter
-  - InterfaceAdapter
-  - DataAccess
-- Frameworks & Drivers
-  - Framework

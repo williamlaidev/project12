@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.Objects;
-
 /**
  * Represents a dining establishment.
  */
@@ -29,7 +27,7 @@ public class Restaurant {
      * @throws IllegalArgumentException if any parameter constraints are violated
      */
     public Restaurant(String restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
-        validateRestaurantId(restaurantId); // Ensure this is validated
+//        validateRestaurantId(Integer.parseInt(restaurantId));
         validateName(name);
         validateAddress(address);
         validateAverageRating(averageRating);
@@ -43,7 +41,6 @@ public class Restaurant {
         this.photoUrl = photoUrl;
         this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
     }
-
     public String getRestaurantId() {
         return restaurantId;
     }
@@ -77,7 +74,7 @@ public class Restaurant {
     }
 
     public void setRestaurantId(String restaurantId) {
-        validateRestaurantId(restaurantId); // Ensure this is validated
+        validateRestaurantId(Integer.parseInt(restaurantId));
         this.restaurantId = restaurantId;
     }
 
@@ -115,7 +112,7 @@ public class Restaurant {
     @Override
     public String toString() {
         return "Restaurant{" +
-                "restaurantId='" + restaurantId + '\'' +
+                "restaurantId=" + restaurantId +
                 ", name='" + name + '\'' +
                 ", location=" + location +
                 ", address='" + address + '\'' +
@@ -126,35 +123,10 @@ public class Restaurant {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Restaurant that = (Restaurant) o;
-        return Double.compare(that.averageRating, averageRating) == 0 &&
-                Objects.equals(restaurantId, that.restaurantId) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(location, that.location) &&
-                Objects.equals(address, that.address) &&
-                dishType == that.dishType &&
-                Objects.equals(photoUrl, that.photoUrl) &&
-                Objects.equals(summarizedReview, that.summarizedReview);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(restaurantId, name, location, address, dishType, averageRating, photoUrl, summarizedReview);
-    }
-
     // Private helper methods for validation
-    private void validateRestaurantId(String restaurantId) {
-        try {
-            int id = Integer.parseInt(restaurantId);
-            if (id < 0) {
-                throw new IllegalArgumentException("Restaurant ID cannot be negative.");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Restaurant ID must be a valid integer.");
+    private void validateRestaurantId(int restaurantId) {
+        if (restaurantId < 0) {
+            throw new IllegalArgumentException("Restaurant ID cannot be negative.");
         }
     }
 
