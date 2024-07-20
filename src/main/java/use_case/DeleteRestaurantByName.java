@@ -1,7 +1,6 @@
 package use_case;
 
 import domain.RestaurantRepository;
-import entity.Restaurant;
 
 /**
  * Use case for deleting a restaurant by its name.
@@ -22,10 +21,10 @@ public class DeleteRestaurantByName {
     /**
      * Executes the deletion of a restaurant from the repository using its name.
      *
-     * @param restaurant the {@link Restaurant} object used to find and delete the restaurant by its name.
+     * @param name the name of the restaurant to be deleted.
      * @return {@code true} if the restaurant was successfully deleted, {@code false} if no restaurant with the given name was found.
      */
-    public boolean execute(Restaurant restaurant) {
-        return repository.deleteByName(restaurant);
+    public boolean execute(String name) {
+        return repository.deleteByName(name);
     }
 }

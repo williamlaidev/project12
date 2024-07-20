@@ -87,7 +87,7 @@ public class InMemoryRestaurantRepositoryTest {
     void testDeleteByName() {
         Restaurant restaurant = new Restaurant("1", "Test Restaurant", new Location(0, 0), "Address", null, 0, null, null);
         repository.add(restaurant);
-        boolean deleted = repository.deleteByName(restaurant);
+        boolean deleted = repository.deleteByName("Test Restaurant");
         assertTrue(deleted, "Restaurant should be deleted successfully by name");
         assertFalse(repository.getByName("Test Restaurant").isPresent(), "Restaurant should not be retrievable by name after deletion");
     }

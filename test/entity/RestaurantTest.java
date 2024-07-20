@@ -43,6 +43,11 @@ class RestaurantTest {
 
     @Test
     void testConstructorInvalid() {
+        // Test invalid restaurant ID
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Restaurant("-1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
+        });
+
         // Test invalid name
         assertThrows(IllegalArgumentException.class, () -> {
             new Restaurant("1", "", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
@@ -57,27 +62,27 @@ class RestaurantTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new Restaurant("1", "Test Restaurant", location, "123 Test St", dishType, 6.0, "http://photo.url", "Great place!");
         });
-
-        // Test invalid restaurant ID
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Restaurant("-1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
-        });
     }
 
     @Test
     void testSetters() {
         restaurant = new Restaurant("1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
 
+        // Test valid setter methods
         restaurant.setRestaurantId("2");
         restaurant.setName("New Name");
+        restaurant.setLocation(new Location(34.0522, -118.2437)); // New example location
         restaurant.setAddress("456 New St");
+        restaurant.setDishType(DishType.MEXICAN);
         restaurant.setAverageRating(3.8);
         restaurant.setPhotoUrl("http://newphoto.url");
         restaurant.setSummarizedReview("Good place!");
 
         assertEquals("2", restaurant.getRestaurantId());
         assertEquals("New Name", restaurant.getName());
+        assertEquals(new Location(34.0522, -118.2437), restaurant.getLocation());
         assertEquals("456 New St", restaurant.getAddress());
+        assertEquals(DishType.MEXICAN, restaurant.getDishType());
         assertEquals(3.8, restaurant.getAverageRating());
         assertEquals("http://newphoto.url", restaurant.getPhotoUrl());
         assertEquals("Good place!", restaurant.getSummarizedReview());
@@ -87,6 +92,7 @@ class RestaurantTest {
     void testInvalidSetters() {
         restaurant = new Restaurant("1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
 
+        // Test invalid setters
         assertThrows(IllegalArgumentException.class, () -> {
             restaurant.setName("");
         });
@@ -118,5 +124,20 @@ class RestaurantTest {
                 ", summarizedReview='Great place!'" +
                 '}';
         assertEquals(expectedString, restaurant.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Restaurant restaurant1 = new Restaurant("1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
+        Restaurant restaurant2 = new Restaurant("1", "Test Restaurant", location, "123 Test St", dishType, 4.5, "http://photo.url", "Great place!");
+        Restaurant restaurant3 = new Restaurant("2", "Another Restaurant", location, "456 Another St", dishType, 3.0, "http://anotherphoto.url", "Okay place!");
+
+        // Test equals
+        assertEquals(restaurant1, restaurant2);
+        assertNotEquals(restaurant1, restaurant3);
+
+        // Test hashCode
+        assertEquals(restaurant1.hashCode(), restaurant2.hashCode());
+        assertNotEquals(restaurant1.hashCode(), restaurant3.hashCode());
     }
 }

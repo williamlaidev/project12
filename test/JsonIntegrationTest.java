@@ -1,272 +1,241 @@
-import static org.junit.jupiter.api.Assertions.*;
-
+import data_access.RestaurantDataAccess;
+import domain.RestaurantRepository;
 import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
 import framework.JsonRestaurantDataAccess;
 import interface_adapter.InMemoryRestaurantRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import use_case.*;
 
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class JsonIntegrationTest {
 
-    private JsonRestaurantDataAccess dataAccess;
-    private InMemoryRestaurantRepository repository;
-    private AddRestaurant addRestaurant;
-    private DeleteRestaurantById deleteRestaurantById;
-    private DeleteRestaurantByName deleteRestaurantByName;
-    private GetAllRestaurants getAllRestaurants;
-    private GetRestaurantById getRestaurantById;
-    private GetRestaurantByLocation getRestaurantByLocation;
-    private GetRestaurantByName getRestaurantByName;
+    private static final String JSON_FILE_PATH = "src/main/resources/data/restaurants.json";
+    private RestaurantRepository repository;
+    private RestaurantDataAccess dataAccess;
 
     @BeforeEach
     public void setUp() {
-        dataAccess = Mockito.mock(JsonRestaurantDataAccess.class);
+        dataAccess = new JsonRestaurantDataAccess();
         repository = new InMemoryRestaurantRepository(dataAccess);
-        addRestaurant = new AddRestaurant(repository);
-        deleteRestaurantById = new DeleteRestaurantById(repository);
-        deleteRestaurantByName = new DeleteRestaurantByName(repository);
-        getAllRestaurants = new GetAllRestaurants(repository);
-        getRestaurantById = new GetRestaurantById(repository);
-        getRestaurantByLocation = new GetRestaurantByLocation(repository);
-        getRestaurantByName = new GetRestaurantByName(repository);
 
-        File file = new File("src/main/resources/data/restaurants.json");
-        if (file.exists()) {
-            file.delete();
+        File jsonFile = new File(JSON_FILE_PATH);
+        if (jsonFile.exists()) {
+            if (!jsonFile.delete()) {
+                fail("Failed to delete existing JSON file: " + JSON_FILE_PATH);
+            }
+        }
+    }
+
+    @AfterEach
+    public void tearDown() {
+        File jsonFile = new File(JSON_FILE_PATH);
+        if (jsonFile.exists()) {
+            if (!jsonFile.delete()) {
+                fail("Failed to delete JSON file: " + JSON_FILE_PATH);
+            }
         }
     }
 
     @Test
-    public void testAddAndRetrieveRestaurant() {
+    public void testAddRestaurant() {
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location = new Location(40.7128, -74.0060); // Valid latitude and longitude
         Restaurant restaurant = new Restaurant(
                 "1",
-                "Sample Restaurant",
-                new Location(12.34, 56.78),
-                "123 Sample St",
+                "Test Restaurant",
+                location,
+                "123 Test Street",
                 DishType.ITALIAN,
                 4.5,
-                "http://example.com/photo.jpg",
+                "http://test.com/photo.jpg",
                 "Great place!"
         );
+        boolean result = addRestaurantUseCase.execute(restaurant);
+        assertTrue(result, "Failed to add restaurant with ID: " + restaurant.getRestaurantId());
 
-        boolean added = addRestaurant.execute(restaurant);
-        assertTrue(added, "Restaurant should be added successfully");
+        // Verify restaurant is added
+        GetRestaurantById getRestaurantByIdUseCase = new GetRestaurantById(repository);
+        Optional<Restaurant> retrievedRestaurant = getRestaurantByIdUseCase.execute("1");
+        assertTrue(retrievedRestaurant.isPresent(), "Restaurant with ID '1' was not found.");
+        assertEquals(restaurant, retrievedRestaurant.get(), "Added restaurant does not match retrieved restaurant.");
 
-        // Simulate saving changes
-        repository.saveIfDirty();
-
-        Optional<Restaurant> retrievedRestaurant = getRestaurantById.execute("1");
-        assertTrue(retrievedRestaurant.isPresent(), "Restaurant should be retrieved by ID");
-        assertEquals(restaurant, retrievedRestaurant.get(), "Retrieved restaurant should match the added restaurant");
-
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
-    }
-
-    @Test
-    public void testRetrieveNonExistentRestaurant() {
-        // Try to retrieve a non-existent restaurant
-        Optional<Restaurant> retrievedRestaurant = getRestaurantById.execute("999");
-        assertFalse(retrievedRestaurant.isPresent(), "Non-existent restaurant should not be found");
-    }
-
-    @Test
-    public void testUpdateRestaurant() {
-        // Create and add a restaurant
-        Restaurant restaurant = new Restaurant(
-                "2",
-                "Another Restaurant",
-                new Location(12.34, 56.78),
-                "456 Another St",
-                DishType.CHINESE,
-                4.0,
-                "http://example.com/photo2.jpg",
-                "Nice food!"
-        );
-        addRestaurant.execute(restaurant);
-
-        // Update the restaurant details
-        Restaurant updatedRestaurant = new Restaurant(
-                "2",
-                "Updated Restaurant",
-                new Location(12.34, 56.78),
-                "456 Another St",
-                DishType.MEXICAN,
-                4.8,
-                "http://example.com/photo-updated.jpg",
-                "Even better food!"
-        );
-        repository.update(updatedRestaurant);
-
-        // Simulate saving changes
-        repository.saveIfDirty();
-
-        // Verify the update
-        Optional<Restaurant> retrievedRestaurant = getRestaurantById.execute("2");
-        assertTrue(retrievedRestaurant.isPresent(), "Updated restaurant should be retrieved by ID");
-        assertEquals(updatedRestaurant, retrievedRestaurant.get(), "Retrieved restaurant should match the updated restaurant");
-
-        // Verify that the data access layer saved the updated restaurant data
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
-    }
-
-    @Test
-    public void testDeleteRestaurantById() {
-        // Create and add a restaurant
-        Restaurant restaurant = new Restaurant(
-                "3",
-                "Delete Restaurant",
-                new Location(12.34, 56.78),
-                "789 Delete St",
-                DishType.INDIAN,
-                4.2,
-                "http://example.com/photo3.jpg",
-                "Good food!"
-        );
-        addRestaurant.execute(restaurant);
-
-        // Delete the restaurant by ID
-        boolean deleted = deleteRestaurantById.execute("3");
-        assertTrue(deleted, "Restaurant should be deleted successfully");
-
-        // Simulate saving changes
-        repository.saveIfDirty();
-
-        // Verify that the restaurant is no longer in the repository
-        Optional<Restaurant> retrievedRestaurant = getRestaurantById.execute("3");
-        assertFalse(retrievedRestaurant.isPresent(), "Deleted restaurant should not be found");
-
-        // Verify that the data access layer's save method was called after deletion
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
-    }
-
-    @Test
-    public void testDeleteRestaurantByName() {
-        // Create and add a restaurant
-        Restaurant restaurant = new Restaurant(
-                "4",
-                "Delete by Name Restaurant",
-                new Location(12.34, 56.78),
-                "101 Delete Name St",
-                DishType.MEDITERRANEAN,
-                4.3,
-                "http://example.com/photo4.jpg",
-                "Delicious!"
-        );
-        addRestaurant.execute(restaurant);
-
-        // Delete the restaurant by name
-        boolean deleted = deleteRestaurantByName.execute(restaurant);
-        assertTrue(deleted, "Restaurant should be deleted by name successfully");
-
-        // Simulate saving changes
-        repository.saveIfDirty();
-
-        // Verify that the restaurant is no longer in the repository
-        Optional<Restaurant> retrievedRestaurant = getRestaurantByName.execute("Delete by Name Restaurant");
-        assertFalse(retrievedRestaurant.isPresent(), "Deleted restaurant by name should not be found");
-
-        // Verify that the data access layer's save method was called after deletion
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
-    }
-
-    @Test
-    public void testGetAllRestaurants() {
-        // Add a few restaurants
-        Restaurant restaurant1 = new Restaurant(
-                "5",
-                "Restaurant One",
-                new Location(12.34, 56.78),
-                "202 All St",
-                DishType.JAPANESE,
-                4.6,
-                "http://example.com/photo5.jpg",
-                "Excellent!"
-        );
-        Restaurant restaurant2 = new Restaurant(
-                "6",
-                "Restaurant Two",
-                new Location(12.34, 56.78),
-                "303 All St",
-                DishType.THAI,
-                4.7,
-                "http://example.com/photo6.jpg",
-                "Very good!"
-        );
-        addRestaurant.execute(restaurant1);
-        addRestaurant.execute(restaurant2);
-
-        // Simulate saving changes
-        repository.saveIfDirty();
-
-        // Retrieve all restaurants
-        List<Restaurant> allRestaurants = getAllRestaurants.execute();
-        assertEquals(2, allRestaurants.size(), "There should be 2 restaurants");
-        assertTrue(allRestaurants.contains(restaurant1), "Restaurant One should be in the list");
-        assertTrue(allRestaurants.contains(restaurant2), "Restaurant Two should be in the list");
-
-        // Verify that the data access layer's save method was called
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
+        // Try adding the same restaurant again and expect failure
+        boolean duplicateResult = addRestaurantUseCase.execute(restaurant);
+        assertFalse(duplicateResult, "Adding a restaurant with a duplicate ID should fail.");
     }
 
     @Test
     public void testGetRestaurantByLocation() {
-        // Create and add a restaurant
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location = new Location(40.7128, -74.0060); // Valid latitude and longitude
         Restaurant restaurant = new Restaurant(
-                "7",
-                "Location Restaurant",
-                new Location(35.33, 54.32),
-                "404 Location St",
-                DishType.FRENCH,
-                4.9,
-                "http://example.com/photo7.jpg",
-                "Amazing cuisine!"
+                "1",
+                "Test Restaurant",
+                location,
+                "123 Test Street",
+                DishType.ITALIAN,
+                4.5,
+                "http://test.com/photo.jpg",
+                "Great place!"
         );
-        addRestaurant.execute(restaurant);
+        addRestaurantUseCase.execute(restaurant);
 
-        // Simulate saving changes
-        repository.saveIfDirty();
+        GetRestaurantByLocation getRestaurantByLocationUseCase = new GetRestaurantByLocation(repository);
+        Optional<Restaurant> retrievedRestaurant = getRestaurantByLocationUseCase.execute(location);
+        assertTrue(retrievedRestaurant.isPresent(), "Restaurant at the location was not found.");
+        assertEquals(restaurant, retrievedRestaurant.get(), "Retrieved restaurant does not match the added restaurant.");
 
-        // Retrieve the restaurant by location
-        Optional<Restaurant> retrievedRestaurant = getRestaurantByLocation.execute(new Location(35.33, 54.32));
-        assertTrue(retrievedRestaurant.isPresent(), "Restaurant should be retrieved by location");
-        assertEquals(restaurant, retrievedRestaurant.get(), "Retrieved restaurant should match the added restaurant");
-
-        // Verify that the data access layer's save method was called
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
+        // Try retrieving a restaurant at a location where none exists
+        Location nonExistentLocation = new Location(35.0000, -90.0000);
+        Optional<Restaurant> missingRestaurant = getRestaurantByLocationUseCase.execute(nonExistentLocation);
+        assertFalse(missingRestaurant.isPresent(), "No restaurant should be found at this non-existent location.");
     }
 
     @Test
-    public void testGetRestaurantByName() {
-        // Create and add a restaurant
+    public void testUpdateRestaurant() {
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location = new Location(40.7128, -74.0060); // Valid latitude and longitude
         Restaurant restaurant = new Restaurant(
-                "8",
-                "Name Restaurant",
-                new Location(87.65, 43.21),
-                "505 Name St",
-                DishType.GREEK,
-                4.4,
-                "http://example.com/photo8.jpg",
-                "Unique experience!"
+                "1",
+                "Test Restaurant",
+                location,
+                "123 Test Street",
+                DishType.ITALIAN,
+                4.5,
+                "http://test.com/photo.jpg",
+                "Great place!"
         );
-        addRestaurant.execute(restaurant);
+        addRestaurantUseCase.execute(restaurant);
 
-        // Simulate saving changes
-        repository.saveIfDirty();
+        UpdateRestaurant updateRestaurantUseCase = new UpdateRestaurant(repository);
+        Location updatedLocation = new Location(40.7306, -73.9352); // Valid latitude and longitude
+        Restaurant updatedRestaurant = new Restaurant(
+                "1",
+                "Updated Restaurant",
+                updatedLocation,
+                "456 Updated Street",
+                DishType.MEXICAN,
+                4.8,
+                "http://test.com/photo_updated.jpg",
+                "Even better place!"
+        );
+        boolean updateResult = updateRestaurantUseCase.execute(updatedRestaurant);
+        assertTrue(updateResult, "Failed to update restaurant with ID: " + updatedRestaurant.getRestaurantId());
 
-        // Retrieve the restaurant by name
-        Optional<Restaurant> retrievedRestaurant = getRestaurantByName.execute("Name Restaurant");
-        assertTrue(retrievedRestaurant.isPresent(), "Restaurant should be retrieved by name");
-        assertEquals(restaurant, retrievedRestaurant.get(), "Retrieved restaurant should match the added restaurant");
+        // Verify restaurant is updated
+        GetRestaurantById getRestaurantByIdUseCase = new GetRestaurantById(repository);
+        Optional<Restaurant> retrievedRestaurant = getRestaurantByIdUseCase.execute("1");
+        assertTrue(retrievedRestaurant.isPresent(), "Restaurant with ID '1' was not found.");
+        assertEquals(updatedRestaurant, retrievedRestaurant.get(), "Updated restaurant does not match retrieved restaurant.");
 
-        // Verify that the data access layer's save method was called
-        Mockito.verify(dataAccess, Mockito.times(1)).saveRestaurants(Mockito.anyList());
+        // Try updating a non-existent restaurant
+        Restaurant nonExistentRestaurant = new Restaurant(
+                "2",
+                "Non-Existent Restaurant",
+                updatedLocation,
+                "789 Non-Existent Street",
+                DishType.CHINESE,
+                4.5,
+                "http://test.com/photo_non_existent.jpg",
+                "This should not exist!"
+        );
+        boolean nonExistentUpdateResult = updateRestaurantUseCase.execute(nonExistentRestaurant);
+        assertFalse(nonExistentUpdateResult, "Updating a non-existent restaurant should fail.");
+    }
+
+    @Test
+    public void testGetAllRestaurants() {
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location1 = new Location(40.7128, -74.0060); // Valid latitude and longitude
+        Location location2 = new Location(34.0522, -118.2437); // Valid latitude and longitude
+        Restaurant restaurant1 = new Restaurant(
+                "1",
+                "Test Restaurant 1",
+                location1,
+                "123 Test Street",
+                DishType.ITALIAN,
+                4.5,
+                "http://test.com/photo1.jpg",
+                "Great place!"
+        );
+        Restaurant restaurant2 = new Restaurant(
+                "2",
+                "Test Restaurant 2",
+                location2,
+                "456 Another Street",
+                DishType.MEXICAN,
+                4.7,
+                "http://test.com/photo2.jpg",
+                "Another great place!"
+        );
+        addRestaurantUseCase.execute(restaurant1);
+        addRestaurantUseCase.execute(restaurant2);
+
+        GetAllRestaurants getAllRestaurantsUseCase = new GetAllRestaurants(repository);
+        List<Restaurant> allRestaurants = getAllRestaurantsUseCase.execute();
+        assertEquals(2, allRestaurants.size(), "The number of retrieved restaurants does not match the expected value.");
+        assertTrue(allRestaurants.contains(restaurant1), "Restaurant with ID '1' is missing from the list of all restaurants.");
+        assertTrue(allRestaurants.contains(restaurant2), "Restaurant with ID '2' is missing from the list of all restaurants.");
+    }
+
+    @Test
+    public void testDeleteRestaurantById() {
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location = new Location(40.7128, -74.0060); // Valid latitude and longitude
+        Restaurant restaurant = new Restaurant(
+                "1",
+                "Test Restaurant",
+                location,
+                "123 Test Street",
+                DishType.ITALIAN,
+                4.5,
+                "http://test.com/photo.jpg",
+                "Great place!"
+        );
+        addRestaurantUseCase.execute(restaurant);
+
+        DeleteRestaurantById deleteRestaurantByIdUseCase = new DeleteRestaurantById(repository);
+        boolean deleteResult = deleteRestaurantByIdUseCase.execute("1");
+        assertTrue(deleteResult, "Failed to delete restaurant with ID: 1");
+
+        // Verify restaurant is deleted
+        GetRestaurantById getRestaurantByIdUseCase = new GetRestaurantById(repository);
+        Optional<Restaurant> retrievedRestaurant = getRestaurantByIdUseCase.execute("1");
+        assertFalse(retrievedRestaurant.isPresent(), "Restaurant with ID '1' was found after deletion.");
+    }
+
+    @Test
+    public void testDeleteRestaurantByName() {
+        AddRestaurant addRestaurantUseCase = new AddRestaurant(repository);
+        Location location = new Location(40.7128, -74.0060); // Valid latitude and longitude
+        Restaurant restaurant = new Restaurant(
+                "1",
+                "Test Restaurant",
+                location,
+                "123 Test Street",
+                DishType.ITALIAN,
+                4.5,
+                "http://test.com/photo.jpg",
+                "Great place!"
+        );
+        addRestaurantUseCase.execute(restaurant);
+
+        DeleteRestaurantByName deleteRestaurantByNameUseCase = new DeleteRestaurantByName(repository);
+        boolean deleteResult = deleteRestaurantByNameUseCase.execute("Test Restaurant");
+        assertTrue(deleteResult, "Failed to delete restaurant with name: Test Restaurant");
+
+        // Verify restaurant is deleted
+        GetRestaurantByName getRestaurantByNameUseCase = new GetRestaurantByName(repository);
+        Optional<Restaurant> retrievedRestaurant = getRestaurantByNameUseCase.execute("Test Restaurant");
+        assertFalse(retrievedRestaurant.isPresent(), "Restaurant with name 'Test Restaurant' was found after deletion.");
     }
 }
