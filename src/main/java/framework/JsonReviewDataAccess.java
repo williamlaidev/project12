@@ -1,7 +1,7 @@
 package framework;
 
-import data_access.RestaurantDataAccess;
-import entity.Restaurant;
+import data_access.ReviewDataAccess;
+import entity.Review;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Implementation of {@link RestaurantDataAccess} that uses JSON file storage.
+ * Implementation of {@link ReviewDataAccess} that uses JSON file storage.
  */
-public class JsonRestaurantDataAccess implements RestaurantDataAccess {
+public class JsonReviewDataAccess implements ReviewDataAccess {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final File jsonFile = new File("src/resources/data/restaurants.json"); // Path to JSON file
+    private final File jsonFile = new File("src/resources/data/reviews.json"); // Path to JSON file
 
-    public JsonRestaurantDataAccess() {
+    public JsonReviewDataAccess() {
         // Ensure the file exists, create it if it does not
         try {
             if (jsonFile.getParentFile() != null && !jsonFile.getParentFile().exists()) {
@@ -42,20 +42,20 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
     }
 
     /**
-     * Loads a list of restaurants from a JSON file.
+     * Loads a list of reviews from a JSON file.
      *
-     * @return a list of {@link Restaurant} objects loaded from the JSON file.
+     * @return a list of {@link Review} objects loaded from the JSON file.
      *         If the file does not exist or an error occurs, an empty list is returned.
      */
     @Override
-    public List<Restaurant> loadRestaurants() {
+    public List<Review> loadReviews() {
         if (jsonFile.exists()) {
             try {
-                System.out.println("Loading restaurants from file: " + jsonFile.getPath());
+                System.out.println("Loading reviews from file: " + jsonFile.getPath());
                 return objectMapper.readValue(jsonFile, new TypeReference<>() {
                 });
             } catch (IOException e) {
-                System.out.println("Failed to load restaurants from file: " + jsonFile.getPath());
+                System.out.println("Failed to load reviews from file: " + jsonFile.getPath());
                 e.printStackTrace();
             }
         } else {
@@ -65,19 +65,19 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
     }
 
     /**
-     * Saves a list of restaurants to a JSON file.
+     * Saves a list of reviews to a JSON file.
      *
-     * @param restaurants the list of {@link Restaurant} objects to be saved.
-     *                    If an error occurs during saving, the operation fails silently.
+     * @param reviews the list of {@link Review} objects to be saved.
+     *                If an error occurs during saving, the operation fails silently.
      */
     @Override
-    public void saveRestaurants(List<Restaurant> restaurants) {
+    public void saveReviews(List<Review> reviews) {
         try {
-            System.out.println("Saving restaurants to file: " + jsonFile.getPath());
-            objectMapper.writeValue(jsonFile, restaurants);
-            System.out.println("Successfully saved restaurants to file: " + jsonFile.getPath());
+            System.out.println("Saving reviews to file: " + jsonFile.getPath());
+            objectMapper.writeValue(jsonFile, reviews);
+            System.out.println("Successfully saved reviews to file: " + jsonFile.getPath());
         } catch (IOException e) {
-            System.out.println("Failed to save restaurants to file: " + jsonFile.getPath());
+            System.out.println("Failed to save reviews to file: " + jsonFile.getPath());
             e.printStackTrace();
         }
     }

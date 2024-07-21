@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import use_case.GetRestaurantById;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,7 @@ public class ReviewMapperImplTest {
         );
         Restaurant restaurant2 = new Restaurant(
                 "2", "Restaurant2", new Location(34.0522, -118.2437), "456 Elm St",
-                DishType.ITALIAN, 4.0, "http://example.com/photo2", Arrays.asList(review3), null
+                DishType.ITALIAN, 4.0, "http://example.com/photo2", List.of(review3), null
         );
 
         when(getRestaurantById.execute("1")).thenReturn(Optional.of(restaurant1));
@@ -72,7 +73,7 @@ public class ReviewMapperImplTest {
         when(getRestaurantById.execute("1")).thenReturn(Optional.empty());
         when(getRestaurantById.execute("2")).thenReturn(Optional.of(
                 new Restaurant("2", "Restaurant2", new Location(34.0522, -118.2437), "456 Elm St",
-                        DishType.ITALIAN, 4.0, "http://example.com/photo2", Arrays.asList(review2), null)
+                        DishType.ITALIAN, 4.0, "http://example.com/photo2", List.of(review2), null)
         ));
 
         // Act
@@ -85,7 +86,7 @@ public class ReviewMapperImplTest {
     @Test
     void testMapReviewsToStringWithEmptyList() {
         // Act
-        String result = reviewMapper.mapReviewsToString(Arrays.asList());
+        String result = reviewMapper.mapReviewsToString(List.of());
 
         // Assert
         assertEquals("No Reviews", result);

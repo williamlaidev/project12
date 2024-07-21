@@ -14,21 +14,19 @@ import org.junit.jupiter.api.Test;
 import use_case.*;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonIntegrationTest {
+public class RestaurantJsonIntegrationTest {
 
-    private static final String JSON_FILE_PATH = "src/main/resources/data/restaurants.json";
+    private static final String JSON_FILE_PATH = "src/resources/data/restaurants.json";
     private RestaurantRepository repository;
-    private RestaurantDataAccess dataAccess;
 
     @BeforeEach
     public void setUp() {
-        dataAccess = new JsonRestaurantDataAccess();
+        RestaurantDataAccess dataAccess = new JsonRestaurantDataAccess();
         repository = new InMemoryRestaurantRepository(dataAccess);
 
         File jsonFile = new File(JSON_FILE_PATH);
@@ -61,7 +59,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         boolean result = addRestaurantUseCase.execute(restaurant);
@@ -90,7 +88,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         addRestaurantUseCase.execute(restaurant);
@@ -118,7 +116,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         addRestaurantUseCase.execute(restaurant);
@@ -133,7 +131,7 @@ public class JsonIntegrationTest {
                 DishType.MEXICAN,
                 4.8,
                 "http://test.com/photo_updated.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         boolean updateResult = updateRestaurantUseCase.execute(updatedRestaurant);
@@ -154,7 +152,7 @@ public class JsonIntegrationTest {
                 DishType.CHINESE,
                 4.5,
                 "http://test.com/photo_non_existent.jpg",
-                Arrays.asList(new Review("2", "author1", "content1", false)),
+                List.of(new Review("2", "author1", "content1", false)),
                 new Review("2", "author1", "content1", true)
         );
         boolean nonExistentUpdateResult = updateRestaurantUseCase.execute(nonExistentRestaurant);
@@ -174,7 +172,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo1.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         Restaurant restaurant2 = new Restaurant(
@@ -185,7 +183,7 @@ public class JsonIntegrationTest {
                 DishType.MEXICAN,
                 4.7,
                 "http://test.com/photo2.jpg",
-                Arrays.asList(new Review("2", "author1", "content1", false)),
+                List.of(new Review("2", "author1", "content1", false)),
                 new Review("2", "author1", "content1", true)
         );
         addRestaurantUseCase.execute(restaurant1);
@@ -210,7 +208,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         addRestaurantUseCase.execute(restaurant);
@@ -237,7 +235,7 @@ public class JsonIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://test.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)),
+                List.of(new Review("1", "author1", "content1", false)),
                 new Review("1", "author1", "content1", true)
         );
         addRestaurantUseCase.execute(restaurant);

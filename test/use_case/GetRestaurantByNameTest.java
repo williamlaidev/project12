@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +47,7 @@ class GetRestaurantByNameTest {
                 DishType.PIZZA,       // dishType (use appropriate enum value)
                 4.0,                  // averageRating
                 "http://example.com/photo1.jpg", // photoUrl
-                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                List.of(new Review("1", "author1", "content1", false)), // userReviews
                 new Review("1", "author1", "content1", true)            // summarizedReview
         );
 

@@ -127,8 +127,8 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
 
         // Add the new restaurant to the store
         restaurantStore.add(restaurant);
-        System.out.println("Restaurant with ID " + restaurantId + " successfully added.");
         isDirty = true;
+        System.out.println("Restaurant with ID " + restaurantId + " successfully added.");
         return true; // Successfully added the new restaurant
     }
 
@@ -223,6 +223,9 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
         if (isDirty) {
             dataAccess.saveRestaurants(restaurantStore);
             isDirty = false;
+            System.out.println("Saved restaurants to data source.");
+        } else {
+            System.out.println("No changes to save.");
         }
     }
 }
