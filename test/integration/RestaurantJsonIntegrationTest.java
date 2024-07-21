@@ -20,9 +20,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonIntegrationTest {
+public class RestaurantJsonIntegrationTest {
 
-    private static final String JSON_FILE_PATH = "src/main/resources/data/restaurants.json";
+    private static final String JSON_FILE_PATH = "src/resources/data/restaurants.json";
     private RestaurantRepository repository;
     private RestaurantDataAccess dataAccess;
 
