@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,8 @@ public class Restaurant {
     private DishType dishType;
     private double averageRating;
     private String photoUrl;
-    private String summarizedReview;
+    private List<Review> userReviews;
+    private Review summarizedReview;
 
     /**
      * Constructs a new Restaurant with the specified details.
@@ -25,14 +27,16 @@ public class Restaurant {
      * @param dishType the type of dishes the restaurant serves
      * @param averageRating the average rating of the restaurant
      * @param photoUrl the URL of the restaurant's photo (optional)
+     * @param userReviews the list of user reviews (optional)
      * @param summarizedReview a summarized review of the restaurant (optional)
      * @throws IllegalArgumentException if any parameter constraints are violated
      */
-    public Restaurant(String restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
-        validateRestaurantId(restaurantId); // Ensure this is validated
+    public Restaurant(String restaurantId, String name, Location location, String address, DishType dishType, double averageRating, String photoUrl, List<Review> userReviews, Review summarizedReview) {
+        validateRestaurantId(restaurantId);
         validateName(name);
         validateAddress(address);
         validateAverageRating(averageRating);
+        validateReviews(restaurantId, userReviews, summarizedReview);
 
         this.restaurantId = restaurantId;
         this.name = name;
@@ -40,8 +44,9 @@ public class Restaurant {
         this.address = address;
         this.dishType = dishType;
         this.averageRating = averageRating;
-        this.photoUrl = photoUrl;
-        this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
+        this.photoUrl = photoUrl == null ? "" : photoUrl;
+        this.userReviews = userReviews;
+        this.summarizedReview = summarizedReview;
     }
 
     public String getRestaurantId() {
@@ -72,13 +77,12 @@ public class Restaurant {
         return photoUrl;
     }
 
-    public String getSummarizedReview() {
-        return summarizedReview;
+    public List<Review> getUserReviews() {
+        return userReviews;
     }
 
-    public void setRestaurantId(String restaurantId) {
-        validateRestaurantId(restaurantId); // Ensure this is validated
-        this.restaurantId = restaurantId;
+    public Review getSummarizedReview() {
+        return summarizedReview;
     }
 
     public void setName(String name) {
@@ -105,11 +109,17 @@ public class Restaurant {
     }
 
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = (photoUrl == null) ? "" : photoUrl;
+        this.photoUrl = photoUrl == null ? "" : photoUrl;
     }
 
-    public void setSummarizedReview(String summarizedReview) {
-        this.summarizedReview = (summarizedReview == null) ? "" : summarizedReview;
+    public void setUserReviews(List<Review> userReviews) {
+        validateReviews(this.restaurantId, userReviews, this.summarizedReview);
+        this.userReviews = userReviews;
+    }
+
+    public void setSummarizedReview(Review summarizedReview) {
+        validateReviews(this.restaurantId, this.userReviews, summarizedReview);
+        this.summarizedReview = summarizedReview;
     }
 
     @Override
@@ -122,7 +132,8 @@ public class Restaurant {
                 ", dishType=" + dishType +
                 ", averageRating=" + averageRating +
                 ", photoUrl='" + photoUrl + '\'' +
-                ", summarizedReview='" + summarizedReview + '\'' +
+                ", userReviews=" + userReviews +
+                ", summarizedReview=" + summarizedReview +
                 '}';
     }
 
@@ -138,23 +149,19 @@ public class Restaurant {
                 Objects.equals(address, that.address) &&
                 dishType == that.dishType &&
                 Objects.equals(photoUrl, that.photoUrl) &&
+                Objects.equals(userReviews, that.userReviews) &&
                 Objects.equals(summarizedReview, that.summarizedReview);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(restaurantId, name, location, address, dishType, averageRating, photoUrl, summarizedReview);
+        return Objects.hash(restaurantId, name, location, address, dishType, averageRating, photoUrl, userReviews, summarizedReview);
     }
 
     // Private helper methods for validation
     private void validateRestaurantId(String restaurantId) {
-        try {
-            int id = Integer.parseInt(restaurantId);
-            if (id < 0) {
-                throw new IllegalArgumentException("Restaurant ID cannot be negative.");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Restaurant ID must be a valid integer.");
+        if (restaurantId == null || restaurantId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Restaurant ID cannot be null or empty.");
         }
     }
 
@@ -173,6 +180,28 @@ public class Restaurant {
     private void validateAverageRating(double averageRating) {
         if (averageRating < 0 || averageRating > 5) {
             throw new IllegalArgumentException("Average rating must be between 0 and 5.");
+        }
+    }
+
+    private void validateReviews(String restaurantId, List<Review> userReviews, Review summarizedReview) {
+        if (userReviews != null) {
+            for (Review review : userReviews) {
+                if (!review.getRestaurantId().equals(restaurantId)) {
+                    throw new IllegalArgumentException("User review restaurant ID must match restaurant ID.");
+                }
+                if (review.isSummarized()) {
+                    throw new IllegalArgumentException("User review cannot be summarized.");
+                }
+            }
+        }
+
+        if (summarizedReview != null) {
+            if (!summarizedReview.getRestaurantId().equals(restaurantId)) {
+                throw new IllegalArgumentException("Summarized review restaurant ID must match restaurant ID.");
+            }
+            if (!summarizedReview.isSummarized()) {
+                throw new IllegalArgumentException("Summarized review must be marked as summarized.");
+            }
         }
     }
 }

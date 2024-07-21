@@ -4,6 +4,7 @@ import domain.RestaurantRepository;
 import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
+import entity.Review;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,14 +43,15 @@ class GetRestaurantByLocationTest {
 
         // Create a Restaurant instance
         Restaurant restaurant = new Restaurant(
-                "1",                  // restaurantId
-                "Restaurant One",     // name
-                location,              // location
-                "123 Address One",    // address
-                DishType.PIZZA,       // dishType (use appropriate enum value)
-                4.0,                  // averageRating
-                "http://example.com/photo1.jpg", // photoUrl
-                "Great food!"         // summarizedReview
+                "1",                               // restaurantId
+                "Restaurant One",                  // name
+                location,                          // location (make sure 'location' is correctly instantiated)
+                "123 Address One",                 // address
+                DishType.PIZZA,                    // dishType (use appropriate enum value)
+                4.0,                               // averageRating
+                "http://example.com/photo1.jpg",   // photoUrl
+                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                new Review("1", "author1", "content1", true)            // summarizedReview
         );
 
         // Mock the repository's getByLocation method to return the restaurant

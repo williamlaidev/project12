@@ -44,7 +44,8 @@ public class ReviewSummarizeServiceIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://example.com/photo.jpg",
-                "A wonderful place for gourmet dining."
+                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                new Review("1", "author1", "content1", true)            // summarizedReview
         );
 
         Mockito.when(getRestaurantByIdMock.execute("1")).thenReturn(Optional.of(restaurant));
