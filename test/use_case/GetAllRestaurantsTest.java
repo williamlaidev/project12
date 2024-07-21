@@ -4,6 +4,7 @@ import domain.RestaurantRepository;
 import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
+import entity.Review;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,8 @@ class GetAllRestaurantsTest {
                         DishType.PIZZA,       // dishType (use appropriate enum value)
                         4.0,                  // averageRating
                         "http://example.com/photo1.jpg", // photoUrl
-                        "Great food!"         // summarizedReview
+                        Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                        new Review("1", "author1", "content1", true)            // summarizedReview
                 ),
                 new Restaurant(
                         "2",                  // restaurantId
@@ -57,7 +59,8 @@ class GetAllRestaurantsTest {
                         DishType.RAMEN,      // dishType (use appropriate enum value)
                         3.5,                  // averageRating
                         "http://example.com/photo2.jpg", // photoUrl
-                        "Good place!"         // summarizedReview
+                        Arrays.asList(new Review("2", "author1", "content1", false)), // userReviews
+                        new Review("2", "author1", "content1", true)            // summarizedReview
                 )
         );
 

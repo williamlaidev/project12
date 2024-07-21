@@ -4,12 +4,15 @@ import domain.RestaurantRepository;
 import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
+import entity.Review;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,7 +46,8 @@ class AddRestaurantTest {
                 DishType.PIZZA,       // dishType (use appropriate enum value)
                 4.5,                  // averageRating
                 "http://example.com/photo.jpg", // photoUrl
-                "Great place!"        // summarizedReview
+                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                new Review("1", "author1", "content1", true)            // summarizedReview
         );
 
         when(repository.add(restaurant)).thenReturn(true);
@@ -65,7 +69,8 @@ class AddRestaurantTest {
                 DishType.PIZZA,       // dishType (use appropriate enum value)
                 4.5,                  // averageRating
                 "http://example.com/photo.jpg", // photoUrl
-                "Great place!"        // summarizedReview
+                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                new Review("1", "author1", "content1", true)            // summarizedReview
         );
 
         when(repository.add(restaurant)).thenReturn(false);
