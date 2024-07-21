@@ -17,7 +17,7 @@ public class MapImageInteractor {
      * Constructor to initialize MapImageInteractor with MapImageAPI.
      *
      * @param mapImageAPI An instance of MapImageAPI.
-     * @param apiKey      The API key for accessing the map image API.
+     * @param apiKey      The API key for the map image API.
      */
     public MapImageInteractor(MapImageAPI mapImageAPI, String apiKey) {
         this.mapImageAPI = mapImageAPI;

@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.SearchController;
 import interface_adapter.SearchViewModel;
+import interface_adapter.SearchViewState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,10 +82,11 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 new ActionListener() {
                     public void actionPerformed(ActionEvent event) {
                         if (event.getSource().equals(searchButton)) {
-                            searchController.execute(mousePosition,
-                                    distanceInputField.getText(),
-                                    (String) dishTypeComboBox.getSelectedItem()
-                            );
+                            SearchViewState searchViewState = new SearchViewState();
+                            searchViewState.setMousePosition(mousePosition);
+                            searchViewState.setDistance(distanceInputField.getText());
+                            searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
+                            searchController.execute(searchViewState);
                         }
                     }
                 }
@@ -201,4 +203,3 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         }
     }
 }
-

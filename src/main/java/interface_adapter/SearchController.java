@@ -1,19 +1,41 @@
 package interface_adapter;
 
-import use_case.SearchInputBoundary;
+import entity.Map;
+import use_case.SearchViewInteractor;
 import use_case.SearchInputData;
-
 import java.awt.Point;
+import utils.MapCoordinateToLocation;
 
 public class SearchController {
-    final SearchInputBoundary searchInputBoundary;
+    private final SearchViewInteractor searchViewInteractor;
+    private final double centerLat;
+    private final double centerLng;
+    private final int zoomLevel;
+    private final int mapWidth;
+    private final int mapHeight;
 
-    public SearchController(SearchInputBoundary searchInputBoundary) {
-        this.searchInputBoundary = searchInputBoundary;
+    public SearchController(SearchViewInteractor searchViewInteractor, Map map, int mapWidth, int mapHeight) {
+        this.searchViewInteractor = searchViewInteractor;
+        this.centerLat = map.getCurrentLatitude();
+        this.centerLng = map.getCurrentLongitude();
+        this.zoomLevel = map.getZoomLevel();
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
     }
 
-    public void execute(Point mousePosition, String distance, String dishType) {
-        SearchInputData searchInputData = new SearchInputData(mousePosition, distance, dishType);
-        searchInputBoundary.execute(searchInputData);
+    public void execute(SearchViewState searchViewState) {
+        Point mousePosition = searchViewState.getMousePosition();
+        String distance = searchViewState.getDistance();
+        String selectedDishType = searchViewState.getSelectedDishType();
+
+        if (mousePosition != null) {
+            double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
+            double latitude = latLng[0];
+            double longitude = latLng[1];
+
+            searchViewInteractor.execute(new SearchInputData(latitude, longitude, distance, selectedDishType));
+        } else {
+            searchViewInteractor.execute(new SearchInputData(centerLat, centerLng, distance, selectedDishType));
+        }
     }
 }

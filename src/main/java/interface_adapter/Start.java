@@ -33,11 +33,11 @@ public class Start {
             File mapImageFile = new File("src/main/resources/map_images/map.png");
             Image mapImage = ImageIO.read(mapImageFile);
 
-            // Create the SimpleSearchInteractor
+            // Create the SearchViewInteractor
             SearchViewInteractor searchViewInteractor = new SearchViewInteractor();
 
             // Create the controller and view model
-            SearchController searchController = new SearchController(searchViewInteractor);
+            SearchController searchController = new SearchController(searchViewInteractor, initializer.getMap(), 200, 200);
             SearchViewModel searchViewModel = new SearchViewModel();
 
             // Create the SearchView

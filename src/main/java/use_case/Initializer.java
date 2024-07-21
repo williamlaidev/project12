@@ -7,9 +7,8 @@ import entity.Location;
 import entity.Map;
 import entity.MapFactory;
 import org.json.JSONObject;
-import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Initializer class is responsible for creating and storing the necessary information
@@ -51,14 +50,14 @@ public class Initializer {
 
         this.currentLocation = new Location(latitude, longitude);
 
-        // Create the Map entity
+        // Create a map entity
         int zoom = 15; // Approximate zoom level for 1km radius
-        this.map = MapFactory.createMap(latitude, longitude, zoom, new ArrayList<>());
+        this.map = MapFactory.createMap(latitude, longitude, zoom, List.of()); // Empty list of restaurant IDs for now
 
         // Create and save the map image centered at the current location
         int width = 200; // Width of the image in pixels
         int height = 200; // Height of the image in pixels
-        boolean success = mapImageInteractor.fetchAndSaveMapImage(map.getCurrentLatitude(), map.getCurrentLongitude(), map.getZoomLevel(), width, height);
+        boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");
         }
@@ -95,11 +94,6 @@ public class Initializer {
         return dishTypeNames;
     }
 
-    /**
-     * Gets the current map entity.
-     *
-     * @return The current map entity.
-     */
     public Map getMap() {
         return map;
     }
@@ -109,13 +103,9 @@ public class Initializer {
      */
     public static void main(String[] args) {
         try {
-            Dotenv dotenv = Dotenv.load();
-            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
-
             GeolocationAPI geolocationAPI = new GeolocationAPI();
             MapImageAPI mapImageAPI = new MapImageAPI();
-            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, apiKey);
-
+            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, "API_KEY");
             Initializer initializer = new Initializer(geolocationAPI, mapImageInteractor);
             initializer.initializeCurrentLocation();
             System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());
@@ -125,9 +115,6 @@ public class Initializer {
             for (String dishType : dishTypes) {
                 System.out.println(dishType);
             }
-
-            Map map = initializer.getMap();
-            System.out.println("Map: " + map);
         } catch (Exception e) {
             e.printStackTrace();
         }
