@@ -75,4 +75,9 @@ public enum DishType {
         }
         return null; // Return null if no match is found.
     }
+
+    @Override
+    public String toString() {
+        return name() + " (API Types: " + String.join(", ", apiTypes) + ")";
+    }
 }
