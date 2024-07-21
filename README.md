@@ -67,8 +67,8 @@ Before running the program, configure the following settings:
 1. Navigate to the `.env` file in the project directory.
 2. Obtain API keys from the Gemini API and Google Maps API, and add them to the `.env` file in the following format:
    ```
-   GEMINI_API_KEY=your_gemini_api_key
-   GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+   GEMINI_API_KEY="your_gemini_api_key"
+   GOOGLE_MAPS_API_KEY="your_google_maps_api_key"
    ```
 
 ## Usage

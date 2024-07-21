@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 public class RestaurantFactory {
 
     /**
@@ -12,11 +14,13 @@ public class RestaurantFactory {
      * @param dishType         the type of dishes the restaurant serves
      * @param averageRating    the average rating of the restaurant
      * @param photoUrl         the URL of the restaurant's photo
+     * @param userReviews      a list of user reviews of the restaurant
      * @param summarizedReview a summarized review of the restaurant
      * @return a new Restaurant object initialized with the given parameters
      */
     public static Restaurant createRestaurant(String restaurantId, String name, Location location, String address,
-                                              DishType dishType, double averageRating, String photoUrl, String summarizedReview) {
-        return new Restaurant(restaurantId, name, location, address, dishType, averageRating, photoUrl, summarizedReview);
+                                              DishType dishType, double averageRating, String photoUrl,
+                                              List<Review> userReviews, Review summarizedReview) {
+        return new Restaurant(restaurantId, name, location, address, dishType, averageRating, photoUrl, userReviews, summarizedReview);
     }
 }
