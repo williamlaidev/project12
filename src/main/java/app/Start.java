@@ -5,6 +5,7 @@ import api.MapImageAPI;
 import interface_adapter.SearchController;
 import interface_adapter.SearchViewModel;
 import interface_adapter.SearchViewPresenter;
+import interface_adapter.ViewManagerModel;
 import use_case.Initializer;
 import use_case.MapImageInteractor;
 import use_case.SearchViewInteractor;
@@ -45,6 +46,8 @@ public class Start {
 
             // Create the SearchView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList, mapImage);
+
+
 
             // Set up the JFrame
             JFrame frame = new JFrame("Search Application");

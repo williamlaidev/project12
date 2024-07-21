@@ -34,7 +34,6 @@ public class SearchController {
 
         }
 
-        System.out.println("Controller execute called with state: " + searchViewState);
 
         if (mousePosition != null) {
             double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);

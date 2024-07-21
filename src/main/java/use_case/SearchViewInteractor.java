@@ -2,12 +2,13 @@ package use_case;
 
 import entity.Location;
 import interface_adapter.PlacesAPIGateway;
+import interface_adapter.SearchViewPresenter;
 
 public class SearchViewInteractor implements SearchInputBoundary {
-    private final SearchOutputBoundary searchOutputBoundary;
+    private final SearchViewPresenter searchViewPresenter;
 
-    public SearchViewInteractor(SearchOutputBoundary searchOutputBoundary) {
-        this.searchOutputBoundary = searchOutputBoundary;
+    public SearchViewInteractor(SearchViewPresenter searchViewPresenter) {
+        this.searchViewPresenter = searchViewPresenter;
     }
 
     @Override
@@ -36,8 +37,8 @@ public class SearchViewInteractor implements SearchInputBoundary {
                 SearchRestaurantsByDishTypeInteractor restaurants = new SearchRestaurantsByDishTypeInteractor(new PlacesAPIGateway());
                 System.out.println(restaurants.search(location, dishType, radius, 10));
             }
-        } catch (NumberFormatException e) {
-            searchOutputBoundary.prepareFailView("Invalid distance input. Please enter a number.");
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("Invalid distance input. Please enter a number.");
         }
     }
 }
