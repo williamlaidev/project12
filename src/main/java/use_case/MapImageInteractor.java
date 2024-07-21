@@ -1,6 +1,5 @@
 package use_case;
 
-import api.ApiKeyReader;
 import api.MapImageAPI;
 
 import java.io.File;
@@ -12,14 +11,17 @@ import java.io.IOException;
  */
 public class MapImageInteractor {
     private final MapImageAPI mapImageAPI;
+    private final String apiKey;
 
     /**
      * Constructor to initialize MapImageInteractor with MapImageAPI.
      *
      * @param mapImageAPI An instance of MapImageAPI.
+     * @param apiKey      The API key for accessing the map image API.
      */
-    public MapImageInteractor(MapImageAPI mapImageAPI) {
+    public MapImageInteractor(MapImageAPI mapImageAPI, String apiKey) {
         this.mapImageAPI = mapImageAPI;
+        this.apiKey = apiKey;
     }
 
     /**
@@ -34,17 +36,9 @@ public class MapImageInteractor {
      */
     public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom, int width, int height) {
         try {
-            ApiKeyReader apiKeyReader = new ApiKeyReader("MapImageAPI", "src/main/java/api/API_KEYS.txt");
-            String apiKey = apiKeyReader.readApiKey();
             byte[] imageData = mapImageAPI.getMapImage(latitude, longitude, zoom, width, height, apiKey);
-            saveImage(imageData, "src/main/java/map_images/map.png");
+            saveImage(imageData, "src/main/resources/map_images/map.png");
             return true;
-        } catch (ApiKeyReader.ApiKeyFileNotFoundException e) {
-            System.err.println(e.getMessage());
-            return false;
-        } catch (ApiKeyReader.ApiKeyNotFoundException e) {
-            System.err.println(e.getMessage());
-            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

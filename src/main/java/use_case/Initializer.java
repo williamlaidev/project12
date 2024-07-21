@@ -5,6 +5,7 @@ import api.MapImageAPI;
 import entity.DishType;
 import entity.Location;
 import org.json.JSONObject;
+import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Initializer class is responsible for creating and storing the necessary information
@@ -80,7 +81,7 @@ public class Initializer {
      */
     public String[] getDishTypes() {
         String[] dishTypeNames = new String[dishTypes.length];
-        for (int i = 0; i < dishTypes.length; i++) {
+        for (int i = 0; i < dishTypeNames.length; i++) {
             dishTypeNames[i] = dishTypes[i].name();
         }
         return dishTypeNames;
@@ -91,9 +92,13 @@ public class Initializer {
      */
     public static void main(String[] args) {
         try {
+            Dotenv dotenv = Dotenv.load();
+            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
+
             GeolocationAPI geolocationAPI = new GeolocationAPI();
             MapImageAPI mapImageAPI = new MapImageAPI();
-            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI);
+            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, apiKey);
+
             Initializer initializer = new Initializer(geolocationAPI, mapImageInteractor);
             initializer.initializeCurrentLocation();
             System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());
@@ -108,3 +113,4 @@ public class Initializer {
         }
     }
 }
+

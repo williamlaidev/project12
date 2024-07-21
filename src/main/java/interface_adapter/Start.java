@@ -12,17 +12,25 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class Start {
     public static void main(String[] args) {
         try {
+            // Load API key from .env file
+            Dotenv dotenv = Dotenv.load();
+            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
+
             // Initialize necessary data
-            Initializer initializer = new Initializer(new GeolocationAPI(), new MapImageInteractor(new MapImageAPI()));
+            GeolocationAPI geolocationAPI = new GeolocationAPI();
+            MapImageAPI mapImageAPI = new MapImageAPI();
+            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, apiKey);
+            Initializer initializer = new Initializer(geolocationAPI, mapImageInteractor);
             initializer.initializeCurrentLocation();
 
             // Get dish types and map image
             String[] dishTypeList = initializer.getDishTypes();
-            File mapImageFile = new File("src/main/java/map_images/map.png");
+            File mapImageFile = new File("src/main/resources/map_images/map.png");
             Image mapImage = ImageIO.read(mapImageFile);
 
             // Create the SimpleSearchInteractor
@@ -49,3 +57,4 @@ public class Start {
         }
     }
 }
+
