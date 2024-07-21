@@ -1,10 +1,10 @@
 package app;
 
-
 import api.GeolocationAPI;
 import api.MapImageAPI;
 import interface_adapter.SearchController;
 import interface_adapter.SearchViewModel;
+import interface_adapter.SearchViewPresenter;
 import use_case.Initializer;
 import use_case.MapImageInteractor;
 import use_case.SearchViewInteractor;
@@ -37,11 +37,11 @@ public class Start {
             Image mapImage = ImageIO.read(mapImageFile);
 
             // Create the SearchViewInteractor
-            SearchViewInteractor searchViewInteractor = new SearchViewInteractor();
+            SearchViewModel searchViewModel = new SearchViewModel();
+            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(new SearchViewPresenter(searchViewModel));
 
             // Create the controller and view model
             SearchController searchController = new SearchController(searchViewInteractor, initializer.getMap(), 200, 200);
-            SearchViewModel searchViewModel = new SearchViewModel();
 
             // Create the SearchView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList, mapImage);
@@ -60,4 +60,3 @@ public class Start {
         }
     }
 }
-

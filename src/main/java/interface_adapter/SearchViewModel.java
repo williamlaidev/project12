@@ -8,7 +8,6 @@ public class SearchViewModel extends ViewModel {
     public final String TITLE_LABEL = "Search View";
     public final String DISTANCE_LABEL = "Choose distance";
     public final String DISH_TYPE_LABEL = "Choose dish type";
-
     public final String SEARCH_BUTTON_LABEL = "Search";
 
     private SearchViewState state = new SearchViewState();

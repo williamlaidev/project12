@@ -3,69 +3,61 @@ package interface_adapter;
 import java.awt.Point;
 
 public class SearchViewState {
-    private String distance = "";
-    private String distanceError = null;
-    private String selectedDishType = "";
-    private String dishTypeError = null;
-    private Point mousePosition = null;
-    private String mousePositionError = null;
+    private Point mousePosition;
+    private String distance;
+    private String selectedDishType;
+    private String distanceError;
 
+    // Copy constructor
     public SearchViewState(SearchViewState copy) {
-        distance = copy.distance;
-        distanceError = copy.distanceError;
-        selectedDishType = copy.selectedDishType;
-        dishTypeError = copy.dishTypeError;
-        mousePosition = copy.mousePosition;
-        mousePositionError = copy.mousePositionError;
+        this.mousePosition = copy.mousePosition;
+        this.distance = copy.distance;
+        this.selectedDishType = copy.selectedDishType;
+        this.distanceError = copy.distanceError;
     }
 
+    // Default constructor
     public SearchViewState() {}
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public String getDistanceError() {
-        return distanceError;
-    }
-
-    public String getSelectedDishType() {
-        return selectedDishType;
-    }
-
-    public String getDishTypeError() {
-        return dishTypeError;
-    }
 
     public Point getMousePosition() {
         return mousePosition;
-    }
-
-    public String getMousePositionError() {
-        return mousePositionError;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public void setDistanceError(String distanceError) {
-        this.distanceError = distanceError;
-    }
-
-    public void setSelectedDishType(String selectedDishType) {
-        this.selectedDishType = selectedDishType;
-    }
-
-    public void setDishTypeError(String dishTypeError) {
-        this.dishTypeError = dishTypeError;
     }
 
     public void setMousePosition(Point mousePosition) {
         this.mousePosition = mousePosition;
     }
 
-    public void setMousePositionError(String mousePositionError) {
-        this.mousePositionError = mousePositionError;
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getSelectedDishType() {
+        return selectedDishType;
+    }
+
+    public void setSelectedDishType(String selectedDishType) {
+        this.selectedDishType = selectedDishType;
+    }
+
+    public String getDistanceError() {
+        return distanceError;
+    }
+
+    public void setDistanceError(String distanceError) {
+        this.distanceError = distanceError;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchViewState{" +
+                "mousePosition=" + mousePosition +
+                ", distance='" + distance + '\'' +
+                ", selectedDishType='" + selectedDishType + '\'' +
+                ", distanceError='" + distanceError + '\'' +
+                '}';
     }
 }

@@ -108,7 +108,6 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         if (x >= SearchViewComponentsPosition.MAP_AREA_X && x <= SearchViewComponentsPosition.MAP_AREA_X + SearchViewComponentsPosition.MAP_AREA_WIDTH
                 && y >= SearchViewComponentsPosition.MAP_AREA_Y && y <= SearchViewComponentsPosition.MAP_AREA_Y + SearchViewComponentsPosition.MAP_AREA_HEIGHT) {
             this.mousePosition = mouseEvent.getPoint();
-            System.out.println("Mouse clicked at: " + mousePosition);
         }
         repaint();
     }

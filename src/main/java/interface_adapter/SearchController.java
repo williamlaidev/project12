@@ -29,11 +29,12 @@ public class SearchController {
         String distance = searchViewState.getDistance();
         String selectedDishType = searchViewState.getSelectedDishType();
 
-        if (distance == null || distance.isEmpty()) {
-            // Calculate the map scale in meters if the distance is null or empty
-            double mapSizeMeters = ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth);
-            distance = String.valueOf(mapSizeMeters);
+        if (distance.isEmpty()) {
+            distance = Double.toString(ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth));
+
         }
+
+        System.out.println("Controller execute called with state: " + searchViewState);
 
         if (mousePosition != null) {
             double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
@@ -46,4 +47,3 @@ public class SearchController {
         }
     }
 }
-
