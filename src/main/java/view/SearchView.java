@@ -2,7 +2,6 @@ package view;
 
 import interface_adapter.SearchController;
 import interface_adapter.SearchViewModel;
-import interface_adapter.SearchViewState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
     private final SearchViewModel searchViewModel;
     private final JTextField distanceInputField = new JTextField(15);
-    private final SearchViewState searchViewState;
+    private Point mousePosition;
 
     private final SearchController searchController;
 
@@ -40,7 +39,6 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
     public SearchView(SearchController controller, SearchViewModel searchViewModel, String[] dishTypeList, Image mapImage) {
         this.searchController = controller;
         this.searchViewModel = searchViewModel;
-        this.searchViewState = new SearchViewState();
         this.mapImage = mapImage;
         searchViewModel.addPropertyChangeListener(this);
 
@@ -65,7 +63,13 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 SearchViewComponentsPosition.DISH_TYPE_LABEL_WIDTH, SearchViewComponentsPosition.DISH_TYPE_LABEL_HEIGHT);
         add(dishTypeLabel);
 
-        dishTypeComboBox = new JComboBox<>(dishTypeList);
+        // Add "ALL" option to the dish type list
+        String[] extendedDishTypeList = new String[dishTypeList.length + 1];
+        extendedDishTypeList[0] = "ALL";
+        System.arraycopy(dishTypeList, 0, extendedDishTypeList, 1, dishTypeList.length);
+
+        dishTypeComboBox = new JComboBox<>(extendedDishTypeList);
+        dishTypeComboBox.setSelectedIndex(0); // Set default selection to "ALL"
         dishTypeComboBox.setBounds(SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_X, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_Y,
                 SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_WIDTH, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_HEIGHT);
         add(dishTypeComboBox);
@@ -77,9 +81,10 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 new ActionListener() {
                     public void actionPerformed(ActionEvent event) {
                         if (event.getSource().equals(searchButton)) {
-                            searchViewState.setDistance(distanceInputField.getText());
-                            searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-                            searchController.execute(searchViewState.getMousePosition(), searchViewState.getDistance(), searchViewState.getSelectedDishType());
+                            searchController.execute(mousePosition,
+                                    distanceInputField.getText(),
+                                    (String) dishTypeComboBox.getSelectedItem()
+                            );
                         }
                     }
                 }
@@ -100,9 +105,8 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         int y = mouseEvent.getY();
         if (x >= SearchViewComponentsPosition.MAP_AREA_X && x <= SearchViewComponentsPosition.MAP_AREA_X + SearchViewComponentsPosition.MAP_AREA_WIDTH
                 && y >= SearchViewComponentsPosition.MAP_AREA_Y && y <= SearchViewComponentsPosition.MAP_AREA_Y + SearchViewComponentsPosition.MAP_AREA_HEIGHT) {
-            Point point = mouseEvent.getPoint();
-            searchViewState.setMousePosition(point);
-            System.out.println("Mouse clicked at: " + point);
+            this.mousePosition = mouseEvent.getPoint();
+            System.out.println("Mouse clicked at: " + mousePosition);
         }
         repaint();
     }
@@ -190,11 +194,11 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 SearchViewComponentsPosition.MAP_AREA_WIDTH + 1, SearchViewComponentsPosition.MAP_AREA_HEIGHT + 1);
 
         // Draw the mouse position if available
-        Point point = searchViewState.getMousePosition();
-        if (point != null) {
+        if (mousePosition != null) {
             graphics.setColor(Color.RED);
-            graphics.drawOval(point.x - 5, point.y - 5, 10, 10);
-            graphics.drawString("Click Position", point.x + 10, point.y);
+            graphics.drawOval(mousePosition.x - 5, mousePosition.y - 5, 10, 10);
+            graphics.drawString("Click Position", mousePosition.x + 10, mousePosition.y);
         }
     }
 }
+
