@@ -1,3 +1,5 @@
+package integration;
+
 import domain.ReviewSummarizeService;
 import entity.Review;
 import entity.Restaurant;
@@ -52,10 +54,10 @@ public class ReviewSummarizeServiceIntegrationTest {
         reviewSummarizeController = new ReviewSummarizeControllerImpl(summarizeReviews, null);
 
         reviews = Arrays.asList(
-                new Review("1", "John Doe", "The food was absolutely fantastic! The steak was cooked to perfection, and the sides complemented it perfectly. The service was attentive but not intrusive. However, the wait time was a bit long, and the prices were on the higher side.", true),
-                new Review("1", "Jane Smith", "I had a wonderful dining experience here. The ambiance was great, and the staff was friendly. I particularly enjoyed the grilled salmon, which was tender and flavorful. The dessert was also a highlight. Unfortunately, the noise level was a bit high, which made conversation difficult.", true),
-                new Review("1", "Alice Johnson", "The restaurant offers a diverse menu with something for everyone. The pasta dishes were particularly noteworthy, and the homemade bread was a nice touch. While the overall experience was positive, the portion sizes were smaller than expected for the price.", true),
-                new Review("1", "Bob Brown", "A solid dining option in the area. The burgers were juicy, and the fries were crispy. The staff was friendly, but there were some issues with the order being incorrect. The atmosphere was relaxed, making it a good spot for a casual meal.", true)
+                new Review("1", "John Doe", "The food was absolutely fantastic! The steak was cooked to perfection, and the sides complemented it perfectly. The service was attentive but not intrusive. However, the wait time was a bit long, and the prices were on the higher side.", false),
+                new Review("1", "Jane Smith", "I had a wonderful dining experience here. The ambiance was great, and the staff was friendly. I particularly enjoyed the grilled salmon, which was tender and flavorful. The dessert was also a highlight. Unfortunately, the noise level was a bit high, which made conversation difficult.", false),
+                new Review("1", "Alice Johnson", "The restaurant offers a diverse menu with something for everyone. The pasta dishes were particularly noteworthy, and the homemade bread was a nice touch. While the overall experience was positive, the portion sizes were smaller than expected for the price.", false),
+                new Review("1", "Bob Brown", "A solid dining option in the area. The burgers were juicy, and the fries were crispy. The staff was friendly, but there were some issues with the order being incorrect. The atmosphere was relaxed, making it a good spot for a casual meal.", false)
         );
     }
 
@@ -69,5 +71,6 @@ public class ReviewSummarizeServiceIntegrationTest {
 
         assertNotNull(summarizedReview, "Summarized review should not be null.");
         assertTrue(summarizedReview.getContent() != null && !summarizedReview.getContent().isEmpty(), "Summarized review content should not be empty.");
+        assertTrue(summarizedReview.isSummarized(), "The summarized review's summarized flag should be true.");
     }
 }

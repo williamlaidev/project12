@@ -6,9 +6,9 @@ public class Review {
     private String restaurantId; // Change to store restaurant ID
     private String author;
     private String content;
-    private boolean summarizedReview;
+    private boolean isSummarized;
 
-    public Review(String restaurantId, String author, String content, boolean summarizedReview) {
+    public Review(String restaurantId, String author, String content, boolean isSummarized) {
         validateRestaurantId(restaurantId);
         validateAuthor(author);
         validateContent(content);
@@ -16,7 +16,7 @@ public class Review {
         this.restaurantId = restaurantId;
         this.author = author;
         this.content = content;
-        this.summarizedReview = summarizedReview;
+        this.isSummarized = isSummarized;
     }
 
     public String getRestaurantId() {
@@ -46,12 +46,12 @@ public class Review {
         this.content = content;
     }
 
-    public boolean isSummarizedReview() {
-        return summarizedReview;
+    public boolean isSummarized() {
+        return isSummarized;
     }
 
-    public void setSummarizedReview(boolean summarizedReview) {
-        this.summarizedReview = summarizedReview;
+    public void setSummarized(boolean summarized) {
+        this.isSummarized = summarized;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Review {
                 "restaurantId='" + restaurantId + '\'' +
                 ", author='" + author + '\'' +
                 ", content='" + content + '\'' +
-                ", summarizedReview=" + summarizedReview +
+                ", summarizedReview=" + isSummarized +
                 '}';
     }
 
@@ -69,7 +69,7 @@ public class Review {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return summarizedReview == review.summarizedReview &&
+        return isSummarized == review.isSummarized &&
                 Objects.equals(restaurantId, review.restaurantId) &&
                 Objects.equals(author, review.author) &&
                 Objects.equals(content, review.content);
@@ -77,7 +77,7 @@ public class Review {
 
     @Override
     public int hashCode() {
-        return Objects.hash(restaurantId, author, content, summarizedReview);
+        return Objects.hash(restaurantId, author, content, isSummarized);
     }
 
     // Validation methods

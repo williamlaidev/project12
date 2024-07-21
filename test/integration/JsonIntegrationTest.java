@@ -1,3 +1,5 @@
+package integration;
+
 import data_access.RestaurantDataAccess;
 import domain.RestaurantRepository;
 import entity.DishType;
