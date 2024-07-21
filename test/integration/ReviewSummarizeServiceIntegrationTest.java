@@ -23,16 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReviewSummarizeServiceIntegrationTest {
 
-    private ReviewSummarizeService summarizeService;
-    private SummarizeReviews summarizeReviews;
     private ReviewSummarizeControllerImpl reviewSummarizeController;
     private List<Review> reviews;
 
-    private GetRestaurantById getRestaurantByIdMock;
-
     @BeforeEach
     public void setUp() {
-        getRestaurantByIdMock = Mockito.mock(GetRestaurantById.class);
+        GetRestaurantById getRestaurantByIdMock = Mockito.mock(GetRestaurantById.class);
 
         Location location = new Location(37.7749, -122.4194);
 
@@ -44,14 +40,14 @@ public class ReviewSummarizeServiceIntegrationTest {
                 DishType.ITALIAN,
                 4.5,
                 "http://example.com/photo.jpg",
-                Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                List.of(new Review("1", "author1", "content1", false)), // userReviews
                 new Review("1", "author1", "content1", true)            // summarizedReview
         );
 
         Mockito.when(getRestaurantByIdMock.execute("1")).thenReturn(Optional.of(restaurant));
 
-        summarizeService = new GeminiReviewSummarizeService(getRestaurantByIdMock);
-        summarizeReviews = new SummarizeReviews(summarizeService);
+        ReviewSummarizeService summarizeService = new GeminiReviewSummarizeService(getRestaurantByIdMock);
+        SummarizeReviews summarizeReviews = new SummarizeReviews(summarizeService);
         reviewSummarizeController = new ReviewSummarizeControllerImpl(summarizeReviews, null);
 
         reviews = Arrays.asList(

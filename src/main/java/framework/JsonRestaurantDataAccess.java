@@ -20,13 +20,20 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
         // Ensure the file exists, create it if it does not
         try {
             if (jsonFile.getParentFile() != null && !jsonFile.getParentFile().exists()) {
-                jsonFile.getParentFile().mkdirs(); // Create directories if they do not exist
+                boolean dirsCreated = jsonFile.getParentFile().mkdirs(); // Create directories if they do not exist
+                if (!dirsCreated) {
+                    System.out.println("Failed to create directories: " + jsonFile.getParentFile().getPath());
+                }
             }
             if (!jsonFile.exists()) {
-                jsonFile.createNewFile(); // Create the file if it does not exist
-                System.out.println("Created new file: " + jsonFile.getPath());
-                // Initialize the file with an empty list if needed
-                objectMapper.writeValue(jsonFile, List.of());
+                boolean fileCreated = jsonFile.createNewFile(); // Create the file if it does not exist
+                if (fileCreated) {
+                    System.out.println("Created new file: " + jsonFile.getPath());
+                    // Initialize the file with an empty list if needed
+                    objectMapper.writeValue(jsonFile, List.of());
+                } else {
+                    System.out.println("File already exists: " + jsonFile.getPath());
+                }
             }
         } catch (IOException e) {
             System.out.println("Failed to create or initialize file: " + jsonFile.getPath());
@@ -45,7 +52,8 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
         if (jsonFile.exists()) {
             try {
                 System.out.println("Loading restaurants from file: " + jsonFile.getPath());
-                return objectMapper.readValue(jsonFile, new TypeReference<List<Restaurant>>(){});
+                return objectMapper.readValue(jsonFile, new TypeReference<>() {
+                });
             } catch (IOException e) {
                 System.out.println("Failed to load restaurants from file: " + jsonFile.getPath());
                 e.printStackTrace();

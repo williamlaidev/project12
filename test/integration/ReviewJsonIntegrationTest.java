@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import use_case.*;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,11 +19,10 @@ public class ReviewJsonIntegrationTest {
 
     private static final String JSON_FILE_PATH = "src/resources/data/reviews.json";
     private ReviewRepository reviewRepository;
-    private ReviewDataAccess reviewDataAccess;
 
     @BeforeEach
     public void setUp() {
-        reviewDataAccess = new JsonReviewDataAccess();
+        ReviewDataAccess reviewDataAccess = new JsonReviewDataAccess();
         reviewRepository = new InMemoryReviewRepository(reviewDataAccess);
 
         File jsonFile = new File(JSON_FILE_PATH);

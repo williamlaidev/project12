@@ -48,7 +48,7 @@ class GetAllRestaurantsTest {
                         DishType.PIZZA,       // dishType (use appropriate enum value)
                         4.0,                  // averageRating
                         "http://example.com/photo1.jpg", // photoUrl
-                        Arrays.asList(new Review("1", "author1", "content1", false)), // userReviews
+                        List.of(new Review("1", "author1", "content1", false)), // userReviews
                         new Review("1", "author1", "content1", true)            // summarizedReview
                 ),
                 new Restaurant(
@@ -59,7 +59,7 @@ class GetAllRestaurantsTest {
                         DishType.RAMEN,      // dishType (use appropriate enum value)
                         3.5,                  // averageRating
                         "http://example.com/photo2.jpg", // photoUrl
-                        Arrays.asList(new Review("2", "author1", "content1", false)), // userReviews
+                        List.of(new Review("2", "author1", "content1", false)), // userReviews
                         new Review("2", "author1", "content1", true)            // summarizedReview
                 )
         );

@@ -7,7 +7,7 @@ import java.util.Objects;
  * Represents a dining establishment.
  */
 public class Restaurant {
-    private String restaurantId;
+    private final String restaurantId;
     private String name;
     private Location location;
     private String address;
