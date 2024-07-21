@@ -8,16 +8,15 @@ public class SearchViewModel extends ViewModel {
     public final String TITLE_LABEL = "Search View";
     public final String DISTANCE_LABEL = "Choose distance";
     public final String DISH_TYPE_LABEL = "Choose dish type";
-
     public final String SEARCH_BUTTON_LABEL = "Search";
 
-    private SearchState state = new SearchState();
+    private SearchViewState state = new SearchViewState();
 
     public SearchViewModel() {
         super("search");
     }
 
-    public void setState(SearchState state) {
+    public void setState(SearchViewState state) {
         this.state = state;
     }
 
@@ -32,8 +31,7 @@ public class SearchViewModel extends ViewModel {
         changeSupport.addPropertyChangeListener(listener);
     }
 
-    public SearchState getState() {
+    public SearchViewState getState() {
         return state;
     }
-
 }

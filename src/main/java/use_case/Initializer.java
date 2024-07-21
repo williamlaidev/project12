@@ -4,7 +4,11 @@ import api.GeolocationAPI;
 import api.MapImageAPI;
 import entity.DishType;
 import entity.Location;
+import entity.Map;
+import entity.MapFactory;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Initializer class is responsible for creating and storing the necessary information
@@ -19,6 +23,7 @@ public class Initializer {
     private Location currentLocation;
     private DishType[] dishTypes;
     private MapImageInteractor mapImageInteractor;
+    private Map map;
 
     /**
      * Constructs an Initializer with a GeolocationAPI and a MapImageInteractor.
@@ -45,8 +50,11 @@ public class Initializer {
 
         this.currentLocation = new Location(latitude, longitude);
 
-        // Create and save the map image centered at the current location
+        // Create a map entity
         int zoom = 15; // Approximate zoom level for 1km radius
+        this.map = MapFactory.createMap(latitude, longitude, zoom, List.of()); // Empty list of restaurant IDs for now
+
+        // Create and save the map image centered at the current location
         int width = 200; // Width of the image in pixels
         int height = 200; // Height of the image in pixels
         boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
@@ -80,10 +88,14 @@ public class Initializer {
      */
     public String[] getDishTypes() {
         String[] dishTypeNames = new String[dishTypes.length];
-        for (int i = 0; i < dishTypes.length; i++) {
+        for (int i = 0; i < dishTypeNames.length; i++) {
             dishTypeNames[i] = dishTypes[i].name();
         }
         return dishTypeNames;
+    }
+
+    public Map getMap() {
+        return map;
     }
 
     /**
@@ -93,7 +105,7 @@ public class Initializer {
         try {
             GeolocationAPI geolocationAPI = new GeolocationAPI();
             MapImageAPI mapImageAPI = new MapImageAPI();
-            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI);
+            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, "API_KEY");
             Initializer initializer = new Initializer(geolocationAPI, mapImageInteractor);
             initializer.initializeCurrentLocation();
             System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());

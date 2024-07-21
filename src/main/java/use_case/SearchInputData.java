@@ -1,20 +1,24 @@
 package use_case;
 
-import java.awt.*;
-
 public class SearchInputData {
-    final private Point mapPosition;
-    final private String distance;
-    final private String dishType;
+    private final double latitude;
+    private final double longitude;
+    private final String distance;
+    private final String dishType;
 
-    public SearchInputData(Point mapPosition, String distance, String dishType) {
-        this.mapPosition = mapPosition;
+    public SearchInputData(double latitude, double longitude, String distance, String dishType) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.distance = distance;
         this.dishType = dishType;
     }
 
-    public Point getMapPosition() {
-        return mapPosition;
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public String getDistance() {
@@ -24,5 +28,4 @@ public class SearchInputData {
     public String getDishType() {
         return dishType;
     }
-
 }
