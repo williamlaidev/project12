@@ -5,6 +5,7 @@ import use_case.SearchViewInteractor;
 import use_case.SearchInputData;
 import java.awt.Point;
 import utils.MapCoordinateToLocation;
+import utils.ZoomLevelToMeter;
 
 public class SearchController {
     private final SearchViewInteractor searchViewInteractor;
@@ -28,6 +29,12 @@ public class SearchController {
         String distance = searchViewState.getDistance();
         String selectedDishType = searchViewState.getSelectedDishType();
 
+        if (distance == null || distance.isEmpty()) {
+            // Calculate the map scale in meters if the distance is null or empty
+            double mapSizeMeters = ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth);
+            distance = String.valueOf(mapSizeMeters);
+        }
+
         if (mousePosition != null) {
             double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
             double latitude = latLng[0];
@@ -39,3 +46,4 @@ public class SearchController {
         }
     }
 }
+
