@@ -1,9 +1,6 @@
 package interface_adapter;
 
-import entity.DishType;
-import entity.Location;
-import entity.Restaurant;
-import entity.RestaurantFactory;
+import entity.*;
 import api.GeolocationAPI;
 import api.PlacesAPI;
 import org.json.JSONArray;
@@ -86,7 +83,9 @@ public class PlacesAPIGateway implements IPlacesAPIGateway {
                         dishType,
                         averageRating,
                         photoUri,
-                        "Summarized Review Placeholder");
+                        List.of(new Review(restaurantId, "author1", "content1", false)),
+                        new Review(restaurantId, "author1", "content1", true)
+                );
 
                 restaurants.add(restaurant);
             }
