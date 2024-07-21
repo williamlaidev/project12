@@ -4,7 +4,7 @@ import api.GeolocationAPI;
 import api.MapImageAPI;
 import use_case.Initializer;
 import use_case.MapImageInteractor;
-import use_case.SimpleSearchInteractor;
+import use_case.SearchViewInteractor;
 import view.SearchView;
 
 import javax.swing.*;
@@ -34,10 +34,10 @@ public class Start {
             Image mapImage = ImageIO.read(mapImageFile);
 
             // Create the SimpleSearchInteractor
-            SimpleSearchInteractor simpleSearchInteractor = new SimpleSearchInteractor();
+            SearchViewInteractor searchViewInteractor = new SearchViewInteractor();
 
             // Create the controller and view model
-            SearchController searchController = new SearchController(simpleSearchInteractor);
+            SearchController searchController = new SearchController(searchViewInteractor);
             SearchViewModel searchViewModel = new SearchViewModel();
 
             // Create the SearchView
@@ -57,4 +57,3 @@ public class Start {
         }
     }
 }
-

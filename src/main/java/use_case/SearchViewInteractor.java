@@ -1,8 +1,8 @@
 package use_case;
 
-import java.awt.*;
+import java.awt.Point;
 
-public class SimpleSearchInteractor implements SearchInputBoundary {
+public class SearchViewInteractor implements SearchInputBoundary {
     @Override
     public void execute(SearchInputData searchInputData) {
         Point mapPosition = searchInputData.getMapPosition();

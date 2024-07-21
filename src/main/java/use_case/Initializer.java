@@ -4,8 +4,12 @@ import api.GeolocationAPI;
 import api.MapImageAPI;
 import entity.DishType;
 import entity.Location;
+import entity.Map;
+import entity.MapFactory;
 import org.json.JSONObject;
 import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.ArrayList;
 
 /**
  * Initializer class is responsible for creating and storing the necessary information
@@ -20,6 +24,7 @@ public class Initializer {
     private Location currentLocation;
     private DishType[] dishTypes;
     private MapImageInteractor mapImageInteractor;
+    private Map map;
 
     /**
      * Constructs an Initializer with a GeolocationAPI and a MapImageInteractor.
@@ -46,11 +51,14 @@ public class Initializer {
 
         this.currentLocation = new Location(latitude, longitude);
 
-        // Create and save the map image centered at the current location
+        // Create the Map entity
         int zoom = 15; // Approximate zoom level for 1km radius
+        this.map = MapFactory.createMap(latitude, longitude, zoom, new ArrayList<>());
+
+        // Create and save the map image centered at the current location
         int width = 200; // Width of the image in pixels
         int height = 200; // Height of the image in pixels
-        boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
+        boolean success = mapImageInteractor.fetchAndSaveMapImage(map.getCurrentLatitude(), map.getCurrentLongitude(), map.getZoomLevel(), width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");
         }
@@ -88,6 +96,15 @@ public class Initializer {
     }
 
     /**
+     * Gets the current map entity.
+     *
+     * @return The current map entity.
+     */
+    public Map getMap() {
+        return map;
+    }
+
+    /**
      * Main method for testing purposes.
      */
     public static void main(String[] args) {
@@ -108,9 +125,11 @@ public class Initializer {
             for (String dishType : dishTypes) {
                 System.out.println(dishType);
             }
+
+            Map map = initializer.getMap();
+            System.out.println("Map: " + map);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-

@@ -1,11 +1,11 @@
 package use_case;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class SearchInputData {
-    final private Point mapPosition;
-    final private String distance;
-    final private String dishType;
+    private final Point mapPosition;
+    private final String distance;
+    private final String dishType;
 
     public SearchInputData(Point mapPosition, String distance, String dishType) {
         this.mapPosition = mapPosition;
@@ -24,5 +24,4 @@ public class SearchInputData {
     public String getDishType() {
         return dishType;
     }
-
 }

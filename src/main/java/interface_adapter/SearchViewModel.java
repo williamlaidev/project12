@@ -11,13 +11,13 @@ public class SearchViewModel extends ViewModel {
 
     public final String SEARCH_BUTTON_LABEL = "Search";
 
-    private SearchState state = new SearchState();
+    private SearchViewState state = new SearchViewState();
 
     public SearchViewModel() {
         super("search");
     }
 
-    public void setState(SearchState state) {
+    public void setState(SearchViewState state) {
         this.state = state;
     }
 
@@ -32,8 +32,7 @@ public class SearchViewModel extends ViewModel {
         changeSupport.addPropertyChangeListener(listener);
     }
 
-    public SearchState getState() {
+    public SearchViewState getState() {
         return state;
     }
-
 }
