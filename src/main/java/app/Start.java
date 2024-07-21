@@ -1,7 +1,10 @@
-package interface_adapter;
+package app;
+
 
 import api.GeolocationAPI;
 import api.MapImageAPI;
+import interface_adapter.SearchController;
+import interface_adapter.SearchViewModel;
 import use_case.Initializer;
 import use_case.MapImageInteractor;
 import use_case.SearchViewInteractor;
@@ -57,3 +60,4 @@ public class Start {
         }
     }
 }
+
