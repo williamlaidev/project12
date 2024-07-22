@@ -36,6 +36,7 @@ public class SearchController {
             distance = Double.toString(ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth));
         }
 
+
         System.out.println("Selected dish type string: " + selectedDishType);
 
         // Convert selected dish type string to DishType enum

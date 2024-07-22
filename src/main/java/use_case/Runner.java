@@ -14,7 +14,7 @@ public class Runner {
         SearchRestaurantGateways gateways = new SearchRestaurantGateways();
 
         // Create an instance of SearchRestaurantsDistanceInteractor, injecting the real gateways for querying
-        SearchRestaurantsDistanceInteractor searchInteractor = new SearchRestaurantsDistanceInteractor(gateways);
+        SearchRestaurantsByDistanceInteractor searchInteractor = new SearchRestaurantsByDistanceInteractor(gateways);
 
         // Set the parameters for the search query
         double latitude = 43.6494; // Latitude coordinate for search location
