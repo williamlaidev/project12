@@ -1,6 +1,5 @@
 package interface_adapter;
 
-import domain.RestaurantRepository;
 import entity.*;
 import domain.SearchInputBoundary;
 import framework.GooglePlacesRestaurantSearchService;
@@ -8,6 +7,7 @@ import framework.EnvConfigService;
 import framework.EnvConfigServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,13 +15,11 @@ import java.util.Optional;
 public class SearchRestaurantGateways implements SearchInputBoundary {
     private final GooglePlacesRestaurantSearchService placesService;
     private final RestaurantMapper restaurantMapper;
-    private final RestaurantRepository restaurantRepository;
 
-    public SearchRestaurantGateways(RestaurantRepository restaurantRepository) {
+    public SearchRestaurantGateways() {
         EnvConfigService envConfigService = new EnvConfigServiceImpl();
         this.placesService = new GooglePlacesRestaurantSearchService(envConfigService);
         this.restaurantMapper = new RestaurantMapper(placesService);
-        this.restaurantRepository = restaurantRepository;
     }
 
     @Override
@@ -36,13 +34,6 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
 
             List<Restaurant> restaurants = fetchNearbyRestaurants(location, dishTypeFilter, Integer.parseInt(searchInput.getDistance()), maxResults);
 
-            System.out.println("Search completed. Found " + restaurants.size() + " restaurant(s).");
-
-            // Save the found restaurants to the repository
-            for (Restaurant restaurant : restaurants) {
-                restaurantRepository.add(restaurant);
-            }
-
             return Optional.of(restaurants);
         } catch (Exception e) {
             System.err.println("Error during restaurant search: " + e.getMessage());
@@ -53,10 +44,8 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
 
     private List<Restaurant> fetchNearbyRestaurants(Location location, DishType dishTypeFilter, int radius, int maxResults) throws Exception {
         List<Restaurant> restaurants = new ArrayList<>();
-        System.out.println("Calling placesService to fetch nearby restaurants...");
 
         JSONObject response = placesService.fetchNearbyRestaurants(location.getLatitude(), location.getLongitude(), radius);
-        System.out.println("Successfully fetched nearby restaurants from placesService.");
 
         parseRestaurantsFromResponse(restaurants, response, dishTypeFilter, maxResults);
         return restaurants;
@@ -69,15 +58,18 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
             return;
         }
 
-        System.out.println("Parsing " + places.length() + " places from response...");
         for (int i = 0; i < Math.min(places.length(), maxResults); i++) {
             JSONObject place = places.getJSONObject(i);
-            System.out.println("Processing place " + (i + 1) + " of " + Math.min(places.length(), maxResults) + "...");
 
             Restaurant restaurant = restaurantMapper.mapToRestaurant(place, dishTypeFilter);
             if (restaurant != null) {
                 restaurants.add(restaurant);
-                System.out.println("Restaurant: " + restaurant.getName() + " has been added to the results.");
+                Double averageRating = restaurant.getAverageRating();
+                String address = restaurant.getAddress();
+                String photoUrl = restaurant.getPhotoUrl();
+
+
+                    System.out.println("Restaurant Name: " + restaurant.getName() + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
             }
         }
     }

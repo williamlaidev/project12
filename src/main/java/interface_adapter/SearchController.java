@@ -36,12 +36,8 @@ public class SearchController {
             distance = Double.toString(ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth));
         }
 
-        System.out.println("Selected dish type string: " + selectedDishType);
-
         // Convert selected dish type string to DishType enum
         DishType dishType = DishType.fromDishTypeString(selectedDishType);
-
-        System.out.println("Selected dish type: " + dishType);
 
         // Determine latitude and longitude based on mouse position or default to center
         double latitude;

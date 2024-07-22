@@ -19,9 +19,7 @@ public class SearchRestaurantsByDistanceInteractor implements SearchRestaurantsB
     @Override
     public Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults) {
         try {
-            System.out.println("Initiating search for restaurants within a radius of "
-                    + searchInput.getDistance() + " meters from location ("
-                    + searchInput.getLatitude() + ", " + searchInput.getLongitude() + ").");
+
 
             // Perform the search
             Optional<List<Restaurant>> result = searchInputBoundary.execute(searchInput, maxResults);

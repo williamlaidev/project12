@@ -1,6 +1,6 @@
 # Project 12
 
-Project 12 is a Java-based software application developed for the CSC207 Software Design course. It enables users to search for highly-rated restaurants, view their locations on a map, and read summarized reviews. The application integrates Google Maps and Gemini APIs, featuring an interactive map interface, restaurant review summaries, the ability to save unlimited restaurant lists, and support for multiple users.
+Project 12 is a Java-based software application developed for the CSC207 Software Design course. It allows users to search for highly-rated restaurants, view their locations on a map, and read summarized reviews. The application integrates Google Maps and Gemini APIs, featuring an interactive map interface, summarized restaurant reviews, the ability to save unlimited restaurant lists, and support for multiple users.
 
 Currently, users can search for restaurants and view summarized reviews with map visualization. Integration of these features is still in progress. Future updates will focus on finalizing the user interface, implementing saved list functionality, and adding support for multiple users.
 
@@ -70,43 +70,37 @@ Before running the program, configure the following settings:
    GEMINI_API_KEY="your_gemini_api_key"
    GOOGLE_MAPS_API_KEY="your_google_maps_api_key"
    ```
+3. If you're encountering any problem on getting these api keys, please contact us and we will provide working api keys.
 
 ## Usage
 
 Here's how to use the program, along with common use cases:
 
-### Search Restaurants by Distance and Dish Type on Map
+### Show the Map View of Your Current Position
 
-1. Navigate to the app package.
-2. Run `start.java`.
-3. Select a point on the map.
-4. Enter the distance range in meters.
-5. Select the restaurant type you want to search for, or choose to search for all types.
-6. The terminal will display up to ten restaurants that fit the search criteria.
-7. Reselect a point on the map and start the search again.
+1. Run src/main/java/app/Start.java
+2. The map view of your current position will be shown in the java swing window.
+3. The default map size will be about 700 meters away from your current location. The exact size is depending on your current latitude.
 
-**Description:**
-The application integrates map view with geolocation and restaurant searching. It can search for restaurants within a selected range on the map and filter by restaurant type if desired. Unfortunately, saving restaurant data locally is not yet implemented, though JSON file settings have been set up and tested. The map is currently fixed but will be updated to allow movement like Google Maps in the future. The current view is small, but UI design improvements are planned. The maximum of ten results is a default setting and can be adjusted in the future.
+### Choose a Point in the Map View as the Restaurant Searching Center
+1. Run src/main/java/app/Start.java
+2. Left click in the map view to choose a point that will become the center of searching restaurant.
+3. If you don't choose the point, the default search center is the center of the map
 
-### Search Restaurant Reviews
+### Search Restaurants by Distance
 
-1. Perform a restaurant search by distance and dish type on the map.
-2. Note down the restaurant ID of the restaurant you want to know more about and copy it.
-3. Go to the app package in the project and run `ReviewApp`.
-4. Paste the restaurant ID.
-5. The program will generate up to six reviews of that restaurant obtained from Google Maps.
+1. Run src/main/java/app/Start.java
+2. In the Choose distance text field, enter a distance in meter(numbers only). The restaurant result will be printed out.
+3. Only the restaurants within this distance to the searching center will be shown. The maximum search result is 10 restaurants.
+4. If you don't enter the distance and left it empty, the default distance is equal to the size of the map.
+5. If you enter a double, it will be rounded to an int.
+6. If you enter something that is not an int or a double, an error message will be print out.
 
-**Description:**
-Due to incomplete local data access integration, this review check cannot be merged with the restaurant search functionality in a single program. The reviews are limited to a maximum of six by default but can be adjusted in the future.
+### Search Restaurants by Dish Type
 
-### Get Restaurant Summarized Review
-
-1. Navigate to the test and integration directory.
-2. Run the review summary service integration test.
-3. You will see a new review returned with content summarizing all default review test cases.
-
-**Description:**
-Due to incomplete local data access setup, this feature is not integrated with the above functionalities. However, the program runs well, and you can adjust the context in the test cases to view differences in the summarized text.
+1. Run src/main/java/app/Start.java
+2. In the Choose dish type box, choose your desired dish type. The restaurant result will be printed out. 
+3. Only the restaurants that belong to your chosen dish type will be shown. The maximum search result is 10 restaurants.
 
 ## Contributing
 
@@ -117,23 +111,32 @@ For guidelines on contributing to the project, please refer to [CONTRIBUTING.md]
 Contributors to this project, listed in alphabetical order:
 
 **Brynn**
+***; UofT email: brynn.jeon@mail.utoronto.ca ;***
+***github id : briskbyte***
 - Project Design
 - Entity Implementation
 - Data Access Integration
 
 **Frank**
+***; UofT email: frankd.fu@mail.utoronto.ca ;***
+***github id : whyimhere***
 - Project Design
+- Documentation
 - Entity Implementation
 - Google Maps Map Image API Integration
 - Java Swing View Module
 
 **Kera**
+***; UofT email: kera.kim@mail.utoronto.ca ;***
+***github id : keraakim***
 - Project Design
 - Entity Implementation
 - Google Maps Geolocation API Integration
 - Google Maps Places API Integration
 
 **William**
+***; UofT email: weiren.lai@mail.utoronto.ca ;***
+***github id : williamlaitpe***
 - Project Management
 - Documentation
 - Project Design
