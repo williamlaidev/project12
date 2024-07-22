@@ -75,25 +75,31 @@ Before running the program, configure the following settings:
 
 Here's how to use the program, along with common use cases:
 
-### Search Restaurants by Distance and Dish Type
+### Show the Map View of Your Current Position
 
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class for searching restaurants based on distance and dish type.
+1. Run src/main/java/app/Start.java
+2. The map view of your current position will be shown in the java swing window.
+3. The default map size will be about 700 meters away from your current location. The exact size is depending on your current latitude.
 
-### Search Restaurants by Distance and Nearest/Top Rated
+### Choose a Point in the Map View as the Restaurant Searching Center
+1. Run src/main/java/app/Start.java
+2. Left click in the map view to choose a point that will become the center of searching restaurant.
+3. If you don't choose the point, the default search center is the center of the map
 
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class for searching restaurants based on distance and rating.
+### Search Restaurants by Distance
+
+1. Run src/main/java/app/Start.java
+2. In the Choose distance text field, enter a distance in meter(numbers only). The restaurant result will be printed out. Only the restaurants within this distance to the searching center will be shown.
+3. If you don't enter the distance and left it empty, the default distance is equal to the size of the map.
+4. If you enter a double, it will be rounded to an int.
+5. If you enter something that is not an int or a double, an error message will be print out.
+
+### Search Restaurants by Dish Type
+
+1. Run src/main/java/app/Start.java
+2. In the Choose dish type box, choose your desired dish type. The restaurant result will be printed out. Only the restaurants that belong to your chosen dish type will be shown.
 
 ### Get Restaurant Summarized Review
-
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class to get summarized reviews for a restaurant.
-
-### Navigate on Map View
-
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class to view restaurant locations on the map.
 
 ## Contributing
 

@@ -19,6 +19,7 @@ Project12 is primarily developed in Java, with some Python scripts used for inte
     - **Google Gemini API**: Provides access to summarization features.
     - **Google Places API**: Offers information about places, including geographical data.
     - **GeoLocation API**: Facilitates location-based services and data.
+    - **Google Static Map API**: Get map image with a given location and zoom level.
 - **Local Repository**:
     - **JSON Files**: Used for local data storage.
 - **Database**:
