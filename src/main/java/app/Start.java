@@ -46,7 +46,7 @@ public class Start {
             RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository(dataAccess);
 
             // Create the SearchRestaurantsByDistanceInteractor with the repository
-            SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways(restaurantRepository));
+            SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
 
             // Create the SearchViewInteractor with the SearchRestaurantsByDistanceInteractor instance
             SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor);
