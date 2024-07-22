@@ -111,22 +111,31 @@ For guidelines on contributing to the project, please refer to [CONTRIBUTING.md]
 Contributors to this project, listed in alphabetical order:
 
 **Brynn**
+***; UofT email: brynn.jeon@mail.utoronto.ca ;***
+***github id : briskbyte***
 - Project Design
 - Entity Implementation
 - OpenAI API Integration
 
 **Frank**
+***; UofT email: frankd.fu@mail.utoronto.ca ;***
+***github id : whyimhere***
 - Project Design
+- Documentation
 - Entity Implementation
 - Google Maps API Integration
 - Java Swing View Module
 
 **Kera**
+***; UofT email: kera.kim@mail.utoronto.ca ;***
+***github id : keraakim***
 - Project Design
 - Entity Implementation
 - Google Maps API Integration
 
 **William**
+***; UofT email: weiren.lai@mail.utoronto.ca ;***
+***github id : williamlaitpe***
 - Project Management
 - Documentation
 - Project Design
