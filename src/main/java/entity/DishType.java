@@ -78,6 +78,6 @@ public enum DishType {
 
     @Override
     public String toString() {
-        return name() + " (API Types: " + String.join(", ", apiTypes) + ")";
+        return name() ;
     }
 }
