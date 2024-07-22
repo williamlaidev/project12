@@ -60,19 +60,24 @@ public enum DishType {
     }
 
     /**
-     * Finds the DishType corresponding to the given API type string.
+     * Converts a string representing the dish type into the corresponding DishType enum constant.
      *
-     * @param apiType The API type string to match.
-     * @return The corresponding DishType if a match is found, otherwise null.
+     * @param dishTypeString The string representation of the dish type.
+     * @return The corresponding DishType enum constant, or null if no match is found.
      */
-    public static DishType fromApiType(String apiType) {
-        for (DishType type : values()) {
-            for (String typeString : type.apiTypes) {
-                if (typeString.equals(apiType)) {
-                    return type;
-                }
-            }
+    public static DishType fromDishTypeString(String dishTypeString) {
+        if (dishTypeString == null || dishTypeString.trim().isEmpty()) {
+            return null; // Return null if the input is null or empty
         }
-        return null; // Return null if no match is found.
+        try {
+            return DishType.valueOf(dishTypeString.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null; // Return null if no match is found
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name() + " (API Types: " + String.join(", ", apiTypes) + ")";
     }
 }

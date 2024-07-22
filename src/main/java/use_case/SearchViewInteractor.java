@@ -1,52 +1,51 @@
 package use_case;
 
-import entity.Location;
-import interface_adapter.PlacesAPIGateway;
-import interface_adapter.SearchViewPresenter;
+import domain.SearchInputBoundary;
+import entity.DishType;
+import entity.Restaurant;
+import entity.SearchInput;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class SearchViewInteractor implements SearchInputBoundary {
-    private final SearchViewPresenter searchViewPresenter;
 
-    public SearchViewInteractor(SearchViewPresenter searchViewPresenter) {
-        this.searchViewPresenter = searchViewPresenter;
+    private final SearchRestaurantsByDistanceInteractor restaurantsInteractor;
+
+    public SearchViewInteractor(SearchRestaurantsByDistanceInteractor restaurantsInteractor) {
+        this.restaurantsInteractor = restaurantsInteractor;
     }
 
     @Override
-    public void execute(SearchInputData searchInputData) {
-        double latitude = searchInputData.getLatitude();
-        double longitude = searchInputData.getLongitude();
-        String distance = searchInputData.getDistance();
-        String dishType = searchInputData.getDishType();
+    public Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults) throws Exception {
+        double latitude = searchInput.getLatitude();
+        double longitude = searchInput.getLongitude();
+        String distance = searchInput.getDistance();
+        DishType dishType = searchInput.getDishType();
 
         try {
             double distanceValue = Double.parseDouble(distance);
             int roundedDistance = (int) Math.round(distanceValue);
-            Location location = new Location(latitude, longitude);
 
             System.out.println("Latitude: " + latitude);
             System.out.println("Longitude: " + longitude);
             System.out.println("Distance: " + roundedDistance);
-            System.out.println("Dish Type: " + dishType);
+            System.out.println("Dish Type: " + (dishType != null ? dishType : "ALL"));
 
-            int radius = roundedDistance;
+            // Create SearchInput instance to pass to the interactor
+            SearchInput searchInputForDistance = new SearchInput(latitude, longitude, distance, dishType);
 
-            if ("ALL".equalsIgnoreCase(dishType)) {
-                SearchRestaurantsByDistanceInteractor restaurants = new SearchRestaurantsByDistanceInteractor(new PlacesAPIGateway());
-                System.out.println(restaurants.search(location, radius, 10));
-            } else {
-                SearchRestaurantsByDishTypeInteractor restaurants = new SearchRestaurantsByDishTypeInteractor(new PlacesAPIGateway());
-                System.out.println(restaurants.search(location, dishType, radius, 10));
-            }
+            // Use SearchRestaurantsByDistanceInteractor for the search
+            List<Restaurant> results = restaurantsInteractor.execute(searchInputForDistance, maxResults).orElse(new ArrayList<>());
+
+            return Optional.of(results);
         } catch (NumberFormatException numberFormatException) {
             System.out.println("Invalid distance input. Please enter a number.");
+            return Optional.empty();
+        } catch (Exception e) {
+            System.out.println("An error occurred during the search: " + e.getMessage());
+            return Optional.empty();
         }
     }
 }
-
-
-
-
-
-
-
-

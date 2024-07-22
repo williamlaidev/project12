@@ -9,17 +9,17 @@ import java.util.concurrent.TimeUnit;
  * This class ensures that requests are limited to a specified rate by enforcing
  * a delay between consecutive requests.
  */
-public class ReviewSummarizeRateLimiter implements RateLimiter {
+public class RateLimiterImpl implements RateLimiter {
 
     private final long requestIntervalMs; // Interval between requests in milliseconds
     private Instant lastRequestTime; // Timestamp of the last request
 
     /**
-     * Constructs a ReviewSummarizeRateLimiter with a specified rate limit.
+     * Constructs a RateLimiterImpl with a specified rate limit.
      *
      * @param maxRequestsPerMinute the maximum number of requests allowed per minute
      */
-    public ReviewSummarizeRateLimiter(int maxRequestsPerMinute) {
+    public RateLimiterImpl(int maxRequestsPerMinute) {
         // Calculate the interval between requests in milliseconds
         this.requestIntervalMs = TimeUnit.MINUTES.toMillis(1) / maxRequestsPerMinute;
         // Initialize the last request time to the current time
@@ -36,7 +36,13 @@ public class ReviewSummarizeRateLimiter implements RateLimiter {
             // Compute the amount of time to wait
             long waitTime = requestIntervalMs - timeSinceLastRequest;
             // Sleep the thread for the calculated wait time
-            Thread.sleep(waitTime);
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                // Restore the interrupted status and throw
+                Thread.currentThread().interrupt();
+                throw e;
+            }
             return waitTime;
         }
         // Update the last request time to the current time

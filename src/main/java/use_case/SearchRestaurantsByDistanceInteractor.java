@@ -1,27 +1,41 @@
 package use_case;
 
-import entity.Location;
 import entity.Restaurant;
-import interface_adapter.IPlacesAPIGateway;
+import entity.SearchInput;
+import domain.SearchInputBoundary;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SearchRestaurantsByDistanceInteractor implements SearchRestaurantsByDistance {
 
-    private final IPlacesAPIGateway placesAPIGateway;
+    private final SearchInputBoundary searchInputBoundary;
 
-    public SearchRestaurantsByDistanceInteractor(IPlacesAPIGateway placesAPIGateway) {
-        this.placesAPIGateway = placesAPIGateway;
+    public SearchRestaurantsByDistanceInteractor(SearchInputBoundary searchInputBoundary) {
+        this.searchInputBoundary = searchInputBoundary;
     }
 
     @Override
-    public List<Restaurant> search(Location location, int radius, int maxResults) {
-        List<Restaurant> restaurants = new ArrayList<>();
+    public Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults) {
         try {
-            restaurants = placesAPIGateway.getNearbyRestaurants(location, radius, maxResults);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Initiating search for restaurants within a radius of "
+                    + searchInput.getDistance() + " meters from location ("
+                    + searchInput.getLatitude() + ", " + searchInput.getLongitude() + ").");
+
+            // Perform the search
+            Optional<List<Restaurant>> result = searchInputBoundary.execute(searchInput, maxResults);
+            List<Restaurant> restaurants = result.orElse(new ArrayList<>());
+
+            System.out.println("Search completed. Found " + restaurants.size() + " restaurant(s) within a radius of "
+                    + searchInput.getDistance() + " meters from location ("
+                    + searchInput.getLatitude() + ", " + searchInput.getLongitude() + ").");
+
+            return Optional.of(restaurants);
+        } catch (Exception e) {
+            System.err.println("Error during restaurant search: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
         }
-        return restaurants;
     }
 }
