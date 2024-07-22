@@ -3,7 +3,7 @@ package framework;
 /**
  * Interface for handling output and error messages.
  */
-public interface OutputHandler {
+public interface SummarizationOutputHandler {
 
     /**
      * Processes standard output.

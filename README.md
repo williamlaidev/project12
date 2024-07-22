@@ -1,6 +1,6 @@
 # Project 12
 
-Project 12 is a Java-based software application developed for the CSC207 Software Design course. It allows users to search for highly-rated restaurants, view their locations on a map, and read summarized reviews. The application integrates Google Maps and Gemini APIs, featuring an interactive map interface, summarized restaurant reviews, the ability to save unlimited restaurant lists, and support for multiple users.
+Project 12 is a Java-based software application developed for the CSC207 Software Design course. It enables users to search for highly-rated restaurants, view their locations on a map, and read summarized reviews. The application integrates Google Maps and Gemini APIs, featuring an interactive map interface, restaurant review summaries, the ability to save unlimited restaurant lists, and support for multiple users.
 
 Currently, users can search for restaurants and view summarized reviews with map visualization. Integration of these features is still in progress. Future updates will focus on finalizing the user interface, implementing saved list functionality, and adding support for multiple users.
 
@@ -75,25 +75,38 @@ Before running the program, configure the following settings:
 
 Here's how to use the program, along with common use cases:
 
-### Search Restaurants by Distance and Dish Type
+### Search Restaurants by Distance and Dish Type on Map
 
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class for searching restaurants based on distance and dish type.
+1. Navigate to the app package.
+2. Run `start.java`.
+3. Select a point on the map.
+4. Enter the distance range in meters.
+5. Select the restaurant type you want to search for, or choose to search for all types.
+6. The terminal will display up to ten restaurants that fit the search criteria.
+7. Reselect a point on the map and start the search again.
 
-### Search Restaurants by Distance and Nearest/Top Rated
+**Description:**
+The application integrates map view with geolocation and restaurant searching. It can search for restaurants within a selected range on the map and filter by restaurant type if desired. Unfortunately, saving restaurant data locally is not yet implemented, though JSON file settings have been set up and tested. The map is currently fixed but will be updated to allow movement like Google Maps in the future. The current view is small, but UI design improvements are planned. The maximum of ten results is a default setting and can be adjusted in the future.
 
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class for searching restaurants based on distance and rating.
+### Search Restaurant Reviews
+
+1. Perform a restaurant search by distance and dish type on the map.
+2. Note down the restaurant ID of the restaurant you want to know more about and copy it.
+3. Go to the app package in the project and run `ReviewApp`.
+4. Paste the restaurant ID.
+5. The program will generate up to six reviews of that restaurant obtained from Google Maps.
+
+**Description:**
+Due to incomplete local data access integration, this review check cannot be merged with the restaurant search functionality in a single program. The reviews are limited to a maximum of six by default but can be adjusted in the future.
 
 ### Get Restaurant Summarized Review
 
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class to get summarized reviews for a restaurant.
+1. Navigate to the test and integration directory.
+2. Run the review summary service integration test.
+3. You will see a new review returned with content summarizing all default review test cases.
 
-### Navigate on Map View
-
-1. Navigate to the use case package in your IDE.
-2. Run the relevant class to view restaurant locations on the map.
+**Description:**
+Due to incomplete local data access setup, this feature is not integrated with the above functionalities. However, the program runs well, and you can adjust the context in the test cases to view differences in the summarized text.
 
 ## Contributing
 
@@ -106,18 +119,19 @@ Contributors to this project, listed in alphabetical order:
 **Brynn**
 - Project Design
 - Entity Implementation
-- OpenAI API Integration
+- Data Access Integration
 
 **Frank**
 - Project Design
 - Entity Implementation
-- Google Maps API Integration
+- Google Maps Map Image API Integration
 - Java Swing View Module
 
 **Kera**
 - Project Design
 - Entity Implementation
-- Google Maps API Integration
+- Google Maps Geolocation API Integration
+- Google Maps Places API Integration
 
 **William**
 - Project Management
@@ -125,7 +139,8 @@ Contributors to this project, listed in alphabetical order:
 - Project Design
 - Entity Implementation
 - Gemini API Integration
-- SQLite Database Integration
+- Google Maps Places API Integration
+- Data Access Integration
 
 Special thanks to TA Howard and Instructor Yasaman for their guidance.
 

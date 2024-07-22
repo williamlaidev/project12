@@ -3,6 +3,7 @@ package domain;
 import entity.Review;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface ReviewRepository {
 
