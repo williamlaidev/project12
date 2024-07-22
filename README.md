@@ -115,7 +115,7 @@ Contributors to this project, listed in alphabetical order:
 ***github id : briskbyte***
 - Project Design
 - Entity Implementation
-- OpenAI API Integration
+- Data Access Integration
 
 **Frank**
 ***; UofT email: frankd.fu@mail.utoronto.ca ;***
@@ -123,7 +123,7 @@ Contributors to this project, listed in alphabetical order:
 - Project Design
 - Documentation
 - Entity Implementation
-- Google Maps API Integration
+- Google Maps Map Image API Integration
 - Java Swing View Module
 
 **Kera**
@@ -131,7 +131,8 @@ Contributors to this project, listed in alphabetical order:
 ***github id : keraakim***
 - Project Design
 - Entity Implementation
-- Google Maps API Integration
+- Google Maps Geolocation API Integration
+- Google Maps Places API Integration
 
 **William**
 ***; UofT email: weiren.lai@mail.utoronto.ca ;***
@@ -141,7 +142,8 @@ Contributors to this project, listed in alphabetical order:
 - Project Design
 - Entity Implementation
 - Gemini API Integration
-- SQLite Database Integration
+- Google Maps Places API Integration
+- Data Access Integration
 
 Special thanks to TA Howard and Instructor Yasaman for their guidance.
 

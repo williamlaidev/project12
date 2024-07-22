@@ -12,17 +12,17 @@ public class PythonScriptExecutor implements ScriptExecutor {
 
     private final String scriptPath; // Path to the Python script
     private static final String PYTHON_COMMAND = "myenv/bin/python3";
-    private final OutputHandler outputHandler;
+    private final SummarizationOutputHandler summarizationOutputHandler;
 
     /**
      * Constructs a PythonScriptExecutor with the specified script path and output handler.
      *
      * @param scriptPath the path to the Python script to execute
-     * @param outputHandler the handler for script output and errors
+     * @param summarizationOutputHandler the handler for script output and errors
      */
-    public PythonScriptExecutor(String scriptPath, OutputHandler outputHandler) {
+    public PythonScriptExecutor(String scriptPath, SummarizationOutputHandler summarizationOutputHandler) {
         this.scriptPath = scriptPath;
-        this.outputHandler = outputHandler;
+        this.summarizationOutputHandler = summarizationOutputHandler;
     }
 
     @Override
@@ -44,22 +44,22 @@ public class PythonScriptExecutor implements ScriptExecutor {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     output.append(line).append(System.lineSeparator());
-                    outputHandler.handleOutput(line);
+                    summarizationOutputHandler.handleOutput(line);
                 }
             }
 
             int exitCode = process.waitFor();
             String exitMessage = "Exited with code: " + exitCode;
-            outputHandler.handleOutput(exitMessage);
+            summarizationOutputHandler.handleOutput(exitMessage);
 
         } catch (IOException | InterruptedException e) {
             String errorMessage = "Error executing script: " + e.getMessage();
-            outputHandler.handleError(errorMessage);
+            summarizationOutputHandler.handleError(errorMessage);
             throw new Exception("Error executing script", e);
         }
 
-        if (outputHandler instanceof OutputHandlerImpl) {
-            ((OutputHandlerImpl) outputHandler).printFilteredOutput();
+        if (summarizationOutputHandler instanceof SummarizationOutputHandlerImpl) {
+            ((SummarizationOutputHandlerImpl) summarizationOutputHandler).printFilteredOutput();
         }
 
         return output.toString().trim();

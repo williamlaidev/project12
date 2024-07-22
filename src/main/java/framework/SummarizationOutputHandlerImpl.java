@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the OutputHandler interface.
+ * Implementation of the SummarizationOutputHandler interface.
  * This class filters and stores output lines.
  * It also handles errors by printing them to the standard error stream.
  */
-public class OutputHandlerImpl implements OutputHandler {
+public class SummarizationOutputHandlerImpl implements SummarizationOutputHandler {
     private final List<String> filteredOutput = new ArrayList<>();
 
     /**
