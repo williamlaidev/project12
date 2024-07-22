@@ -87,6 +87,10 @@ Here's how to use the program, along with common use cases:
 2. Left click in the map view to choose a point that will become the center of searching restaurant.
 3. If you don't choose the point, the default search center is the center of the map
 
+Note;
+- The size of the view will be larger in future update.
+- The map will be movalbe like google map in the future.
+
 ### Search Restaurants by Distance
 
 1. Run src/main/java/app/Start.java
@@ -96,11 +100,37 @@ Here's how to use the program, along with common use cases:
 5. If you enter a double, it will be rounded to an int.
 6. If you enter something that is not an int or a double, an error message will be print out.
 
+Note:
+- The view size will be larger in future updates. 
+- The map will be movable like Google Maps in the future.
+
 ### Search Restaurants by Dish Type
 
 1. Run src/main/java/app/Start.java
 2. In the Choose dish type box, choose your desired dish type. The restaurant result will be printed out. 
 3. Only the restaurants that belong to your chosen dish type will be shown. The maximum search result is 10 restaurants.
+
+Note:
+- The program might search for more than ten places, but at most 10 restaurants will be displayed for now.
+
+### Get Restaurant Reviews (Partial)
+
+1. Run src/main/java/ReviewApp.java. 
+2. Enter the restaurant ID from the results of the previous restaurant search. 
+3. The terminal will print out up to six of the most relevant reviews of the restaurant gathered from Google Maps.
+
+Note:
+- This function is not integrated with the restaurant search due to incomplete local data access integration. Currently, as long as the restaurant ID is valid on Google Maps, it will help the user get up to six of the most relevant reviews.
+- Future improvements will focus on integrating this feature with restaurant search by distance and dish type so that reviews can be viewed immediately after a search.
+
+### Get Summarized Restaurant Reviews (Partial)
+1. Run test/integration/ReviewSummarizeServiceIntegrationTest. 
+2. The default test case will use four fake reviews with fake restaurant data. The program will generate a summarized review based on the fake reviews. 
+3. You can modify the content of the reviews in the test cases to test the generation and summarization feature.
+
+Note:
+- This function is not integrated with the restaurant search and review features due to incomplete local data integration.
+- In future updates, when users check restaurant reviews for a restaurant searched on the map, a generated review will also be shown immediately.
 
 ## Contributing
 
