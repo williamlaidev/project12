@@ -39,7 +39,6 @@ public class GoogleGeolocationService implements GeolocationService {
             throw new IllegalArgumentException("API key is missing. Please check your environment configuration.");
         }
 
-        System.out.println("Using API key: " + apiKey);
 
         URL url = new URL(GEOLOCATION_API_URL + "?key=" + apiKey);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -50,7 +49,6 @@ public class GoogleGeolocationService implements GeolocationService {
 
         // Send an empty JSON object as request body
         String jsonInputString = "{}";
-        System.out.println("Sending request to Google Geolocation API with input: " + jsonInputString);
 
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
@@ -59,7 +57,6 @@ public class GoogleGeolocationService implements GeolocationService {
 
         // Check HTTP response code
         int responseCode = conn.getResponseCode();
-        System.out.println("Received HTTP response code: " + responseCode);
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
             throw new RuntimeException("Failed : HTTP error code : " + responseCode);
@@ -70,7 +67,6 @@ public class GoogleGeolocationService implements GeolocationService {
         StringBuilder response = new StringBuilder();
         String responseLine;
 
-        System.out.println("Reading response from the input stream...");
         while ((responseLine = in.readLine()) != null) {
             response.append(responseLine.trim());
         }
@@ -78,7 +74,6 @@ public class GoogleGeolocationService implements GeolocationService {
         in.close();
         conn.disconnect();
 
-        System.out.println("Response received: " + response);
 
         // Convert the response to a JSONObject and return it
         return new JSONObject(response.toString());

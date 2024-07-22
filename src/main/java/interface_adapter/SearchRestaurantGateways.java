@@ -34,8 +34,6 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
 
             List<Restaurant> restaurants = fetchNearbyRestaurants(location, dishTypeFilter, Integer.parseInt(searchInput.getDistance()), maxResults);
 
-            System.out.println("Search completed. Found " + restaurants.size() + " restaurant(s).");
-
             return Optional.of(restaurants);
         } catch (Exception e) {
             System.err.println("Error during restaurant search: " + e.getMessage());
@@ -46,10 +44,8 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
 
     private List<Restaurant> fetchNearbyRestaurants(Location location, DishType dishTypeFilter, int radius, int maxResults) throws Exception {
         List<Restaurant> restaurants = new ArrayList<>();
-        System.out.println("Calling placesService to fetch nearby restaurants...");
 
         JSONObject response = placesService.fetchNearbyRestaurants(location.getLatitude(), location.getLongitude(), radius);
-        System.out.println("Successfully fetched nearby restaurants from placesService.");
 
         parseRestaurantsFromResponse(restaurants, response, dishTypeFilter, maxResults);
         return restaurants;
@@ -62,10 +58,8 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
             return;
         }
 
-        System.out.println("Parsing " + places.length() + " places from response...");
         for (int i = 0; i < Math.min(places.length(), maxResults); i++) {
             JSONObject place = places.getJSONObject(i);
-            System.out.println("Processing place " + (i + 1) + " of " + Math.min(places.length(), maxResults) + "...");
 
             Restaurant restaurant = restaurantMapper.mapToRestaurant(place, dishTypeFilter);
             if (restaurant != null) {
