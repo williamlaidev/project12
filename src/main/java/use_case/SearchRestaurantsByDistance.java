@@ -1,9 +1,11 @@
 package use_case;
 
-import entity.Location;
 import entity.Restaurant;
+import entity.SearchInput;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface SearchRestaurantsByDistance {
-    List<Restaurant> search(Location location, int radius, int maxResults);
+    Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults);
 }

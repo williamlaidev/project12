@@ -1,6 +1,9 @@
 package interface_adapter;
 
-import entity.*;
+import entity.DishType;
+import entity.Location;
+import entity.Restaurant;
+import entity.RestaurantFactory;
 import framework.GooglePlacesRestaurantSearchService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,21 +40,24 @@ public class RestaurantMapper {
 
         boolean isDishTypeMatch = false;
 
-        // Check if any of the place's types match the dishTypeFilter or "restaurant" if filter is null
-        if (placeTypes != null) {
+        // Check if the dishTypeFilter is null or if any of the place's types match the dishTypeFilter
+        if (dishTypeFilter == null) {
+            // No filter provided, include all restaurants
+            isDishTypeMatch = true;
+        } else if (placeTypes != null) {
             for (int i = 0; i < placeTypes.length(); i++) {
-                String apiType = placeTypes.getString(i);
-                DishType dishType = DishType.fromApiType(apiType);
-                if (dishType != null && (dishTypeFilter == null || dishType.equals(dishTypeFilter))) {
+                String dishTypeString = placeTypes.getString(i);
+                DishType dishType = DishType.fromDishTypeString(dishTypeString);
+                if (dishType != null && dishType.equals(dishTypeFilter)) {
                     isDishTypeMatch = true;
                     break;
                 }
             }
         }
 
-        // If a matching dish type is found or no filter is applied (default to "restaurant"), extract additional information and create a Restaurant object
-        if (isDishTypeMatch || dishTypeFilter == null) {
-            System.out.println("Restaurant '" + restaurantName + "' matches the dish type filter: " + (dishTypeFilter != null ? dishTypeFilter : "restaurant"));
+        // If a matching dish type is found or no filter is applied, extract additional information and create a Restaurant object
+        if (isDishTypeMatch) {
+            System.out.println("Restaurant '" + restaurantName + "' matches the dish type filter: " + (dishTypeFilter != null ? dishTypeFilter : "all"));
 
             double averageRating = placeJson.optDouble("rating", 0.0);
             JSONObject locationJson = placeJson.getJSONObject("geometry").getJSONObject("location");
@@ -61,7 +67,7 @@ public class RestaurantMapper {
             String photoUrl = "";
             if (placeJson.has("photos")) {
                 JSONArray photosArray = placeJson.getJSONArray("photos");
-                if (!photosArray.isEmpty()) {
+                if (photosArray.length() > 0) {
                     System.out.println("Generating photo URL for restaurant: " + restaurantName);
                     JSONObject firstPhoto = photosArray.getJSONObject(0);
                     photoUrl = placesService.buildPhotoUrl(firstPhoto.getString("photo_reference"));

@@ -2,6 +2,7 @@ package framework;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,10 +34,10 @@ public class GoogleMapsImageService implements MapImageService {
      * @param width     The width of the desired map image in pixels.
      * @param height    The height of the desired map image in pixels.
      * @return byte[] containing the map image data.
-     * @throws Exception if there is a network issue or the API call fails.
+     * @throws IOException if there is a network issue or the API call fails.
      */
     @Override
-    public byte[] getMapImage(double latitude, double longitude, int zoom, int width, int height) throws Exception {
+    public byte[] getMapImage(double latitude, double longitude, int zoom, int width, int height) throws IOException {
         // Retrieve API key from the environment configuration
         String apiKey = envConfigService.getGoogleMapsApiKey();
         if (apiKey == null || apiKey.isEmpty()) {

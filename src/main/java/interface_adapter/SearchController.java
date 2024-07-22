@@ -1,11 +1,13 @@
 package interface_adapter;
 
+import entity.DishType;
 import entity.Map;
+import entity.SearchInput;
 import use_case.SearchViewInteractor;
-import use_case.SearchInputData;
-import java.awt.Point;
 import utils.MapCoordinateToLocation;
 import utils.ZoomLevelToMeter;
+
+import java.awt.Point;
 
 public class SearchController {
     private final SearchViewInteractor searchViewInteractor;
@@ -29,20 +31,39 @@ public class SearchController {
         String distance = searchViewState.getDistance();
         String selectedDishType = searchViewState.getSelectedDishType();
 
+        // Convert zoom level to distance if not provided
         if (distance.isEmpty()) {
             distance = Double.toString(ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth));
-
         }
 
+        System.out.println("Selected dish type string: " + selectedDishType);
 
+        // Convert selected dish type string to DishType enum
+        DishType dishType = DishType.fromDishTypeString(selectedDishType);
+
+        System.out.println("Selected dish type: " + dishType);
+
+        // Determine latitude and longitude based on mouse position or default to center
+        double latitude;
+        double longitude;
         if (mousePosition != null) {
             double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
-            double latitude = latLng[0];
-            double longitude = latLng[1];
-
-            searchViewInteractor.execute(new SearchInputData(latitude, longitude, distance, selectedDishType));
+            latitude = latLng[0];
+            longitude = latLng[1];
         } else {
-            searchViewInteractor.execute(new SearchInputData(centerLat, centerLng, distance, selectedDishType));
+            latitude = centerLat;
+            longitude = centerLng;
+        }
+
+        // Create SearchInput object
+        SearchInput searchInput = new SearchInput(latitude, longitude, distance, dishType);
+
+        // Execute the search and handle any exceptions
+        try {
+            searchViewInteractor.execute(searchInput, 10); // Assuming maxResults is 10
+        } catch (Exception e) {
+            System.err.println("An error occurred while executing the search: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

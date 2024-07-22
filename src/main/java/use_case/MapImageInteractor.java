@@ -1,27 +1,25 @@
 package use_case;
 
-import api.MapImageAPI;
+import framework.GoogleMapsImageService;
+import framework.EnvConfigServiceImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * MapImageInteractor class acts as the use case for fetching the map image using MapImageAPI.
+ * MapImageInteractor class acts as the use case for fetching the map image using GoogleMapsImageService.
  */
 public class MapImageInteractor {
-    private final MapImageAPI mapImageAPI;
-    private final String apiKey;
+    private final GoogleMapsImageService googleMapsImageService;
 
     /**
-     * Constructor to initialize MapImageInteractor with MapImageAPI.
+     * Constructor to initialize MapImageInteractor with GoogleMapsImageService.
      *
-     * @param mapImageAPI An instance of MapImageAPI.
-     * @param apiKey      The API key for the map image API.
+     * @param googleMapsImageService An instance of GoogleMapsImageService.
      */
-    public MapImageInteractor(MapImageAPI mapImageAPI, String apiKey) {
-        this.mapImageAPI = mapImageAPI;
-        this.apiKey = apiKey;
+    public MapImageInteractor(GoogleMapsImageService googleMapsImageService) {
+        this.googleMapsImageService = googleMapsImageService;
     }
 
     /**
@@ -36,13 +34,10 @@ public class MapImageInteractor {
      */
     public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom, int width, int height) {
         try {
-            byte[] imageData = mapImageAPI.getMapImage(latitude, longitude, zoom, width, height, apiKey);
+            byte[] imageData = googleMapsImageService.getMapImage(latitude, longitude, zoom, width, height);
             saveImage(imageData, "src/main/resources/map_images/map.png");
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -57,9 +52,25 @@ public class MapImageInteractor {
      */
     private void saveImage(byte[] imageData, String filePath) throws IOException {
         File file = new File(filePath);
-        file.getParentFile().mkdirs(); // Ensure the directories are created
+        // Ensure the directories are created and handle the result
+        if (!file.getParentFile().mkdirs() && !file.getParentFile().exists()) {
+            throw new IOException("Failed to create directories for path: " + filePath);
+        }
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(imageData);
         }
+    }
+
+    public static void main(String[] args) {
+        // Create instances of EnvConfigService and GoogleMapsImageService
+        EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
+        GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
+
+        // Create the MapImageInteractor with the GoogleMapsImageService
+        MapImageInteractor interactor = new MapImageInteractor(googleMapsImageService);
+
+        // Example usage
+        boolean success = interactor.fetchAndSaveMapImage(37.7749, -122.4194, 12, 800, 600);
+        System.out.println("Map image fetched and saved: " + success);
     }
 }

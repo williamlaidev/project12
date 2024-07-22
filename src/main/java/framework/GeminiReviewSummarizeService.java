@@ -27,8 +27,8 @@ public class GeminiReviewSummarizeService implements ReviewSummarizeService {
     public GeminiReviewSummarizeService(GetRestaurantById getRestaurantById) {
         OutputHandler outputHandler = new OutputHandlerImpl();
         this.scriptExecutor = new PythonScriptExecutor(SCRIPT_PATH, outputHandler);
-        this.rateLimiter = new ReviewSummarizeRateLimiter(30); // 30 requests per minute
-        this.retryPolicy = new ReviewSummarizeRetryPolicy(3); // 3 retries
+        this.rateLimiter = new RateLimiterImpl(30); // 30 requests per minute
+        this.retryPolicy = new RetryPolicyImpl(3); // 3 retries
         this.reviewMapper = new ReviewMapperImpl(getRestaurantById);
     }
 

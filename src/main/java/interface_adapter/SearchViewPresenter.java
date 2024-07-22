@@ -1,6 +1,6 @@
 package interface_adapter;
 
-import use_case.SearchOutputBoundary;
+import domain.SearchOutputBoundary;
 
 public class SearchViewPresenter implements SearchOutputBoundary {
 

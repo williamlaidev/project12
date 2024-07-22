@@ -18,5 +18,5 @@ public interface SearchInputBoundary {
      * @return an {@code Optional} containing a list of restaurants that match the search criteria, or an empty {@code Optional} if no results are found or if an error occurs
      * @throws Exception if an error occurs during the search process
      */
-    Optional<List<Restaurant>> search(SearchInput searchInput, int maxResults) throws Exception;
+    Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults) throws Exception;
 }

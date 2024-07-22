@@ -1,4 +1,4 @@
-package use_case;
+package domain;
 
 public interface SearchOutputBoundary {
     void prepareFailView(String error);

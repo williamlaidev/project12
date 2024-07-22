@@ -1,7 +1,8 @@
 package use_case;
 
-import api.GeolocationAPI;
-import api.MapImageAPI;
+import framework.GoogleGeolocationService;
+import framework.GoogleMapsImageService;
+import framework.EnvConfigServiceImpl;
 import entity.DishType;
 import entity.Location;
 import entity.Map;
@@ -13,26 +14,26 @@ import java.util.List;
 /**
  * Initializer class is responsible for creating and storing the necessary information
  * before the first screen of the application (SearchView) is displayed.
- * It fetches the current geographical location using the GeolocationAPI and stores it in a Location entity.
+ * It fetches the current geographical location using the GoogleGeolocationService and stores it in a Location entity.
  * It also stores the dish types available in the application.
  * Additionally, it creates a map centered at the current location.
  */
 public class Initializer {
 
-    private GeolocationAPI geolocationAPI;
+    private final GoogleGeolocationService geolocationService;
     private Location currentLocation;
-    private DishType[] dishTypes;
-    private MapImageInteractor mapImageInteractor;
+    private final DishType[] dishTypes;
+    private final MapImageInteractor mapImageInteractor;
     private Map map;
 
     /**
-     * Constructs an Initializer with a GeolocationAPI and a MapImageInteractor.
+     * Constructs an Initializer with a GoogleGeolocationService and a MapImageInteractor.
      *
-     * @param geolocationAPI    An instance of GeolocationAPI to get the current location.
-     * @param mapImageInteractor An instance of MapImageInteractor to fetch and save the map image.
+     * @param geolocationService    An instance of GoogleGeolocationService to get the current location.
+     * @param mapImageInteractor    An instance of MapImageInteractor to fetch and save the map image.
      */
-    public Initializer(GeolocationAPI geolocationAPI, MapImageInteractor mapImageInteractor) {
-        this.geolocationAPI = geolocationAPI;
+    public Initializer(GoogleGeolocationService geolocationService, MapImageInteractor mapImageInteractor) {
+        this.geolocationService = geolocationService;
         this.dishTypes = DishType.values(); // Initialize dish types
         this.mapImageInteractor = mapImageInteractor;
     }
@@ -44,7 +45,7 @@ public class Initializer {
      * @throws Exception if there is a network issue or the API call fails.
      */
     public void initializeCurrentLocation() throws Exception {
-        JSONObject currentLocationJson = geolocationAPI.getCurrentLocation();
+        JSONObject currentLocationJson = geolocationService.getCurrentLocation();
         double latitude = currentLocationJson.getJSONObject("location").getDouble("lat");
         double longitude = currentLocationJson.getJSONObject("location").getDouble("lng");
 
@@ -103,10 +104,16 @@ public class Initializer {
      */
     public static void main(String[] args) {
         try {
-            GeolocationAPI geolocationAPI = new GeolocationAPI();
-            MapImageAPI mapImageAPI = new MapImageAPI();
-            MapImageInteractor mapImageInteractor = new MapImageInteractor(mapImageAPI, "API_KEY");
-            Initializer initializer = new Initializer(geolocationAPI, mapImageInteractor);
+            // Initialize EnvConfigService and GoogleGeolocationService
+            EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
+            GoogleGeolocationService geolocationService = new GoogleGeolocationService(envConfigService);
+
+            // Initialize GoogleMapsImageService with EnvConfigService
+            GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
+            MapImageInteractor mapImageInteractor = new MapImageInteractor(googleMapsImageService);
+
+            // Initialize the Initializer with the updated services
+            Initializer initializer = new Initializer(geolocationService, mapImageInteractor);
             initializer.initializeCurrentLocation();
             System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());
 
