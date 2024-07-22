@@ -64,7 +64,12 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
             Restaurant restaurant = restaurantMapper.mapToRestaurant(place, dishTypeFilter);
             if (restaurant != null) {
                 restaurants.add(restaurant);
-                System.out.println("Restaurant: " + restaurant.getName() + " has been added to the results.");
+                Double averageRating = restaurant.getAverageRating();
+                String address = restaurant.getAddress();
+                String photoUrl = restaurant.getPhotoUrl();
+
+
+                    System.out.println("Restaurant Name: " + restaurant.getName() + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
             }
         }
     }
