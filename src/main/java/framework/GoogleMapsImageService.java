@@ -43,12 +43,10 @@ public class GoogleMapsImageService implements MapImageService {
         if (apiKey == null || apiKey.isEmpty()) {
             throw new RuntimeException("Google Maps API key is missing or empty.");
         }
-        System.out.println("Using API key: " + apiKey);
 
         // Construct the URL with query parameters
         String urlString = String.format("%s?center=%f,%f&zoom=%d&size=%dx%d&key=%s",
                 MAP_IMAGE_API_URL, latitude, longitude, zoom, width, height, apiKey);
-        System.out.println("Request URL: " + urlString);
 
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -60,7 +58,6 @@ public class GoogleMapsImageService implements MapImageService {
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[1024];
             int n;
-            System.out.println("Reading the map image data...");
             while ((n = in.read(buffer)) != -1) {
                 out.write(buffer, 0, n);
             }
@@ -69,7 +66,6 @@ public class GoogleMapsImageService implements MapImageService {
             return out.toByteArray();
         } finally {
             conn.disconnect();
-            System.out.println("Disconnected from Google Maps Static API.");
         }
     }
 }

@@ -28,10 +28,6 @@ public class SearchViewInteractor implements SearchInputBoundary {
             double distanceValue = Double.parseDouble(distance);
             String roundedDistance = Integer.toString((int) Math.round(distanceValue));
 
-            System.out.println("Latitude: " + latitude);
-            System.out.println("Longitude: " + longitude);
-            System.out.println("Distance: " + roundedDistance);
-            System.out.println("Dish Type: " + (dishType != null ? dishType : "ALL"));
 
             // Create SearchInput instance to pass to the interactor
             SearchInput searchInputForDistance = new SearchInput(latitude, longitude, roundedDistance, dishType);
