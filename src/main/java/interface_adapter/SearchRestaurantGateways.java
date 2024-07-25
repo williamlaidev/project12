@@ -67,9 +67,10 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
                 Double averageRating = restaurant.getAverageRating();
                 String address = restaurant.getAddress();
                 String photoUrl = restaurant.getPhotoUrl();
+                String restaurantID =restaurant.getRestaurantId();
 
 
-                    System.out.println("Restaurant Name: " + restaurant.getName() + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
+                    System.out.println("Restaurant Name: " + restaurant.getName() + "ID: " + restaurantID + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
             }
         }
     }
