@@ -1,19 +1,19 @@
 package app;
 
 import data_access.RestaurantDataAccess;
-import framework.GoogleGeolocationService;
-import framework.GoogleMapsImageService;
-import framework.EnvConfigServiceImpl;
-import framework.JsonRestaurantDataAccess;
-import interface_adapter.SearchRestaurantGateways;
-import interface_adapter.SearchController;
-import interface_adapter.SearchViewModel;
-import use_case.Initializer;
-import use_case.MapImageInteractor;
-import use_case.SearchRestaurantsByDistanceInteractor;
-import use_case.SearchViewInteractor;
+import framework.SearchRestaurant.GoogleGeolocationService;
+import framework.SearchRestaurant.GoogleMapsImageService;
+import framework.APIKeyConfig.EnvConfigServiceImpl;
+import framework.Data.JsonRestaurantDataAccess;
+import interface_adapter.Search.SearchRestaurantGateways;
+import interface_adapter.UI.SearchController;
+import interface_adapter.UI.SearchViewModel;
+import use_case.UI.Initializer;
+import use_case.UI.MapImageInteractor;
+import use_case.Search.SearchRestaurantsByDistanceInteractor;
+import use_case.UI.SearchViewInteractor;
 import view.SearchView;
-import interface_adapter.InMemoryRestaurantRepository;
+import interface_adapter.Data.InMemoryRestaurantRepository;
 import domain.RestaurantRepository;
 
 import javax.swing.*;
