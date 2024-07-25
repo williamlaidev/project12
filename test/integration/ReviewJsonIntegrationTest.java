@@ -3,12 +3,12 @@ package integration;
 import data_access.ReviewDataAccess;
 import domain.ReviewRepository;
 import entity.Review;
-import framework.JsonReviewDataAccess;
-import interface_adapter.InMemoryReviewRepository;
+import framework.Data.JsonReviewDataAccess;
+import interface_adapter.Data.InMemoryReviewRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import use_case.*;
+import use_case.Data.*;
 
 import java.io.File;
 import java.util.Optional;

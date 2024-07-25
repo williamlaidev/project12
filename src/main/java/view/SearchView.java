@@ -1,8 +1,8 @@
 package view;
 
-import interface_adapter.SearchController;
-import interface_adapter.SearchViewModel;
-import interface_adapter.SearchViewState;
+import interface_adapter.UI.SearchController;
+import interface_adapter.UI.SearchViewModel;
+import interface_adapter.UI.SearchViewState;
 
 import javax.swing.*;
 import java.awt.*;

@@ -4,6 +4,7 @@ import data_access.RestaurantDataAccess;
 import entity.Location;
 import entity.Restaurant;
 import entity.Review;
+import interface_adapter.Data.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package domain;
 
 import entity.Restaurant;
-import entity.SearchInput;
+import use_case.UI.SearchInput;
 
 import java.util.List;
 import java.util.Optional;
