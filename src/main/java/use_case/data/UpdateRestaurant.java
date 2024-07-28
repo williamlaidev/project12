@@ -1,31 +1,30 @@
 package use_case.data;
 
-import domain.RestaurantRepository;
 import entity.Restaurant;
+import domain.RestaurantRepository;
 
 /**
- * Use case for updating an existing restaurant in the repository.
- * This class encapsulates the logic required to update a restaurant.
+ * Handles the use case for updating an existing restaurant.
+ * It uses the {@link RestaurantRepository} to update the restaurant data.
  */
 public class UpdateRestaurant {
     private final RestaurantRepository repository;
 
     /**
-     * Constructs an {@link UpdateRestaurant} instance with the specified repository.
+     * Constructs an instance with the specified repository.
      *
-     * @param repository the {@link RestaurantRepository} used to update the restaurant.
+     * @param repository the {@link RestaurantRepository} used for updating restaurants.
      */
     public UpdateRestaurant(RestaurantRepository repository) {
         this.repository = repository;
     }
 
     /**
-     * Executes the update of a restaurant in the repository.
+     * Updates the given restaurant in the repository.
      *
-     * @param restaurant the {@link Restaurant} with updated information.
-     * @return {@code true} if the restaurant was successfully updated, {@code false} if the restaurant with the given ID does not exist.
+     * @param restaurant the {@link Restaurant} to be updated.
      */
-    public boolean execute(Restaurant restaurant) {
-        return repository.update(restaurant);
+    public void execute(Restaurant restaurant) {
+        repository.update(restaurant);
     }
 }

@@ -2,75 +2,77 @@ package domain;
 
 import entity.Location;
 import entity.Restaurant;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * The RestaurantRepository interface defines the contract for a repository
- * that provides CRUD (Create, Read, Update, Delete) operations for Restaurant entities.
+ * Defines the operations for managing {@link Restaurant} entities in a repository.
+ * This interface provides methods for adding, finding, saving, updating, and deleting restaurants.
  */
 public interface RestaurantRepository {
 
     /**
      * Adds a new restaurant to the repository.
      *
-     * @param restaurant the restaurant to be added
-     * @return true if the restaurant was added successfully, false otherwise
+     * @param restaurant the {@link Restaurant} to be added.
+     * @return {@code true} if the restaurant was added successfully; {@code false} otherwise.
      */
     boolean add(Restaurant restaurant);
 
     /**
-     * Retrieves a restaurant by its unique ID.
+     * Finds a restaurant by its unique identifier.
      *
-     * @param id the unique identifier of the restaurant
-     * @return an Optional containing the found restaurant, or empty if not found
+     * @param id the ID of the restaurant to find.
+     * @return an {@link Optional} containing the {@link Restaurant} if found, or an empty {@link Optional} if not found.
      */
-    Optional<Restaurant> getById(String id);
+    Optional<Restaurant> findById(String id);
 
     /**
-     * Retrieves a restaurant by its name.
+     * Finds a restaurant by its name.
      *
-     * @param name the name of the restaurant
-     * @return an Optional containing the found restaurant, or empty if not found
+     * @param name the name of the restaurant to find.
+     * @return an {@link Optional} containing the {@link Restaurant} if found, or an empty {@link Optional} if not found.
      */
-    Optional<Restaurant> getByName(String name);
+    Optional<Restaurant> findByName(String name);
 
     /**
-     * Retrieves a restaurant by its location.
+     * Finds a restaurant by its location.
      *
-     * @param location the location of the restaurant
-     * @return an Optional containing the found restaurant, or empty if not found
+     * @param location the {@link Location} of the restaurant to find.
+     * @return an {@link Optional} containing the {@link Restaurant} if found, or an empty {@link Optional} if not found.
      */
-    Optional<Restaurant> getByLocation(Location location);
+    Optional<Restaurant> findByLocation(Location location);
 
     /**
-     * Retrieves all restaurants in the repository.
+     * Retrieves all restaurants from the repository.
      *
-     * @return a list of all restaurants
+     * @return an {@link Optional} containing a list of all {@link Restaurant}s, or an empty {@link Optional} if no restaurants are found.
      */
-    List<Restaurant> getAll();
+    Optional<List<Restaurant>> findAll();
 
     /**
-     * Updates the details of an existing restaurant.
+     * Saves a new or updated restaurant to the repository.
+     * This method may be used for both inserting a new record or updating an existing one.
      *
-     * @param restaurant the restaurant with updated details
-     * @return true if the update was successful, false otherwise
+     * @param restaurant the {@link Restaurant} to be saved.
+     * @return {@code true} if the restaurant was saved successfully; {@code false} otherwise.
+     */
+    boolean save(Restaurant restaurant);
+
+    /**
+     * Updates an existing restaurant in the repository.
+     *
+     * @param restaurant the {@link Restaurant} to be updated.
+     * @return {@code true} if the restaurant was updated successfully; {@code false} otherwise.
      */
     boolean update(Restaurant restaurant);
 
     /**
-     * Deletes a restaurant by its unique ID.
+     * Deletes a restaurant from the repository by its unique identifier.
      *
-     * @param id the unique identifier of the restaurant to be deleted
-     * @return true if the deletion was successful, false otherwise
+     * @param id the ID of the restaurant to be deleted.
+     * @return {@code true} if the restaurant was deleted successfully; {@code false} otherwise.
      */
-    boolean deleteById(String id);
-
-    /**
-     * Deletes a restaurant by its name.
-     *
-     * @param name the name of the restaurant to be deleted
-     * @return true if the deletion was successful, false otherwise
-     */
-    boolean deleteByName(String name);
+    boolean delete(String id);
 }

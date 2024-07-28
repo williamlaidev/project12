@@ -8,29 +8,14 @@ import framework.search.GooglePlacesRestaurantSearchService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Maps JSON objects from Google Places API responses to Restaurant entities.
- */
 public class RestaurantMapper {
 
     private final GooglePlacesRestaurantSearchService placesService;
 
-    /**
-     * Constructs a RestaurantMapper with the specified GooglePlacesRestaurantSearchService.
-     *
-     * @param placesService The service used to interact with the Google Places API.
-     */
     public RestaurantMapper(GooglePlacesRestaurantSearchService placesService) {
         this.placesService = placesService;
     }
 
-    /**
-     * Maps a JSON object representing a place to a Restaurant entity, if it matches the dish type filter.
-     *
-     * @param placeJson The JSON object containing place information from the Google Places API.
-     * @param dishTypeFilter The dish type filter to match against the restaurant's type.
-     * @return A Restaurant object if the dish type matches the filter; otherwise, returns null.
-     */
     public Restaurant mapToRestaurant(JSONObject placeJson, DishType dishTypeFilter) {
 
         // Extract basic information from the JSON object
@@ -38,57 +23,83 @@ public class RestaurantMapper {
         String restaurantName = placeJson.optString("name", "");
         JSONArray placeTypes = placeJson.optJSONArray("types");
 
-        boolean isDishTypeMatch = false;
+        double latitude = placeJson.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+        double longitude = placeJson.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+        String address = placeJson.optString("vicinity", "");
+        double averageRating = placeJson.optDouble("rating", 0.0);
 
-        // Check if the dishTypeFilter is null or if any of the place's types match the dishTypeFilter
-        if (dishTypeFilter == null) {
-            // No filter provided, include all restaurants
-            isDishTypeMatch = true;
-        } else if (placeTypes != null) {
+        // Print details
+        printRestaurantDetails(placeId, restaurantName, latitude, longitude, address, placeTypes, averageRating);
+
+        // Continue with dish type matching
+        DishType matchedDishType = null;
+        if (placeTypes != null) {
             for (int i = 0; i < placeTypes.length(); i++) {
-                String dishTypeString = placeTypes.getString(i);
-                DishType dishType = DishType.fromDishTypeString(dishTypeString);
-                if (dishType != null && dishType.equals(dishTypeFilter)) {
-                    isDishTypeMatch = true;
+                String type = placeTypes.getString(i);
+                for (DishType dishType : DishType.values()) {
+                    for (String apiType : dishType.getApiTypes()) {
+                        if (type.equals(apiType)) {
+                            matchedDishType = dishType;
+                            break;
+                        }
+                    }
+                    if (matchedDishType != null) {
+                        break;
+                    }
+                }
+                if (matchedDishType != null) {
                     break;
                 }
             }
         }
 
-        // If a matching dish type is found or no filter is applied, extract additional information and create a Restaurant object
+        boolean isDishTypeMatch = (dishTypeFilter == null) || (matchedDishType != null && matchedDishType.equals(dishTypeFilter));
         if (isDishTypeMatch) {
             System.out.println("Restaurant '" + restaurantName + "' matches the dish type filter: " + (dishTypeFilter != null ? dishTypeFilter : "all"));
-
-            double averageRating = placeJson.optDouble("rating", 0.0);
-            JSONObject locationJson = placeJson.getJSONObject("geometry").getJSONObject("location");
-            Location restaurantLocation = new Location(locationJson.getDouble("lat"), locationJson.getDouble("lng"));
-            String restaurantAddress = placeJson.optString("vicinity", "");
 
             String photoUrl = "";
             if (placeJson.has("photos")) {
                 JSONArray photosArray = placeJson.getJSONArray("photos");
-                if (!photosArray.isEmpty()) {
+                if (photosArray.length() > 0) {
                     JSONObject firstPhoto = photosArray.getJSONObject(0);
                     photoUrl = placesService.buildPhotoUrl(firstPhoto.getString("photo_reference"));
                 }
             }
 
-            // Create and return a Restaurant object
-            return RestaurantFactory.createRestaurant(
+            return RestaurantFactory.createRestaurantWithoutReviews(
                     placeId,
                     restaurantName,
-                    restaurantLocation,
-                    restaurantAddress,
-                    dishTypeFilter, // Use the targetDishType if found
+                    new Location(latitude, longitude),
+                    address,
+                    matchedDishType,
                     averageRating,
-                    photoUrl,
-                    null,
-                    null
+                    photoUrl
             );
         } else {
             System.out.println("Restaurant '" + restaurantName + "' does not match the dish type filter: " + dishTypeFilter);
         }
 
         return null;
+    }
+
+    private void printRestaurantDetails(String placeId, String restaurantName, double latitude, double longitude, String address, JSONArray placeTypes, double averageRating) {
+        System.out.println("Restaurant ID: " + placeId);
+        System.out.println("Restaurant Name: " + restaurantName);
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Longitude: " + longitude);
+        System.out.println("Address: " + address);
+
+        if (placeTypes != null) {
+            System.out.print("Types: ");
+            for (int i = 0; i < placeTypes.length(); i++) {
+                System.out.print(placeTypes.getString(i));
+                if (i < placeTypes.length() - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println("Average Rating: " + averageRating);
     }
 }

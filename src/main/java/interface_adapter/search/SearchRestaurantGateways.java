@@ -2,6 +2,10 @@ package interface_adapter.search;
 
 import entity.*;
 import domain.SearchRestaurantService;
+import interface_adapter.data.SQLiteRestaurantRepository;
+import use_case.data.AddRestaurant;
+import use_case.data.UpdateRestaurant;
+import use_case.data.FindRestaurantById;
 import framework.search.GooglePlacesRestaurantSearchService;
 import framework.config.EnvConfigService;
 import framework.config.EnvConfigServiceImpl;
@@ -19,11 +23,18 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
     private final GooglePlacesRestaurantSearchService placesService;
     private final RestaurantMapper restaurantMapper;
     private static final Logger logger = LoggerFactory.getLogger(SearchRestaurantGateways.class);
+    private final AddRestaurant addRestaurantUseCase;
+    private final UpdateRestaurant updateRestaurantUseCase;
+    private final FindRestaurantById findRestaurantByIdUseCase;
 
     public SearchRestaurantGateways() {
         EnvConfigService envConfigService = new EnvConfigServiceImpl();
         this.placesService = new GooglePlacesRestaurantSearchService(envConfigService);
         this.restaurantMapper = new RestaurantMapper(placesService);
+        SQLiteRestaurantRepository restaurantRepository = new SQLiteRestaurantRepository();
+        this.addRestaurantUseCase = new AddRestaurant(restaurantRepository);
+        this.updateRestaurantUseCase = new UpdateRestaurant(restaurantRepository);
+        this.findRestaurantByIdUseCase = new FindRestaurantById(restaurantRepository);
     }
 
     @Override
@@ -69,6 +80,15 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
             Restaurant restaurant = restaurantMapper.mapToRestaurant(place, dishTypeFilter);
             if (restaurant != null) {
                 restaurants.add(restaurant);
+
+                Optional<Restaurant> existingRestaurant = findRestaurantByIdUseCase.execute(restaurant.getRestaurantId());
+
+                if (existingRestaurant.isPresent()) {
+                    updateRestaurantUseCase.execute(restaurant);
+                } else {
+                    addRestaurantUseCase.execute(restaurant);
+                }
+
                 double averageRating = restaurant.getAverageRating();
                 String address = restaurant.getAddress();
                 String photoUrl = restaurant.getPhotoUrl();

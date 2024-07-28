@@ -1,10 +1,8 @@
 package app;
 
-import data_access.RestaurantDataAccess;
 import framework.search.GoogleGeolocationService;
 import framework.search.GoogleMapsImageService;
 import framework.config.EnvConfigServiceImpl;
-import framework.data.JsonRestaurantDataAccess;
 import interface_adapter.search.SearchRestaurantGateways;
 import interface_adapter.view.SearchController;
 import interface_adapter.view.SearchViewModel;
@@ -13,8 +11,6 @@ import use_case.view.MapImageInteractor;
 import use_case.search.SearchRestaurantsByDistanceInteractor;
 import use_case.view.SearchViewInteractor;
 import view.SearchView;
-import interface_adapter.data.InMemoryRestaurantRepository;
-import domain.RestaurantRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,10 +36,6 @@ public class Start {
 
             // Create the SearchViewModel
             SearchViewModel searchViewModel = new SearchViewModel();
-
-            // Initialize the data access and repository
-            RestaurantDataAccess dataAccess = new JsonRestaurantDataAccess();
-            RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository(dataAccess);
 
             // Create the SearchRestaurantsByDistanceInteractor with the repository
             SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
