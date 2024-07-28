@@ -30,3 +30,6 @@ bin/
 
 ### Python Virtual Environment ###
 myenv/
+
+### Environment Variables ###
+.env

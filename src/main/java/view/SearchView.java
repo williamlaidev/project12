@@ -1,14 +1,16 @@
 package view;
 
-import interface_adapter.UI.SearchController;
-import interface_adapter.UI.SearchViewModel;
-import interface_adapter.UI.SearchViewState;
+import interface_adapter.view.SearchController;
+import interface_adapter.view.SearchViewModel;
+import interface_adapter.view.SearchViewState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+// TODO: Fix the IntelliJ warnings in this class and reduce their number as much as possible.
 
 /**
  * SearchView class is responsible for presenting the components of the search interface.

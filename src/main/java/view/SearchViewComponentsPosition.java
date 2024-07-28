@@ -1,5 +1,7 @@
 package view;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class SearchViewComponentsPosition {
     public static final int TITLE_X = 10;
     public static final int TITLE_Y = 0;

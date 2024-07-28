@@ -2,6 +2,8 @@ package utils;
 
 import java.awt.*;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class MapCoordinateToLocation {
     public static double[] convert(Point point, double centerLat, double centerLng, int zoomLevel, int mapWidth, int mapHeight) {
         double metersPerPixel = ZoomLevelToMeterPerPixel.zoomLevelToMeter(zoomLevel, centerLat);

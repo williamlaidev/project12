@@ -5,6 +5,8 @@ import entity.Review;
 import java.util.Optional;
 import java.util.List;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public interface ReviewRepository {
 
     Review add(Review review);

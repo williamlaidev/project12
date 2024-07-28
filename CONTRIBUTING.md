@@ -70,6 +70,42 @@ We recommend using Conventional Commits for commit messages and pull request tit
 - **description**: A brief description of the commit.
 - **optional body**: A detailed description of the commit, if necessary, using bullet points.
 
+Sure, here is a simplified version of the explanation for each comment type:
+
+### Comments
+
+Use the following types of comments:
+
+- **Single-Line Comments**:
+  Use `//` for short notes or to explain a line of code.
+  ```plaintext
+  // short explanation for the code
+  ```
+
+- **Single-Line Comments with Tags**:
+  Use tags like TODO, FIXME, and NOTE within single-line comments to indicate specific issues.
+  ```plaintext
+  // TODO: refactor this function
+  ```
+
+- **Multi-Line Comments**:
+  Use `/* */` for longer explanations that span multiple lines.
+  ```plaintext
+  /*
+   * longer explanation for the code
+   */
+  ```
+
+- **Documentation Comments**:
+  Use `/** */` to document methods, classes, and fields.
+  ```plaintext
+  /**
+   * This method does something important.
+   * @param param1 Description of param1
+   * @return Description of return value
+   */
+  ```
+
 ### SOLID Principles
 
 When adding new features, adhere to these principles for clean and maintainable code:
