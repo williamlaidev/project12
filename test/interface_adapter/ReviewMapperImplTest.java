@@ -4,14 +4,14 @@ import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
 import entity.Review;
-import interface_adapter.Summarize.ReviewMapperImpl;
+import interface_adapter.summarize.ReviewMapperImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.Data.GetRestaurantById;
+import use_case.data.GetRestaurantById;
 
 import java.util.Arrays;
 import java.util.List;

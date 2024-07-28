@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.Data.GetRestaurantById;
+import use_case.data.GetRestaurantById;
 
 import java.util.List;
 import java.util.Optional;

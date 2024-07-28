@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.Data.UpdateRestaurant;
+import use_case.data.UpdateRestaurant;
 
 import java.util.List;
 

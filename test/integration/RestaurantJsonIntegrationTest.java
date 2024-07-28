@@ -6,12 +6,12 @@ import entity.DishType;
 import entity.Location;
 import entity.Restaurant;
 import entity.Review;
-import framework.Data.JsonRestaurantDataAccess;
-import interface_adapter.Data.InMemoryRestaurantRepository;
+import framework.data.JsonRestaurantDataAccess;
+import interface_adapter.data.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import use_case.Data.*;
+import use_case.data.*;
 
 import java.io.File;
 import java.util.List;

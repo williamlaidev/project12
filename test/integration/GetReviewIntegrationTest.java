@@ -2,11 +2,11 @@ package integration;
 
 import domain.ReviewRetrievalService;
 import entity.Review;
-import framework.APIKeyConfig.EnvConfigService;
-import framework.APIKeyConfig.EnvConfigServiceImpl;
-import framework.SearchReviews.GooglePlacesReviewsService;
-import interface_adapter.Search.PlacesReviewsGateways;
-import use_case.Search.GetReviewsForRestaurant;
+import framework.config.EnvConfigService;
+import framework.config.EnvConfigServiceImpl;
+import framework.search.GooglePlacesReviewsService;
+import interface_adapter.search.PlacesReviewsGateways;
+import use_case.search.GetReviewsForRestaurant;
 
 import java.util.List;
 

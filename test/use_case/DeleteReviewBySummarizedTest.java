@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import use_case.Data.DeleteReviewBySummarized;
+import use_case.data.DeleteReviewBySummarized;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

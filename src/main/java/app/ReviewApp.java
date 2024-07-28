@@ -4,11 +4,11 @@ import data_access.ReviewDataAccess;
 import domain.ReviewRepository;
 import domain.ReviewRetrievalService;
 import entity.Review;
-import framework.Data.JsonReviewDataAccess;
-import interface_adapter.Data.InMemoryReviewRepository;
-import interface_adapter.Search.PlacesReviewsGateways;
-import use_case.Data.AddReview;
-import use_case.Search.GetReviewsForRestaurant;
+import framework.data.JsonReviewDataAccess;
+import interface_adapter.data.InMemoryReviewRepository;
+import interface_adapter.search.PlacesReviewsGateways;
+import use_case.data.AddReview;
+import use_case.search.GetReviewsForRestaurant;
 
 import java.util.List;
 import java.util.Scanner;
