@@ -8,6 +8,8 @@ import entity.Location;
 import entity.Map;
 import entity.MapFactory;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ import java.util.List;
  * Additionally, it creates a map centered at the current location.
  */
 public class Initializer {
+
+    private static final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     private final GoogleGeolocationService geolocationService;
     private Location currentLocation;
@@ -123,7 +127,7 @@ public class Initializer {
                 System.out.println(dishType);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred during initialization", e);
         }
     }
 }

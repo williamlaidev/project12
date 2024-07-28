@@ -7,6 +7,8 @@ import framework.config.EnvConfigService;
 import framework.config.EnvConfigServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import use_case.search.RestaurantSearchInput;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class SearchRestaurantGateways implements SearchRestaurantService {
     private final GooglePlacesRestaurantSearchService placesService;
     private final RestaurantMapper restaurantMapper;
+    private static final Logger logger = LoggerFactory.getLogger(SearchRestaurantGateways.class);
 
     public SearchRestaurantGateways() {
         EnvConfigService envConfigService = new EnvConfigServiceImpl();
@@ -38,7 +41,7 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
             return Optional.of(restaurants);
         } catch (Exception e) {
             System.err.println("Error during restaurant search: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during restaurant search: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
@@ -52,10 +55,11 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
         return restaurants;
     }
 
-    private void parseRestaurantsFromResponse(List<Restaurant> restaurants, JSONObject response, DishType dishTypeFilter, int maxResults) throws Exception {
+    private void parseRestaurantsFromResponse(List<Restaurant> restaurants, JSONObject response, DishType dishTypeFilter, int maxResults) {
         JSONArray places = response.optJSONArray("results");
         if (places == null) {
             System.err.println("No results found in the response.");
+            logger.warn("No results found in the response.");
             return;
         }
 
@@ -65,13 +69,12 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
             Restaurant restaurant = restaurantMapper.mapToRestaurant(place, dishTypeFilter);
             if (restaurant != null) {
                 restaurants.add(restaurant);
-                Double averageRating = restaurant.getAverageRating();
+                double averageRating = restaurant.getAverageRating();
                 String address = restaurant.getAddress();
                 String photoUrl = restaurant.getPhotoUrl();
-                String restaurantID =restaurant.getRestaurantId();
+                String restaurantID = restaurant.getRestaurantId();
 
-
-                    System.out.println("Restaurant Name: " + restaurant.getName() + "ID: " + restaurantID + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
+                System.out.println("Restaurant Name: " + restaurant.getName() + " ID: " + restaurantID + "; Average Rating: " + averageRating + "; Address: " + address + "; PhotoUrl: " + photoUrl);
             }
         }
     }

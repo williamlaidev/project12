@@ -67,12 +67,11 @@ public class RestaurantMapper {
             String photoUrl = "";
             if (placeJson.has("photos")) {
                 JSONArray photosArray = placeJson.getJSONArray("photos");
-                if (photosArray.length() > 0) {
+                if (!photosArray.isEmpty()) {
                     JSONObject firstPhoto = photosArray.getJSONObject(0);
                     photoUrl = placesService.buildPhotoUrl(firstPhoto.getString("photo_reference"));
                 }
             }
-
 
             // Create and return a Restaurant object
             return RestaurantFactory.createRestaurant(
@@ -87,6 +86,7 @@ public class RestaurantMapper {
                     null
             );
         } else {
+            System.out.println("Restaurant '" + restaurantName + "' does not match the dish type filter: " + dishTypeFilter);
         }
 
         return null;

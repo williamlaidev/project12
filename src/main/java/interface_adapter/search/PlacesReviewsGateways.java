@@ -6,6 +6,8 @@ import framework.search.GooglePlacesReviewsService;
 import framework.config.EnvConfigService;
 import framework.config.EnvConfigServiceImpl;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class PlacesReviewsGateways implements ReviewRetrievalService {
 
     private final GooglePlacesReviewsService reviewsService;
+    private static final Logger logger = LoggerFactory.getLogger(PlacesReviewsGateways.class);
 
     /**
      * Constructs the PlacesReviewsGateway with the provided EnvConfigService.
@@ -50,8 +53,8 @@ public class PlacesReviewsGateways implements ReviewRetrievalService {
 
             return reviews;
         } catch (Exception e) {
-            System.err.println("Error fetching reviews: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error fetching reviews: " + e.getMessage()); // Keeping println as requested
+            logger.error("Error fetching reviews: {}", e.getMessage(), e);
             return new ArrayList<>(); // Return an empty list in case of error
         }
     }
@@ -77,8 +80,8 @@ public class PlacesReviewsGateways implements ReviewRetrievalService {
                     isSummarized
             );
         } catch (Exception e) {
-            System.err.println("Error mapping JSON to Review: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error mapping JSON to Review: " + e.getMessage()); // Keeping println as requested
+            logger.error("Error mapping JSON to Review: {}", e.getMessage(), e);
             return null;
         }
     }

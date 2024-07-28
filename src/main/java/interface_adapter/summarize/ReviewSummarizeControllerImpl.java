@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class ReviewSummarizeControllerImpl implements ReviewSummarizeController {
     private final SummarizeReviews summarizeReviews;
-    private final ReviewMapper reviewMapper;
 
     /**
      * Constructs a ReviewSummarizeControllerImpl with the given SummarizeReviews use case and ReviewMapper.
@@ -20,14 +19,11 @@ public class ReviewSummarizeControllerImpl implements ReviewSummarizeController 
      */
     public ReviewSummarizeControllerImpl(SummarizeReviews summarizeReviews, ReviewMapper reviewMapper) {
         this.summarizeReviews = summarizeReviews;
-        this.reviewMapper = reviewMapper;
     }
 
     @Override
     public Review summarize(List<Review> reviews) throws InterruptedException {
 
-        Review summarizedReview = summarizeReviews.execute(reviews);
-
-        return summarizedReview;
+        return summarizeReviews.execute(reviews);
     }
 }

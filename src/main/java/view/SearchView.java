@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+// TODO: Fix the IntelliJ warnings in this class and reduce their number as much as possible.
+
 /**
  * SearchView class is responsible for presenting the components of the search interface.
  * It includes input fields, buttons, and a map area where users can click to set a location.

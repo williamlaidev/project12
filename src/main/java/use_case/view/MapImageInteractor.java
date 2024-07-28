@@ -2,6 +2,8 @@ package use_case.view;
 
 import framework.search.GoogleMapsImageService;
 import framework.config.EnvConfigServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +13,8 @@ import java.io.IOException;
  * MapImageInteractor class acts as the use case for fetching the map image using GoogleMapsImageService.
  */
 public class MapImageInteractor {
+    private static final Logger logger = LoggerFactory.getLogger(MapImageInteractor.class);
+
     private final GoogleMapsImageService googleMapsImageService;
 
     /**
@@ -38,7 +42,7 @@ public class MapImageInteractor {
             saveImage(imageData, "src/main/resources/map_images/map.png");
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to fetch and save the map image", e);
             return false;
         }
     }

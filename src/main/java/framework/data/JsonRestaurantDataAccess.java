@@ -4,6 +4,8 @@ import data_access.RestaurantDataAccess;
 import entity.Restaurant;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
  * Implementation of {@link RestaurantDataAccess} that uses JSON file storage.
  */
 public class JsonRestaurantDataAccess implements RestaurantDataAccess {
+    private static final Logger logger = LoggerFactory.getLogger(JsonRestaurantDataAccess.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final File jsonFile = new File("src/resources/data/restaurants.json"); // Path to JSON file
 
@@ -23,21 +26,24 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
                 boolean dirsCreated = jsonFile.getParentFile().mkdirs(); // Create directories if they do not exist
                 if (!dirsCreated) {
                     System.out.println("Failed to create directories: " + jsonFile.getParentFile().getPath());
+                    logger.warn("Failed to create directories: {}", jsonFile.getParentFile().getPath());
                 }
             }
             if (!jsonFile.exists()) {
                 boolean fileCreated = jsonFile.createNewFile(); // Create the file if it does not exist
                 if (fileCreated) {
                     System.out.println("Created new file: " + jsonFile.getPath());
+                    logger.info("Created new file: {}", jsonFile.getPath());
                     // Initialize the file with an empty list if needed
                     objectMapper.writeValue(jsonFile, List.of());
                 } else {
                     System.out.println("File already exists: " + jsonFile.getPath());
+                    logger.info("File already exists: {}", jsonFile.getPath());
                 }
             }
         } catch (IOException e) {
             System.out.println("Failed to create or initialize file: " + jsonFile.getPath());
-            e.printStackTrace();
+            logger.error("Failed to create or initialize file: {}", jsonFile.getPath(), e);
         }
     }
 
@@ -52,14 +58,15 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
         if (jsonFile.exists()) {
             try {
                 System.out.println("Loading restaurants from file: " + jsonFile.getPath());
-                return objectMapper.readValue(jsonFile, new TypeReference<>() {
-                });
+                logger.info("Loading restaurants from file: {}", jsonFile.getPath());
+                return objectMapper.readValue(jsonFile, new TypeReference<>() {});
             } catch (IOException e) {
                 System.out.println("Failed to load restaurants from file: " + jsonFile.getPath());
-                e.printStackTrace();
+                logger.error("Failed to load restaurants from file: {}", jsonFile.getPath(), e);
             }
         } else {
             System.out.println("File does not exist: " + jsonFile.getPath());
+            logger.warn("File does not exist: {}", jsonFile.getPath());
         }
         return List.of(); // Return empty list if file does not exist or error occurs
     }
@@ -74,11 +81,13 @@ public class JsonRestaurantDataAccess implements RestaurantDataAccess {
     public void saveRestaurants(List<Restaurant> restaurants) {
         try {
             System.out.println("Saving restaurants to file: " + jsonFile.getPath());
+            logger.info("Saving restaurants to file: {}", jsonFile.getPath());
             objectMapper.writeValue(jsonFile, restaurants);
             System.out.println("Successfully saved restaurants to file: " + jsonFile.getPath());
+            logger.info("Successfully saved restaurants to file: {}", jsonFile.getPath());
         } catch (IOException e) {
             System.out.println("Failed to save restaurants to file: " + jsonFile.getPath());
-            e.printStackTrace();
+            logger.error("Failed to save restaurants to file: {}", jsonFile.getPath(), e);
         }
     }
 }

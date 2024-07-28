@@ -6,6 +6,8 @@ import use_case.search.RestaurantSearchInput;
 import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 import utils.ZoomLevelToMeter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 
@@ -16,6 +18,7 @@ public class SearchController {
     private final int zoomLevel;
     private final int mapWidth;
     private final int mapHeight;
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     public SearchController(SearchViewInteractor searchViewInteractor, Map map, int mapWidth, int mapHeight) {
         this.searchViewInteractor = searchViewInteractor;
@@ -58,8 +61,8 @@ public class SearchController {
         try {
             searchViewInteractor.execute(searchInput, 10); // Assuming maxResults is 10
         } catch (Exception e) {
-            System.err.println("An error occurred while executing the search: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("An error occurred while executing the search: " + e.getMessage()); // Retaining the println call
+            logger.error("An error occurred while executing the search: {}", e.getMessage(), e);
         }
     }
 }

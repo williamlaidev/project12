@@ -2,13 +2,12 @@ package domain;
 
 import entity.Location;
 import entity.Restaurant;
-
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Interface for Restaurant Repository.
- * Provides methods to perform CRUD operations on Restaurant entities.
+ * The RestaurantRepository interface defines the contract for a repository
+ * that provides CRUD (Create, Read, Update, Delete) operations for Restaurant entities.
  */
 public interface RestaurantRepository {
 
@@ -24,7 +23,7 @@ public interface RestaurantRepository {
      * Retrieves a restaurant by its unique ID.
      *
      * @param id the unique identifier of the restaurant
-     * @return an Optional containing the found restaurant or empty if not found
+     * @return an Optional containing the found restaurant, or empty if not found
      */
     Optional<Restaurant> getById(String id);
 
@@ -32,7 +31,7 @@ public interface RestaurantRepository {
      * Retrieves a restaurant by its name.
      *
      * @param name the name of the restaurant
-     * @return an Optional containing the found restaurant or empty if not found
+     * @return an Optional containing the found restaurant, or empty if not found
      */
     Optional<Restaurant> getByName(String name);
 
@@ -40,7 +39,7 @@ public interface RestaurantRepository {
      * Retrieves a restaurant by its location.
      *
      * @param location the location of the restaurant
-     * @return an Optional containing the found restaurant or empty if not found
+     * @return an Optional containing the found restaurant, or empty if not found
      */
     Optional<Restaurant> getByLocation(Location location);
 
