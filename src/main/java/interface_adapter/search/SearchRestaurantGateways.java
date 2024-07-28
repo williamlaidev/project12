@@ -1,19 +1,19 @@
 package interface_adapter.search;
 
 import entity.*;
-import domain.SearchInputBoundary;
+import domain.SearchRestaurantService;
 import framework.search.GooglePlacesRestaurantSearchService;
 import framework.config.EnvConfigService;
 import framework.config.EnvConfigServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import use_case.view.SearchInput;
+import use_case.search.RestaurantSearchInput;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SearchRestaurantGateways implements SearchInputBoundary {
+public class SearchRestaurantGateways implements SearchRestaurantService {
     private final GooglePlacesRestaurantSearchService placesService;
     private final RestaurantMapper restaurantMapper;
 
@@ -24,16 +24,16 @@ public class SearchRestaurantGateways implements SearchInputBoundary {
     }
 
     @Override
-    public Optional<List<Restaurant>> execute(SearchInput searchInput, int maxResults) {
+    public Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
         try {
-            DishType dishTypeFilter = searchInput.getDishType();
-            Location location = new Location(searchInput.getLatitude(), searchInput.getLongitude());
+            DishType dishTypeFilter = restaurantSearchInput.getDishType();
+            Location location = new Location(restaurantSearchInput.getLatitude(), restaurantSearchInput.getLongitude());
 
             System.out.println("Starting search for restaurants within "
-                    + searchInput.getDistance() + " meters from location ("
-                    + searchInput.getLatitude() + ", " + searchInput.getLongitude() + ").");
+                    + restaurantSearchInput.getDistance() + " meters from location ("
+                    + restaurantSearchInput.getLatitude() + ", " + restaurantSearchInput.getLongitude() + ").");
 
-            List<Restaurant> restaurants = fetchNearbyRestaurants(location, dishTypeFilter, Integer.parseInt(searchInput.getDistance()), maxResults);
+            List<Restaurant> restaurants = fetchNearbyRestaurants(location, dishTypeFilter, Integer.parseInt(restaurantSearchInput.getDistance()), maxResults);
 
             return Optional.of(restaurants);
         } catch (Exception e) {

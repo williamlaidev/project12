@@ -2,7 +2,7 @@ package interface_adapter.view;
 
 import entity.DishType;
 import entity.Map;
-import use_case.view.SearchInput;
+import use_case.search.RestaurantSearchInput;
 import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 import utils.ZoomLevelToMeter;
@@ -51,8 +51,8 @@ public class SearchController {
             longitude = centerLng;
         }
 
-        // Create SearchInput object
-        SearchInput searchInput = new SearchInput(latitude, longitude, distance, dishType);
+        // Create RestaurantSearchInput object
+        RestaurantSearchInput searchInput = new RestaurantSearchInput(latitude, longitude, distance, dishType);
 
         // Execute the search and handle any exceptions
         try {
