@@ -126,15 +126,13 @@ public class Review {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return isSummarized == review.isSummarized &&
-                Objects.equals(restaurantId, review.restaurantId) &&
-                Objects.equals(author, review.author) &&
-                Objects.equals(content, review.content);
+        return Objects.equals(restaurantId, review.restaurantId) &&
+                Objects.equals(author, review.author);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(restaurantId, author, content, isSummarized);
+        return Objects.hash(restaurantId, author);
     }
 
     /**

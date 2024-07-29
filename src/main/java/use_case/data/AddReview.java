@@ -1,23 +1,31 @@
 package use_case.data;
 
-import domain.ReviewRepository;
 import entity.Review;
+import domain.ReviewRepository;
 
+/**
+ * Handles the use case for adding a review.
+ * It uses the {@link ReviewRepository} to save the review.
+ */
 public class AddReview {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewRepository repository;
 
-    public AddReview(ReviewRepository reviewRepository) {
-        this.reviewRepository = reviewRepository;
+    /**
+     * Creates an instance with the given repository.
+     *
+     * @param repository the {@link ReviewRepository} for adding reviews.
+     */
+    public AddReview(ReviewRepository repository) {
+        this.repository = repository;
     }
 
     /**
-     * Adds a review to the repository.
+     * Adds the specified review to the repository.
      *
-     * @param review the review to be added
-     * @return the added review
+     * @param review the {@link Review} to add.
      */
-    public Review execute(Review review) {
-        return reviewRepository.add(review);
+    public void execute(Review review) {
+        repository.save(review);
     }
 }

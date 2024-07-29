@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class SearchController {
     private final SearchViewInteractor searchViewInteractor;
     private final double centerLat;

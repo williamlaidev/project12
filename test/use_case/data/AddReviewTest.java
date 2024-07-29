@@ -1,6 +1,7 @@
 package use_case.data;
 
-import domain.RestaurantRepository;
+import domain.ReviewRepository;
+import entity.Review;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -8,13 +9,13 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
 
-public class DeleteRestaurantTest {
+public class AddReviewTest {
 
     @Mock
-    private RestaurantRepository repository;
+    private ReviewRepository repository;
 
     @InjectMocks
-    private DeleteRestaurant useCase;
+    private AddReview useCase;
 
     private AutoCloseable closeable;
 
@@ -29,11 +30,11 @@ public class DeleteRestaurantTest {
     }
 
     @Test
-    void testDeleteRestaurant() {
-        String restaurantId = "1";
+    void testAddReview() {
+        Review review = new Review("1", "Author", "Content", false);
 
-        useCase.execute(restaurantId);
+        useCase.execute(review);
 
-        verify(repository).delete(restaurantId);
+        verify(repository).save(review);
     }
 }

@@ -2,86 +2,86 @@ package interface_adapter.search;
 
 import domain.ReviewRetrievalService;
 import entity.Review;
+import entity.ReviewFactory;
 import framework.search.GooglePlacesReviewsService;
 import framework.config.EnvConfigService;
 import framework.config.EnvConfigServiceImpl;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import use_case.data.AddReview;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Gateway class for interacting with Google Places API to fetch reviews for a specific restaurant.
+ * Gateway class for interacting with the Google Places API to fetch and manage reviews for a specific restaurant.
+ * Implements the {@link ReviewRetrievalService} interface to retrieve reviews and add them to a repository.
  */
 public class PlacesReviewsGateways implements ReviewRetrievalService {
 
     private final GooglePlacesReviewsService reviewsService;
+    private final AddReview addReviewUseCase;
     private static final Logger logger = LoggerFactory.getLogger(PlacesReviewsGateways.class);
 
     /**
-     * Constructs the PlacesReviewsGateway with the provided EnvConfigService.
+     * Constructs a {@code PlacesReviewsGateways} instance with the provided {@link AddReview} use case.
+     * Initializes the Google Places review service using environment configurations.
+     *
+     * @param addReviewUseCase the {@link AddReview} use case for persisting reviews to the repository
      */
-    public PlacesReviewsGateways() {
+    public PlacesReviewsGateways(AddReview addReviewUseCase) {
         EnvConfigService envConfigService = new EnvConfigServiceImpl();
         this.reviewsService = new GooglePlacesReviewsService(envConfigService);
+        this.addReviewUseCase = addReviewUseCase;
     }
 
     /**
-     * Retrieves the most relevant reviews for a given restaurant.
+     * Retrieves and processes the most relevant reviews for a given restaurant.
+     * Fetches reviews from the Google Places API, maps them to {@link Review} objects,
+     * and adds them to the repository using the {@link AddReview} use case.
      *
-     * @param restaurantId the ID of the restaurant
-     * @return a list of the most relevant reviews if present, otherwise an empty list
+     * @param restaurantId the ID of the restaurant for which reviews are to be fetched
+     * @return a list of the most relevant {@link Review} objects; returns an empty list if no reviews are found or an error occurs
      */
     @Override
     public List<Review> getReviewsForRestaurant(String restaurantId) {
         try {
-            // Fetch reviews with default parameters (assuming default language and sorting)
             List<JSONObject> reviewJsonObjects = reviewsService.fetchReviews(restaurantId, "en", "most_relevant");
             List<Review> reviews = new ArrayList<>();
 
-            // Limit to top six reviews
             int limit = Math.min(reviewJsonObjects.size(), 6);
             for (int i = 0; i < limit; i++) {
                 JSONObject reviewJson = reviewJsonObjects.get(i);
-                Review review = mapToReview(reviewJson, restaurantId); // Pass the restaurantId here
+                Review review = mapToReview(reviewJson, restaurantId);
                 if (review != null) {
                     reviews.add(review);
+                    addReviewUseCase.execute(review);
                 }
             }
 
             return reviews;
         } catch (Exception e) {
-            System.err.println("Error fetching reviews: " + e.getMessage()); // Keeping println as requested
-            logger.error("Error fetching reviews: {}", e.getMessage(), e);
+            logger.error("Error fetching reviews for restaurant ID {}: {}", restaurantId, e.getMessage(), e);
             return new ArrayList<>(); // Return an empty list in case of error
         }
     }
 
     /**
-     * Maps a JSON object to a Review instance.
+     * Maps a JSON object representing a review to a {@link Review} instance using the {@link ReviewFactory}.
      *
-     * @param reviewJson the JSON object containing review details
-     * @param restaurantId the ID of the restaurant
-     * @return a Review instance
+     * @param reviewJson the JSON object containing the review details
+     * @param restaurantId the ID of the restaurant associated with the review
+     * @return a {@link Review} instance created from the JSON data, or {@code null} if mapping fails
      */
     private Review mapToReview(JSONObject reviewJson, String restaurantId) {
         try {
             String author = reviewJson.optString("author_name");
             String content = reviewJson.optString("text");
-            boolean isSummarized = false; // Set as needed
 
-            // Return new Review instance
-            return new Review(
-                    restaurantId, // Set the actual restaurantId here
-                    author,
-                    content,
-                    isSummarized
-            );
+            return ReviewFactory.createUserReview(restaurantId, author, content);
         } catch (Exception e) {
-            System.err.println("Error mapping JSON to Review: " + e.getMessage()); // Keeping println as requested
-            logger.error("Error mapping JSON to Review: {}", e.getMessage(), e);
+            logger.error("Error mapping JSON to Review for restaurant ID {}: {}", restaurantId, e.getMessage(), e);
             return null;
         }
     }

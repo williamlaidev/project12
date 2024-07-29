@@ -2,6 +2,8 @@ package interface_adapter.view;
 
 import java.beans.PropertyChangeListener;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public abstract class ViewModel {
 
     private String viewName;

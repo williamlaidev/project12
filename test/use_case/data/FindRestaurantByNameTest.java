@@ -36,10 +36,21 @@ public class FindRestaurantByNameTest {
 
     @Test
     void testFindByNameSuccess() {
-        Restaurant restaurant = new Restaurant("1", "Test Restaurant", new Location(40.7128, -74.0060), "Test Address", DishType.AMERICAN, 4.5, null, null, null);
+        Restaurant restaurant = new Restaurant(
+                "1",
+                "Test Restaurant",
+                new Location(40.7128, -74.0060),
+                "Test Address",
+                DishType.AMERICAN,
+                4.5,
+                null,
+                null,
+                null
+        );
         when(repository.findByName("Test Restaurant")).thenReturn(Optional.of(restaurant));
 
         Optional<Restaurant> result = useCase.execute("Test Restaurant");
+
         assertTrue(result.isPresent());
         assertEquals(restaurant, result.get());
     }
@@ -49,6 +60,7 @@ public class FindRestaurantByNameTest {
         when(repository.findByName("Nonexistent Restaurant")).thenReturn(Optional.empty());
 
         Optional<Restaurant> result = useCase.execute("Nonexistent Restaurant");
+
         assertFalse(result.isPresent());
     }
 }

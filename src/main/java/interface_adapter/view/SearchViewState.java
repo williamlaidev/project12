@@ -2,6 +2,8 @@ package interface_adapter.view;
 
 import java.awt.Point;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class SearchViewState {
     private Point mousePosition;
     private String distance;
