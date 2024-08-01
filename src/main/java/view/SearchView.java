@@ -29,6 +29,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
     private final JComboBox<String> dishTypeComboBox;
 
+
     private Image mapImage;
 
     /**

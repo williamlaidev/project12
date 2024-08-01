@@ -52,7 +52,7 @@ public class Start {
             // Set up the JFrame
             JFrame frame = new JFrame("Search Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(400, 400);
+            frame.setSize(450, 600);
             frame.setContentPane(searchView);
             frame.setLocationRelativeTo(null); // Center the frame on the screen
             frame.setVisible(true);
