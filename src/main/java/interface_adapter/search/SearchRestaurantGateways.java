@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Gateway class for searching restaurants using the Google Places API.
+ * Implements the {@link SearchRestaurantService} interface to provide restaurant search functionality.
+ */
 public class SearchRestaurantGateways implements SearchRestaurantService {
     private final GooglePlacesRestaurantSearchService placesService;
     private final RestaurantMapper restaurantMapper;
@@ -27,6 +31,10 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
     private final UpdateRestaurant updateRestaurantUseCase;
     private final FindRestaurantById findRestaurantByIdUseCase;
 
+    /**
+     * Constructs a {@code SearchRestaurantGateways} with dependencies for restaurant search,
+     * including Google Places service and use cases for managing restaurants.
+     */
     public SearchRestaurantGateways() {
         EnvConfigService envConfigService = new EnvConfigServiceImpl();
         this.placesService = new GooglePlacesRestaurantSearchService(envConfigService);
@@ -37,6 +45,15 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
         this.findRestaurantByIdUseCase = new FindRestaurantById(restaurantRepository);
     }
 
+    /**
+     * Executes a search for restaurants based on the provided {@link RestaurantSearchInput}.
+     * Retrieves nearby restaurants, applies a dish type filter if specified, and limits the number of results.
+     *
+     * @param restaurantSearchInput the input containing search parameters including location, distance, and dish type
+     * @param maxResults            the maximum number of restaurants to return
+     * @return an {@link Optional} containing a list of {@link Restaurant} objects if the search is successful;
+     *         otherwise, an empty {@link Optional}
+     */
     @Override
     public Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
         try {
@@ -57,6 +74,17 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
         }
     }
 
+    /**
+     * Fetches nearby restaurants from the Google Places API based on the provided location,
+     * dish type filter, search radius, and maximum number of results.
+     *
+     * @param location        the {@link Location} to search around
+     * @param dishTypeFilter the {@link DishType} filter to apply; {@code null} if no filtering is required
+     * @param radius         the search radius in meters
+     * @param maxResults     the maximum number of results to retrieve
+     * @return a list of {@link Restaurant} objects found within the search parameters
+     * @throws Exception if an error occurs while fetching data from the API
+     */
     private List<Restaurant> fetchNearbyRestaurants(Location location, DishType dishTypeFilter, int radius, int maxResults) throws Exception {
         List<Restaurant> restaurants = new ArrayList<>();
 
@@ -66,6 +94,15 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
         return restaurants;
     }
 
+    /**
+     * Parses the JSON response from the Google Places API to extract and map restaurants.
+     * Updates or adds restaurants to the repository based on their presence in the system.
+     *
+     * @param restaurants     the list to which parsed {@link Restaurant} objects will be added
+     * @param response        the JSON response from the Google Places API
+     * @param dishTypeFilter  the {@link DishType} filter to apply; {@code null} if no filtering is required
+     * @param maxResults      the maximum number of results to process
+     */
     private void parseRestaurantsFromResponse(List<Restaurant> restaurants, JSONObject response, DishType dishTypeFilter, int maxResults) {
         JSONArray places = response.optJSONArray("results");
         if (places == null) {

@@ -17,7 +17,7 @@ import java.util.Optional;
  * It manages a SQLite database to store and retrieve restaurant data.
  */
 public class SQLiteRestaurantRepository implements RestaurantRepository {
-    private static final String DB_URL = "jdbc:sqlite:identifier.sqlite";
+    private static final String DB_URL = "jdbc:sqlite:app_database.sqlite";
     private static final Logger logger = LoggerFactory.getLogger(SQLiteRestaurantRepository.class);
 
     /**
@@ -153,13 +153,21 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
     }
 
     /**
-     * Saves a restaurant to the database. This method performs an insertion of a new record.
+     * Saves a restaurant to the database. If a restaurant with the same ID already exists, it updates the existing record.
+     * Otherwise, it inserts a new record into the `restaurants` table.
      *
-     * @param restaurant the {@link Restaurant} to be saved.
-     * @return {@code true} if the restaurant was saved successfully; {@code false} otherwise.
+     * @param restaurant the {@link Restaurant} to be saved. It must have a non-null `restaurantId`, which serves as the
+     *                   primary key.
+     * @return {@code true} if the restaurant was successfully saved (either inserted or updated); {@code false} otherwise.
      */
     @Override
     public boolean save(Restaurant restaurant) {
+        // First, try updating the restaurant if it exists
+        if (findById(restaurant.getRestaurantId()).isPresent()) {
+            return update(restaurant);
+        }
+
+        // Insert if it does not exist
         String sql = "INSERT INTO restaurants (restaurantId, name, latitude, longitude, address, dishType, averageRating, photoUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);

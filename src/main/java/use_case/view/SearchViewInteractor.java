@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class SearchViewInteractor implements SearchRestaurantService {
 
     private final SearchRestaurantsByDistanceInteractor restaurantsInteractor;

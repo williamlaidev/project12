@@ -2,6 +2,8 @@ package interface_adapter.view;
 
 import domain.SearchOutputBoundary;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class SearchViewPresenter implements SearchOutputBoundary {
 
     private final SearchViewModel searchViewModel;

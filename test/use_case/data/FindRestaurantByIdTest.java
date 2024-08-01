@@ -36,10 +36,21 @@ public class FindRestaurantByIdTest {
 
     @Test
     void testFindByIdSuccess() {
-        Restaurant restaurant = new Restaurant("1", "Test Restaurant", new Location(40.7128, -74.0060), "Test Address", DishType.AMERICAN, 4.5, null, null, null);
+        Restaurant restaurant = new Restaurant(
+                "1",
+                "Test Restaurant",
+                new Location(40.7128, -74.0060),
+                "Test Address",
+                DishType.AMERICAN,
+                4.5,
+                null,
+                null,
+                null
+        );
         when(repository.findById("1")).thenReturn(Optional.of(restaurant));
 
         Optional<Restaurant> result = useCase.execute("1");
+
         assertTrue(result.isPresent());
         assertEquals(restaurant, result.get());
     }
@@ -49,6 +60,7 @@ public class FindRestaurantByIdTest {
         when(repository.findById("1")).thenReturn(Optional.empty());
 
         Optional<Restaurant> result = useCase.execute("1");
+
         assertFalse(result.isPresent());
     }
 }

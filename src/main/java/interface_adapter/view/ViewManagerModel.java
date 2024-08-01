@@ -3,6 +3,8 @@ package interface_adapter.view;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
+
 public class ViewManagerModel {
     private String activeViewName;
 

@@ -6,51 +6,79 @@ import java.util.Optional;
 import java.util.List;
 
 /**
- * Interface for managing review data in a repository.
- * Provides methods to add, retrieve, update, and delete reviews.
+ * Interface for managing {@link Review} entities in a repository.
+ * Provides methods for adding, finding, updating, and deleting reviews.
  */
 public interface ReviewRepository {
 
     /**
      * Adds a new review to the repository.
-     * If a review by the same author for the same restaurant already exists, it is not added.
      *
-     * @param review the review to be added
-     * @return the added review if successful, otherwise null
+     * @param review The review to add.
+     * @return true if the review was added successfully, false otherwise.
      */
-    Review add(Review review);
+    boolean add(Review review);
 
     /**
-     * Retrieves a review for a specific restaurant by its ID.
+     * Finds all reviews for a specific restaurant.
      *
-     * @param restaurantId the ID of the restaurant
-     * @return an Optional containing the review if found, or an empty Optional if not found
+     * @param restaurantId The ID of the restaurant.
+     * @return An {@link Optional} containing a list of reviews if found, otherwise empty.
      */
-    Optional<Review> getReviewByRestaurant(String restaurantId);
+    Optional<List<Review>> findUserReviews(String restaurantId);
+
+    /**
+     * Finds a summarized review for a specific restaurant.
+     *
+     * @param restaurantId The ID of the restaurant.
+     * @return An {@link Optional} containing the summarized review if found, otherwise empty.
+     */
+    Optional<Review> findSummarizedReview(String restaurantId);
+
+    /**
+     * Finds all reviews in the repository.
+     *
+     * @return An {@link Optional} containing a list of all reviews if found, otherwise empty.
+     */
+    Optional<List<Review>> findAll();
+
+    /**
+     * Saves or updates a review in the repository.
+     *
+     * @param review The review to save or update.
+     * @return true if the operation was successful, false otherwise.
+     */
+    boolean save(Review review);
 
     /**
      * Updates an existing review in the repository.
-     * If no review is found for the given restaurant ID and author, the update fails.
      *
-     * @param review the review to be updated
-     * @return true if the review was updated successfully, false otherwise
+     * @param review The review to update.
+     * @return true if the review was updated successfully, false otherwise.
      */
     boolean update(Review review);
 
     /**
-     * Deletes a review from the repository by the restaurant's ID.
+     * Deletes all reviews for a specific restaurant.
      *
-     * @param reviewId the ID of the review to be deleted
-     * @return true if the review was deleted successfully, false otherwise
+     * @param restaurantId The ID of the restaurant.
+     * @return true if the reviews were deleted successfully, false otherwise.
      */
-    boolean deleteReviewByRestaurant(String reviewId);
+    boolean deleteUserReviews(String restaurantId);
 
     /**
-     * Deletes reviews from the repository based on whether they are summarized.
-     * The summarized status typically indicates whether the review is a summary of multiple reviews.
+     * Deletes the summarized review for a specific restaurant.
      *
-     * @param summarized the summarized status of the reviews to be deleted
-     * @return true if the reviews were deleted successfully, false otherwise
+     * @param restaurantId The ID of the restaurant.
+     * @return true if the summarized review was deleted successfully, false otherwise.
      */
-    boolean deleteReviewBySummarized(boolean summarized);
+    boolean deleteSummarizedReview(String restaurantId);
+
+    /**
+     * Deletes all reviews for a specific restaurant.
+     *
+     * @param restaurantId The ID of the restaurant.
+     * @return true if all reviews were deleted successfully, false otherwise.
+     */
+    boolean deleteAllReviews(String restaurantId);
 }

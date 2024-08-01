@@ -33,13 +33,20 @@ public class AddRestaurantTest {
 
     @Test
     void testAddRestaurant() {
-        // Arrange
-        Restaurant restaurant = new Restaurant("1", "Test Restaurant", new Location(40.7128, -74.0060), "Test Address", DishType.AMERICAN, 4.5, null, null, null);
+        Restaurant restaurant = new Restaurant(
+                "1",
+                "Test Restaurant",
+                new Location(40.7128, -74.0060),
+                "Test Address",
+                DishType.AMERICAN,
+                4.5,
+                null,
+                null,
+                null
+        );
 
-        // Act
         useCase.execute(restaurant);
 
-        // Assert
         verify(repository).add(restaurant);
     }
 }

@@ -1,28 +1,28 @@
 package app;
 
-import data_access.ReviewDataAccess;
-import domain.ReviewRepository;
 import domain.ReviewRetrievalService;
 import entity.Review;
-import framework.data.JsonReviewDataAccess;
-import interface_adapter.data.InMemoryReviewRepository;
+import interface_adapter.data.SQLiteReviewRepository;
 import interface_adapter.search.PlacesReviewsGateways;
 import use_case.data.AddReview;
 import use_case.search.GetReviewsForRestaurant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ReviewApp {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReviewApp.class);
+
     public static void main(String[] args) {
         try {
             // Set up services
-            ReviewDataAccess reviewDataAccess = new JsonReviewDataAccess();
-            ReviewRepository reviewRepository = new InMemoryReviewRepository(reviewDataAccess);
+            SQLiteReviewRepository reviewRepository = new SQLiteReviewRepository();
             AddReview addReviewUseCase = new AddReview(reviewRepository);
 
-            ReviewRetrievalService reviewRetrievalService = new PlacesReviewsGateways();
+            ReviewRetrievalService reviewRetrievalService = new PlacesReviewsGateways(addReviewUseCase); // Inject AddReview
             GetReviewsForRestaurant getReviewsForRestaurant = new GetReviewsForRestaurant(reviewRetrievalService);
 
             // Read user input
@@ -33,22 +33,16 @@ public class ReviewApp {
             // Fetch reviews
             List<Review> reviews = getReviewsForRestaurant.execute(restaurantId);
             if (reviews.isEmpty()) {
-                System.out.println("No reviews found.");
+                logger.info("No reviews found.");
             } else {
-                // Add reviews to repository
-                for (Review review : reviews) {
-                    addReviewUseCase.execute(review);
-                }
-
                 // Print out all reviews
-                System.out.println("All Reviews:");
+                logger.info("All Reviews:");
                 for (Review review : reviews) {
-                    System.out.println(review);
+                    logger.info(review.toString());
                 }
             }
         } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("An error occurred: ", e);
         }
     }
 }
