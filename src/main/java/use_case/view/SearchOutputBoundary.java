@@ -14,5 +14,6 @@ public interface SearchOutputBoundary {
     void prepareFailView(String error);
 
 
-    void updateZoomLevel(int zoomLevel);
+    void setZoomLevel(int zoomLevel);
+
 }

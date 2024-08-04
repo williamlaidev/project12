@@ -11,7 +11,7 @@ public class SearchViewState {
     private String distance;
     private String selectedDishType;
     private String distanceError;
-    private int zoomLevel;  // Adding zoom level to the state
+ // Adding zoom level to the state
 
     // Copy constructor
     public SearchViewState(SearchViewState copy) {
@@ -19,7 +19,7 @@ public class SearchViewState {
         this.distance = copy.distance;
         this.selectedDishType = copy.selectedDishType;
         this.distanceError = copy.distanceError;
-        this.zoomLevel = copy.zoomLevel;
+
     }
 
     // Default constructor
@@ -57,13 +57,8 @@ public class SearchViewState {
         this.distanceError = distanceError;
     }
 
-    public int getZoomLevel() {
-        return zoomLevel;
-    }
 
-    public void setZoomLevel(int zoomLevel) {
-        this.zoomLevel = zoomLevel;
-    }
+
 
     @Override
     public String toString() {
@@ -72,7 +67,6 @@ public class SearchViewState {
                 ", distance='" + distance + '\'' +
                 ", selectedDishType='" + selectedDishType + '\'' +
                 ", distanceError='" + distanceError + '\'' +
-                ", zoomLevel=" + zoomLevel +
                 '}';
     }
 }

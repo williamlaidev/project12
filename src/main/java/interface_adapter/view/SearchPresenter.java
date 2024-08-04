@@ -13,7 +13,7 @@ public class SearchPresenter implements SearchOutputBoundary {
     }
 
 
-    public void updateZoomLevel(int zoomLevel) {
+    public void setZoomLevel(int zoomLevel) {
         searchViewModel.setZoomLevel(zoomLevel);
         searchViewModel.firePropertyChanged();  // Notify observers of the change
     }

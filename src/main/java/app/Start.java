@@ -32,8 +32,7 @@ public class Start {
 
             // Get dish types and map image
             String[] dishTypeList = initializer.getDishTypes();
-            File mapImageFile = new File("src/main/resources/map_images/map.png");
-            Image mapImage = ImageIO.read(mapImageFile);
+            
 
             // Create the SearchViewModel
             SearchViewModel searchViewModel = new SearchViewModel();
@@ -45,12 +44,13 @@ public class Start {
             SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap());
 
             SearchPresenter searchPresenter = new SearchPresenter(searchViewModel);
+            searchPresenter.setZoomLevel(15);
 
             // Create the controller and view model
             SearchController searchController = new SearchController(searchViewInteractor, searchPresenter, initializer.getMap(), 400, 400);
 
             // Create the SearchView
-            SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList, mapImage);
+            SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList);
 
             // Set up the JFrame
             JFrame frame = new JFrame("Search Application");

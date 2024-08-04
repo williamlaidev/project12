@@ -70,6 +70,25 @@ public class Initializer {
         }
     }
 
+    public void initializeNewMap(int zoom, double latitude, double longitude) throws Exception {
+        JSONObject currentLocationJson = geolocationService.getCurrentLocation();
+
+        this.currentLocation = new Location(latitude, longitude);
+
+        // Create a map entity
+        int width = 400; // Width of the image in pixels
+        int height = 400; // Height of the image in pixels
+
+        this.map = MapFactory.createMap(latitude, longitude, zoom, width, height); // Empty list of restaurant IDs for now
+
+        // Create and save the map image centered at the current location
+
+        boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
+        if (!success) {
+            throw new RuntimeException("Failed to fetch and save the map image.");
+        }
+    }
+
     /**
      * Gets the latitude of the current location.
      *

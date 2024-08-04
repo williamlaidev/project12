@@ -17,8 +17,8 @@ import java.awt.Point;
 public class SearchController {
     private final SearchViewInteractor searchViewInteractor;
     private final SearchPresenter searchPresenter;
-    private final double centerLat;
-    private final double centerLng;
+    private double centerLat;
+    private double centerLng;
     private final int mapWidth;
     private final int mapHeight;
     private int zoomLevel; // Mutable state to handle zoom level changes dynamically
@@ -64,8 +64,39 @@ public class SearchController {
     /**
      * Adjusts the zoom level of the map.
      */
-    public void changeZoomLevel(int change) {
+    public void changeZoomLevel(int change, SearchViewState searchViewState) {
         this.zoomLevel += change;
-        searchPresenter.updateZoomLevel(this.zoomLevel);
+
+        String distance = searchViewState.getDistance();
+        String selectedDishType = searchViewState.getSelectedDishType();
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
+
+        RestaurantSearchInput inputData = new RestaurantSearchInput(centerLat, centerLng, distance, dishType);
+
+        searchViewInteractor.adjustZoomLevel(change, inputData);
+        searchPresenter.setZoomLevel(this.zoomLevel);
     }
+
+
+    /**
+     * Adjusts the center of the map.
+     */
+    public void changeCenter(Point rightClickPosition, SearchViewState searchViewState) {
+        String distance = searchViewState.getDistance();
+        String selectedDishType = searchViewState.getSelectedDishType();
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
+
+        double[] latLng = MapCoordinateToLocation.convert(rightClickPosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
+        double latitude = latLng[0];
+        double longitude = latLng[1];
+        this.centerLat = latitude;
+        this.centerLng = longitude;
+
+
+        RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
+
+        searchViewInteractor.adjustCenter(latitude, longitude, inputData);
+
+    }
+
 }

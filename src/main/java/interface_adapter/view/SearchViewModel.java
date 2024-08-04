@@ -32,6 +32,10 @@ public class SearchViewModel extends ViewModel {
         firePropertyChanged(); // Notify observers about zoom level change
     }
 
+    public int getZoomLevel(){
+        return zoomLevel;
+    }
+
     public SearchViewState getState() {
         return state;
     }

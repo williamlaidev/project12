@@ -3,6 +3,8 @@ package use_case.view;
 import domain.SearchRestaurantService;
 import entity.DishType;
 import entity.Restaurant;
+import framework.config.EnvConfigServiceImpl;
+import framework.search.GoogleMapsImageService;
 import use_case.search.RestaurantSearchInput;
 import use_case.search.SearchRestaurantsByDistanceInteractor;
 import entity.Map;
@@ -52,12 +54,32 @@ public class SearchViewInteractor implements SearchRestaurantService {
      *
      * @param zoomChange the change in zoom level (+1 or -1 typically)
      */
-    public void adjustZoomLevel(int zoomChange) {
+    public void adjustZoomLevel(int zoomChange, RestaurantSearchInput restaurantSearchInput) {
         int newZoomLevel = this.currentMap.getZoomLevel() + zoomChange;
         this.currentMap.setZoomLevel(newZoomLevel);
         // Optionally trigger a map refresh or update other components dependent on the zoom level
+
+        double newLatitude = this.currentMap.getCurrentLatitude();
+        double newLongitude = this.currentMap.getCurrentLongitude();
+
+
+        MapImageInteractor mapImageInteractor = new MapImageInteractor(new GoogleMapsImageService(new EnvConfigServiceImpl()));
+        mapImageInteractor.fetchAndSaveMapImage(newLatitude, newLongitude, newZoomLevel, 400, 400);
+
+
+
         System.out.println("Zoom level adjusted to: " + newZoomLevel);
         // Here you might also trigger a map refresh or update UI components
+    }
+
+    public void adjustCenter(double latitude, double longitude, RestaurantSearchInput restaurantSearchInput) {
+        this.currentMap.setCurrentLatitude(latitude);
+        this.currentMap.setCurrentLongitude(longitude);
+        MapImageInteractor mapImageInteractor = new MapImageInteractor(new GoogleMapsImageService(new EnvConfigServiceImpl()));
+        mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, currentMap.getZoomLevel(), 400, 400);
+
+        System.out.println("Center adjusted to: " + latitude + ", " + longitude);
+
     }
 }
 
