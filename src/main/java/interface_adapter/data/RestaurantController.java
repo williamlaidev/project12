@@ -1,16 +1,16 @@
 package interface_adapter.data;
 
 import domain.RestaurantRepository;
-import entity.OperationResult;
-import entity.Restaurant;
-import entity.SuccessOperationResultFactory;
-import entity.FailureOperationResultFactory;
-import use_case.data.AddRestaurant;
-import use_case.data.ClearAllRestaurants;
-import use_case.data.DeleteRestaurantById;
-import use_case.data.FindAllRestaurants;
-import use_case.data.FindRestaurantById;
-import use_case.data.UpdateRestaurant;
+import entity.operation_result.OperationResult;
+import entity.restaurant.Restaurant;
+import entity.operation_result.OperationResultSuccessFactory;
+import entity.operation_result.OperationResultFailureFactory;
+import use_case.data.create.AddRestaurant;
+import use_case.data.delete.ClearAllRestaurants;
+import use_case.data.delete.DeleteRestaurantById;
+import use_case.data.read.FindAllRestaurants;
+import use_case.data.read.FindRestaurantById;
+import use_case.data.update.UpdateRestaurant;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +24,8 @@ public class RestaurantController {
     private final FindAllRestaurants findAllRestaurantsUseCase;
     private final FindRestaurantById findRestaurantByIdUseCase;
 
-    private final SuccessOperationResultFactory successFactory;
-    private final FailureOperationResultFactory failureFactory;
+    private final OperationResultSuccessFactory successFactory;
+    private final OperationResultFailureFactory failureFactory;
 
     public RestaurantController(RestaurantRepository restaurantRepository) {
         this.addRestaurantUseCase = new AddRestaurant(restaurantRepository);
@@ -34,8 +34,8 @@ public class RestaurantController {
         this.clearAllRestaurantsUseCase = new ClearAllRestaurants(restaurantRepository);
         this.findAllRestaurantsUseCase = new FindAllRestaurants(restaurantRepository);
         this.findRestaurantByIdUseCase = new FindRestaurantById(restaurantRepository);
-        this.successFactory = new SuccessOperationResultFactory();
-        this.failureFactory = new FailureOperationResultFactory();
+        this.successFactory = new OperationResultSuccessFactory();
+        this.failureFactory = new OperationResultFailureFactory();
     }
 
     public OperationResult addRestaurant(Restaurant restaurant) {

@@ -1,7 +1,7 @@
 package domain;
 
-import entity.OperationResult;
-import entity.Restaurant;
+import entity.operation_result.OperationResult;
+import entity.restaurant.Restaurant;
 import java.util.List;
 import java.util.Optional;
 

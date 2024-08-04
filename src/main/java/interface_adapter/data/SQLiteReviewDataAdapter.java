@@ -1,16 +1,16 @@
 package interface_adapter.data;
 
-import entity.Review;
-import entity.GeminiReviewFactory;
-import entity.UserReviewFactory;
+import entity.review.Review;
+import entity.review.ReviewGeminiFactory;
+import entity.review.ReviewUserFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLiteReviewDataAdapter implements ReviewDataAdapter {
 
-    private final UserReviewFactory userReviewFactory = new UserReviewFactory();
-    private final GeminiReviewFactory geminiReviewFactory = new GeminiReviewFactory();
+    private final ReviewUserFactory userReviewFactory = new ReviewUserFactory();
+    private final ReviewGeminiFactory geminiReviewFactory = new ReviewGeminiFactory();
 
     @Override
     public Review adaptToReview(ResultSet rs) throws SQLException {

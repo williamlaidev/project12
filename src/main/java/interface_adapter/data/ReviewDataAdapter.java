@@ -1,6 +1,6 @@
 package interface_adapter.data;
 
-import entity.Review;
+import entity.review.Review;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

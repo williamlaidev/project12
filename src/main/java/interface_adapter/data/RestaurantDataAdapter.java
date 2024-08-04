@@ -1,6 +1,6 @@
 package interface_adapter.data;
 
-import entity.Restaurant;
+import entity.restaurant.Restaurant;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -2,6 +2,11 @@ package framework.data;
 
 import domain.RestaurantRepository;
 import entity.*;
+import entity.operation_result.OperationResult;
+import entity.operation_result.OperationResultFactory;
+import entity.operation_result.OperationResultFailureFactory;
+import entity.operation_result.OperationResultSuccessFactory;
+import entity.restaurant.Restaurant;
 import interface_adapter.data.SQLiteRestaurantDataAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +18,8 @@ import java.util.Optional;
 
 public class SQLiteRestaurantRepository implements RestaurantRepository {
     private static final Logger logger = LoggerFactory.getLogger(SQLiteRestaurantRepository.class);
-    private final OperationResultFactory successFactory = new SuccessOperationResultFactory();
-    private final OperationResultFactory failureFactory = new FailureOperationResultFactory();
+    private final OperationResultFactory successFactory = new OperationResultSuccessFactory();
+    private final OperationResultFactory failureFactory = new OperationResultFailureFactory();
     private final DatabaseConfig databaseConfig = new DatabaseConfig();
     private final SQLiteRestaurantDataAdapter dataAdapter;
 

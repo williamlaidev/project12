@@ -1,12 +1,20 @@
 package interface_adapter.data;
 
-import use_case.data.*;
-import entity.OperationResult;
-import entity.Review;
-import entity.SuccessOperationResultFactory;
-import entity.FailureOperationResultFactory;
+import entity.operation_result.OperationResult;
+import entity.review.Review;
+import entity.operation_result.OperationResultSuccessFactory;
+import entity.operation_result.OperationResultFailureFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import use_case.data.create.AddReview;
+import use_case.data.delete.ClearAllReviews;
+import use_case.data.delete.DeleteAllReviewsById;
+import use_case.data.delete.DeleteSummarizedReviewById;
+import use_case.data.delete.DeleteUserReviewsById;
+import use_case.data.read.FindAllReviews;
+import use_case.data.read.FindSummarizedReview;
+import use_case.data.read.FindUserReviews;
+import use_case.data.update.UpdateReview;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +32,8 @@ public class ReviewController {
     private final FindUserReviews findUserReviewsUseCase;
     private final FindSummarizedReview findSummarizedReviewUseCase;
 
-    private final SuccessOperationResultFactory successFactory;
-    private final FailureOperationResultFactory failureFactory;
+    private final OperationResultSuccessFactory successFactory;
+    private final OperationResultFailureFactory failureFactory;
 
     public ReviewController(AddReview addReviewUseCase,
                             UpdateReview updateReviewUseCase,
@@ -36,8 +44,8 @@ public class ReviewController {
                             FindAllReviews findAllReviewsUseCase,
                             FindUserReviews findUserReviewsUseCase,
                             FindSummarizedReview findSummarizedReviewUseCase,
-                            SuccessOperationResultFactory successFactory,
-                            FailureOperationResultFactory failureFactory) {
+                            OperationResultSuccessFactory successFactory,
+                            OperationResultFailureFactory failureFactory) {
         this.addReviewUseCase = addReviewUseCase;
         this.updateReviewUseCase = updateReviewUseCase;
         this.deleteUserReviewsByIdUseCase = deleteUserReviewsByIdUseCase;

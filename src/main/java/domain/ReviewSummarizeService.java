@@ -1,6 +1,6 @@
 package domain;
 
-import entity.Review;
+import entity.review.Review;
 import java.util.List;
 
 /**

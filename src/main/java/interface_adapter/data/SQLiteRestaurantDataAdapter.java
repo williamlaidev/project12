@@ -1,18 +1,18 @@
 package interface_adapter.data;
 
-import entity.DefaultRestaurantFactory;
-import entity.Restaurant;
-import entity.Location;
+import entity.restaurant.RestaurantDefaultFactory;
+import entity.restaurant.Restaurant;
+import entity.location.Location;
 import entity.DishType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLiteRestaurantDataAdapter implements RestaurantDataAdapter {
-    private final DefaultRestaurantFactory restaurantFactory;
+    private final RestaurantDefaultFactory restaurantFactory;
 
     public SQLiteRestaurantDataAdapter() {
-        this.restaurantFactory = new DefaultRestaurantFactory();
+        this.restaurantFactory = new RestaurantDefaultFactory();
     }
 
     @Override

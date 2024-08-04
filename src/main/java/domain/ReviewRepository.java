@@ -1,7 +1,7 @@
 package domain;
 
-import entity.OperationResult;
-import entity.Review;
+import entity.operation_result.OperationResult;
+import entity.review.Review;
 
 import java.util.Optional;
 import java.util.List;

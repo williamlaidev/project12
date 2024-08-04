@@ -1,10 +1,10 @@
 package framework.data;
 
 import domain.ReviewRepository;
-import entity.Review;
-import entity.OperationResult;
-import entity.SuccessOperationResultFactory;
-import entity.FailureOperationResultFactory;
+import entity.review.Review;
+import entity.operation_result.OperationResult;
+import entity.operation_result.OperationResultSuccessFactory;
+import entity.operation_result.OperationResultFailureFactory;
 import interface_adapter.data.SQLiteReviewDataAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +19,13 @@ public class SQLiteReviewRepository implements ReviewRepository {
 
     private final DatabaseConfig databaseConnection;
     private final SQLiteReviewDataAdapter dataAdapter;
-    private final SuccessOperationResultFactory successFactory;
-    private final FailureOperationResultFactory failureFactory;
+    private final OperationResultSuccessFactory successFactory;
+    private final OperationResultFailureFactory failureFactory;
 
     public SQLiteReviewRepository(DatabaseConfig databaseConnection,
                                   SQLiteReviewDataAdapter dataAdapter,
-                                  SuccessOperationResultFactory successFactory,
-                                  FailureOperationResultFactory failureFactory) {
+                                  OperationResultSuccessFactory successFactory,
+                                  OperationResultFailureFactory failureFactory) {
         this.databaseConnection = databaseConnection;
         this.dataAdapter = dataAdapter;
         this.successFactory = successFactory;
