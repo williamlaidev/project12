@@ -1,31 +1,18 @@
 package use_case.data;
 
-import entity.Restaurant;
 import domain.RestaurantRepository;
+import entity.OperationResult;
+import entity.Restaurant;
 
-/**
- * Handles the use case for adding a restaurant.
- * It uses the {@link RestaurantRepository} to save the restaurant.
- */
 public class AddRestaurant {
 
-    private final RestaurantRepository repository;
+    private final RestaurantRepository restaurantRepository;
 
-    /**
-     * Creates an instance with the given repository.
-     *
-     * @param repository the {@link RestaurantRepository} for adding restaurants.
-     */
-    public AddRestaurant(RestaurantRepository repository) {
-        this.repository = repository;
+    public AddRestaurant(RestaurantRepository restaurantRepository) {
+        this.restaurantRepository = restaurantRepository;
     }
 
-    /**
-     * Adds the specified restaurant to the repository.
-     *
-     * @param restaurant the {@link Restaurant} to add.
-     */
-    public void execute(Restaurant restaurant) {
-        repository.add(restaurant);
+    public OperationResult execute(Restaurant restaurant) {
+        return restaurantRepository.add(restaurant);
     }
 }

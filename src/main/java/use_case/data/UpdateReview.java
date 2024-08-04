@@ -1,5 +1,6 @@
 package use_case.data;
 
+import entity.OperationResult;
 import entity.Review;
 import domain.ReviewRepository;
 
@@ -26,7 +27,7 @@ public class UpdateReview {
      * @param review the {@link Review} to be updated.
      * @return {@code true} if the update operation was successful, {@code false} otherwise.
      */
-    public boolean execute(Review review) {
+    public OperationResult execute(Review review) {
         return repository.update(review);
     }
 }

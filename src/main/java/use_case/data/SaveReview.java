@@ -1,5 +1,6 @@
 package use_case.data;
 
+import entity.OperationResult;
 import entity.Review;
 import domain.ReviewRepository;
 
@@ -26,7 +27,7 @@ public class SaveReview {
      * @param review the {@link Review} to be saved.
      * @return {@code true} if the save operation was successful, {@code false} otherwise.
      */
-    public boolean execute(Review review) {
+    public OperationResult execute(Review review) {
         return repository.save(review);
     }
 }

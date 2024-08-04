@@ -6,7 +6,7 @@ import domain.ReviewRepository;
  * Handles the use case for deleting user reviews of a specific restaurant.
  * It uses the {@link ReviewRepository} to perform the deletion.
  */
-public class DeleteUserReviews {
+public class DeleteUserReviewsById {
 
     private final ReviewRepository repository;
 
@@ -15,7 +15,7 @@ public class DeleteUserReviews {
      *
      * @param repository the {@link ReviewRepository} for deleting user reviews.
      */
-    public DeleteUserReviews(ReviewRepository repository) {
+    public DeleteUserReviewsById(ReviewRepository repository) {
         this.repository = repository;
     }
 
@@ -26,6 +26,6 @@ public class DeleteUserReviews {
      * @return {@code true} if the deletion was successful, {@code false} otherwise.
      */
     public boolean execute(String restaurantId) {
-        return repository.deleteUserReviews(restaurantId);
+        return repository.deleteUserById(restaurantId);
     }
 }
