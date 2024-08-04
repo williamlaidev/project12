@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.Objects;
-
 /**
  * Represents a geographical location with latitude and longitude coordinates.
  */
@@ -64,13 +62,6 @@ public class Location {
         return Double.compare(location.latitude, latitude) == 0 &&
                 Double.compare(location.longitude, longitude) == 0;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(latitude, longitude);
-    }
-
-    // Private helper methods for validation
 
     private void validateLatitude(double latitude) {
         if (latitude < -90 || latitude > 90) {
