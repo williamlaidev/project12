@@ -1,59 +1,62 @@
 package entity;
 
-import java.util.List;
-
 /**
- * Represents a map integration for displaying user and restaurant locations.
+ * Represents a map entity used to manage the display of maps with given parameters.
  */
 public class Map {
     private double currentLatitude;
     private double currentLongitude;
     private int zoomLevel;
-    private List<Integer> displayedRestaurantIds; // List of restaurant IDs to display on the map
+    private int width;
+    private int height;
 
     /**
-     * @param currentLatitude         the latitude of the current map center
-     * @param currentLongitude        the longitude of the current map center
-     * @param zoomLevel               the zoom level of the map
-     * @param displayedRestaurantIds  the list of restaurant IDs to display on the map
+     * Constructs a Map object with the specified location, zoom level, and dimensions.
+     *
+     * @param currentLatitude  the latitude of the map's center
+     * @param currentLongitude the longitude of the map's center
+     * @param zoomLevel        the zoom level of the map
+     * @param width            the width of the map in pixels
+     * @param height           the height of the map in pixels
      */
-    public Map(double currentLatitude, double currentLongitude, int zoomLevel, List<Integer> displayedRestaurantIds) {
+    public Map(double currentLatitude, double currentLongitude, int zoomLevel, int width, int height) {
         this.currentLatitude = currentLatitude;
         this.currentLongitude = currentLongitude;
         this.zoomLevel = zoomLevel;
-        this.displayedRestaurantIds = displayedRestaurantIds;
+        this.width = width;
+        this.height = height;
     }
 
     public double getCurrentLatitude() {
         return currentLatitude;
     }
 
-    public double getCurrentLongitude() {
-        return currentLongitude;
-    }
-
-    public int getZoomLevel() {
-        return zoomLevel;
-    }
-
-    public List<Integer> getDisplayedRestaurantIds() {
-        return displayedRestaurantIds;
-    }
-
     public void setCurrentLatitude(double currentLatitude) {
         this.currentLatitude = currentLatitude;
+    }
+
+    public double getCurrentLongitude() {
+        return currentLongitude;
     }
 
     public void setCurrentLongitude(double currentLongitude) {
         this.currentLongitude = currentLongitude;
     }
 
+    public int getZoomLevel() {
+        return zoomLevel;
+    }
+
     public void setZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
     }
 
-    public void setDisplayedRestaurantIds(List<Integer> displayedRestaurantIds) {
-        this.displayedRestaurantIds = displayedRestaurantIds;
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -62,7 +65,8 @@ public class Map {
                 "currentLatitude=" + currentLatitude +
                 ", currentLongitude=" + currentLongitude +
                 ", zoomLevel=" + zoomLevel +
-                ", displayedRestaurantIds=" + displayedRestaurantIds +
+                ", width=" + width +
+                ", height=" + height +
                 '}';
     }
 }

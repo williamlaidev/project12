@@ -10,49 +10,47 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-// TODO: Fix the IntelliJ warnings in this class and reduce their number as much as possible.
-
 /**
- * SearchView class is responsible for presenting the components of the search interface.
- * It includes input fields, buttons, and a map area where users can click to set a location.
+ * Provides a graphical user interface for the search feature, allowing user interactions for searching and map manipulation.
  */
 public class SearchView extends JPanel implements ActionListener, PropertyChangeListener, MouseListener {
-    public final String viewName = "search";
-
     private final SearchViewModel searchViewModel;
     private final JTextField distanceInputField = new JTextField(15);
     private Point mousePosition;
 
     private final SearchController searchController;
-
-    private JButton searchButton = new JButton("Search");
-
-    private final JComboBox<String> dishTypeComboBox;
-
-
+    private JButton searchButton;
+    private JComboBox<String> dishTypeComboBox;
     private Image mapImage;
 
-    /**
-     * Constructs a SearchView with the specified controller and view model.
-     *
-     * @param controller      The controller to handle actions.
-     * @param searchViewModel The view model to manage data and state.
-     * @param dishTypeList    The list of dish types.
-     * @param mapImage        The map image to display.
-     */
-    public SearchView(SearchController controller, SearchViewModel searchViewModel, String[] dishTypeList, Image mapImage) {
-        this.searchController = controller;
+    private JLabel zoomLabel;
+    private JButton zoomInButton, zoomOutButton;
+
+    public SearchView(SearchController searchController, SearchViewModel searchViewModel, String[] dishTypeList, Image mapImage) {
+        this.searchController = searchController;
         this.searchViewModel = searchViewModel;
         this.mapImage = mapImage;
         searchViewModel.addPropertyChangeListener(this);
 
-        setLayout(null); // Disable layout manager for absolute positioning
+        setLayout(null); // Use absolute positioning
 
+        setupTitle();
+        setupDistanceControls();
+        setupDishTypeControls(dishTypeList);
+        setupSearchButton();
+        setupZoomControls();
+
+        addMouseListener(this);
+    }
+
+    private void setupTitle() {
         JLabel title = new JLabel(searchViewModel.TITLE_LABEL);
         title.setBounds(SearchViewComponentsPosition.TITLE_X, SearchViewComponentsPosition.TITLE_Y,
                 SearchViewComponentsPosition.TITLE_WIDTH, SearchViewComponentsPosition.TITLE_HEIGHT);
         add(title);
+    }
 
+    private void setupDistanceControls() {
         JLabel distanceLabel = new JLabel(searchViewModel.DISTANCE_LABEL);
         distanceLabel.setBounds(SearchViewComponentsPosition.DISTANCE_LABEL_X, SearchViewComponentsPosition.DISTANCE_LABEL_Y,
                 SearchViewComponentsPosition.DISTANCE_LABEL_WIDTH, SearchViewComponentsPosition.DISTANCE_LABEL_HEIGHT);
@@ -61,23 +59,21 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         distanceInputField.setBounds(SearchViewComponentsPosition.DISTANCE_INPUT_X, SearchViewComponentsPosition.DISTANCE_INPUT_Y,
                 SearchViewComponentsPosition.DISTANCE_INPUT_WIDTH, SearchViewComponentsPosition.DISTANCE_INPUT_HEIGHT);
         add(distanceInputField);
+    }
 
+    private void setupDishTypeControls(String[] dishTypeList) {
         JLabel dishTypeLabel = new JLabel("Choose Dish Type:");
         dishTypeLabel.setBounds(SearchViewComponentsPosition.DISH_TYPE_LABEL_X, SearchViewComponentsPosition.DISH_TYPE_LABEL_Y,
                 SearchViewComponentsPosition.DISH_TYPE_LABEL_WIDTH, SearchViewComponentsPosition.DISH_TYPE_LABEL_HEIGHT);
         add(dishTypeLabel);
 
-        // Add "ALL" option to the dish type list
-        String[] extendedDishTypeList = new String[dishTypeList.length + 1];
-        extendedDishTypeList[0] = "ALL";
-        System.arraycopy(dishTypeList, 0, extendedDishTypeList, 1, dishTypeList.length);
-
-        dishTypeComboBox = new JComboBox<>(extendedDishTypeList);
-        dishTypeComboBox.setSelectedIndex(0); // Set default selection to "ALL"
+        dishTypeComboBox = new JComboBox<>(dishTypeList);
         dishTypeComboBox.setBounds(SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_X, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_Y,
                 SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_WIDTH, SearchViewComponentsPosition.DISH_TYPE_COMBO_BOX_HEIGHT);
         add(dishTypeComboBox);
+    }
 
+    private void setupSearchButton() {
         searchButton = new JButton(searchViewModel.SEARCH_BUTTON_LABEL);
         searchButton.setBounds(SearchViewComponentsPosition.SEARCH_BUTTON_X, SearchViewComponentsPosition.SEARCH_BUTTON_Y,
                 SearchViewComponentsPosition.SEARCH_BUTTON_WIDTH, SearchViewComponentsPosition.SEARCH_BUTTON_HEIGHT);
@@ -98,6 +94,41 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
         addMouseListener(this);
     }
+
+    private void setupZoomControls() {
+        // Setting up the zoom level label with predefined positions
+        zoomLabel = new JLabel("Zoom Level: " + searchViewModel.getState().getZoomLevel());
+        zoomLabel.setBounds(SearchViewComponentsPosition.ZOOM_LABEL_X, SearchViewComponentsPosition.ZOOM_LABEL_Y,
+                SearchViewComponentsPosition.ZOOM_LABEL_WIDTH, SearchViewComponentsPosition.ZOOM_LABEL_HEIGHT);
+        add(zoomLabel);
+
+        // Setting up the zoom in button with predefined positions
+        zoomInButton = new JButton("+");
+        zoomInButton.setBounds(SearchViewComponentsPosition.ZOOM_IN_BUTTON_X, SearchViewComponentsPosition.ZOOM_IN_BUTTON_Y,
+                SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
+        zoomInButton.addActionListener(e -> {
+            searchController.changeZoomLevel(1);
+            updateViewAfterZoom();
+        });
+        add(zoomInButton);
+
+        // Setting up the zoom out button with predefined positions
+        zoomOutButton = new JButton("-");
+        zoomOutButton.setBounds(SearchViewComponentsPosition.ZOOM_OUT_BUTTON_X, SearchViewComponentsPosition.ZOOM_OUT_BUTTON_Y,
+                SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
+        zoomOutButton.addActionListener(e -> {
+            searchController.changeZoomLevel(-1);
+            updateViewAfterZoom();
+        });
+        add(zoomOutButton);
+    }
+
+    // This method is used to update the zoom level label and refresh the view after a zoom change
+    private void updateViewAfterZoom() {
+        zoomLabel.setText("Zoom Level: " + searchViewModel.getState().getZoomLevel());
+        repaint(); // Optionally, if needed to redraw or refresh other components
+    }
+
 
     /**
      * Handles mouse click events to set the mouse position if within the map area.

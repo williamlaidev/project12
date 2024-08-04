@@ -1,4 +1,4 @@
-package domain;
+package use_case.view;
 
 /**
  * Interface that defines what to do when a search operation fails.
@@ -12,4 +12,7 @@ public interface SearchOutputBoundary {
      * @param error the error message to be presented
      */
     void prepareFailView(String error);
+
+
+    void updateZoomLevel(int zoomLevel);
 }

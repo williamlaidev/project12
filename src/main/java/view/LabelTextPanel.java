@@ -2,7 +2,9 @@ package view;
 
 import javax.swing.*;
 
-// TODO: Add JavaDoc documentation to describe the purpose and usage.
+/**
+ * A panel containing a label and a text field.
+ */
 
 public class LabelTextPanel extends JPanel {
     LabelTextPanel(JLabel label, JTextField textField) {

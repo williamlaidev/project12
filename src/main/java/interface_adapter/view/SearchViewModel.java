@@ -3,37 +3,49 @@ package interface_adapter.view;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-// TODO: Add JavaDoc documentation to describe the purpose and usage.
-
+/**
+ * ViewModel for managing the state and interactions for the SearchView component.
+ */
 public class SearchViewModel extends ViewModel {
-
     public final String TITLE_LABEL = "Search View";
     public final String DISTANCE_LABEL = "Choose distance";
     public final String DISH_TYPE_LABEL = "Choose dish type";
     public final String SEARCH_BUTTON_LABEL = "Search";
-
-    private SearchViewState state = new SearchViewState();
+    public final String ZOOM_LABEL = "Zoom Level";
+    private SearchViewState state;
+    private int zoomLevel;
+    private final PropertyChangeSupport changeSupport;
 
     public SearchViewModel() {
         super("search");
+        this.state = new SearchViewState();
+        this.changeSupport = new PropertyChangeSupport(this);
     }
 
     public void setState(SearchViewState state) {
         this.state = state;
+        firePropertyChanged(); // Notify observers about state change
     }
 
-    private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
-    // This is what the Search Presenter will call to let the ViewModel know to alert the View
-    public void firePropertyChanged() {
-        changeSupport.firePropertyChange("state", null, this.state);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
+    public void setZoomLevel(int zoomLevel) {
+        this.zoomLevel = zoomLevel;
+        firePropertyChanged(); // Notify observers about zoom level change
     }
 
     public SearchViewState getState() {
         return state;
     }
+
+    @Override
+    public void firePropertyChanged() {
+        // This method triggers updates in the view layer
+        changeSupport.firePropertyChange("state", null, this.state);
+        changeSupport.firePropertyChange("zoomLevel", null, this.zoomLevel);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
 }
+

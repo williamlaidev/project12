@@ -57,11 +57,13 @@ public class Initializer {
 
         // Create a map entity
         int zoom = 15; // Approximate zoom level for 1km radius
-        this.map = MapFactory.createMap(latitude, longitude, zoom, List.of()); // Empty list of restaurant IDs for now
+        int width = 400; // Width of the image in pixels
+        int height = 400; // Height of the image in pixels
+
+        this.map = MapFactory.createMap(latitude, longitude, zoom, width, height); // Empty list of restaurant IDs for now
 
         // Create and save the map image centered at the current location
-        int width = 200; // Width of the image in pixels
-        int height = 200; // Height of the image in pixels
+
         boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");

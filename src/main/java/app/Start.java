@@ -11,6 +11,7 @@ import use_case.view.MapImageInteractor;
 import use_case.search.SearchRestaurantsByDistanceInteractor;
 import use_case.view.SearchViewInteractor;
 import view.SearchView;
+import interface_adapter.view.SearchPresenter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,10 +42,12 @@ public class Start {
             SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
 
             // Create the SearchViewInteractor with the SearchRestaurantsByDistanceInteractor instance
-            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor);
+            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap());
+
+            SearchPresenter searchPresenter = new SearchPresenter(searchViewModel);
 
             // Create the controller and view model
-            SearchController searchController = new SearchController(searchViewInteractor, initializer.getMap(), 200, 200);
+            SearchController searchController = new SearchController(searchViewInteractor, searchPresenter, initializer.getMap(), 400, 400);
 
             // Create the SearchView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList, mapImage);
@@ -52,7 +55,7 @@ public class Start {
             // Set up the JFrame
             JFrame frame = new JFrame("Search Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(450, 600);
+            frame.setSize(450, 650);
             frame.setContentPane(searchView);
             frame.setLocationRelativeTo(null); // Center the frame on the screen
             frame.setVisible(true);

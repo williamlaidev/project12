@@ -2,13 +2,16 @@ package interface_adapter.view;
 
 import java.awt.Point;
 
-// TODO: Add JavaDoc documentation to describe the purpose and usage.
-
+/**
+ * Holds the state information for search operations in the view layer, including
+ * user interactions such as selected location, search distance, dish type, and zoom level.
+ */
 public class SearchViewState {
     private Point mousePosition;
     private String distance;
     private String selectedDishType;
     private String distanceError;
+    private int zoomLevel;  // Adding zoom level to the state
 
     // Copy constructor
     public SearchViewState(SearchViewState copy) {
@@ -16,6 +19,7 @@ public class SearchViewState {
         this.distance = copy.distance;
         this.selectedDishType = copy.selectedDishType;
         this.distanceError = copy.distanceError;
+        this.zoomLevel = copy.zoomLevel;
     }
 
     // Default constructor
@@ -53,6 +57,14 @@ public class SearchViewState {
         this.distanceError = distanceError;
     }
 
+    public int getZoomLevel() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int zoomLevel) {
+        this.zoomLevel = zoomLevel;
+    }
+
     @Override
     public String toString() {
         return "SearchViewState{" +
@@ -60,6 +72,7 @@ public class SearchViewState {
                 ", distance='" + distance + '\'' +
                 ", selectedDishType='" + selectedDishType + '\'' +
                 ", distanceError='" + distanceError + '\'' +
+                ", zoomLevel=" + zoomLevel +
                 '}';
     }
 }
