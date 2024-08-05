@@ -56,7 +56,7 @@ public class SearchController {
 
         DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
         RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
-        searchViewInteractor.execute(inputData, 100);
+        searchViewInteractor.execute(inputData, 50);
     }
 
     /**

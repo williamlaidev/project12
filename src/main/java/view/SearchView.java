@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -111,6 +112,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         zoomInButton.setBounds(SearchViewComponentsPosition.ZOOM_IN_BUTTON_X, SearchViewComponentsPosition.ZOOM_IN_BUTTON_Y,
                 SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
         zoomInButton.addActionListener(e -> {
+            searchViewModel.clearMapMarkers();
             SearchState searchState = new SearchState();
             Point centerPosition = new Point(SearchViewComponentsPosition.MAP_AREA_WIDTH / 2, SearchViewComponentsPosition.MAP_AREA_HEIGHT / 2);
             searchState.setMouseRightClickPosition(centerPosition);
@@ -130,6 +132,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         zoomOutButton.setBounds(SearchViewComponentsPosition.ZOOM_OUT_BUTTON_X, SearchViewComponentsPosition.ZOOM_OUT_BUTTON_Y,
                 SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
         zoomOutButton.addActionListener(e -> {
+            searchViewModel.clearMapMarkers();
             SearchState searchState = new SearchState();
             Point centerPosition = new Point(SearchViewComponentsPosition.MAP_AREA_WIDTH / 2, SearchViewComponentsPosition.MAP_AREA_HEIGHT / 2);
             searchState.setMouseRightClickPosition(centerPosition);
@@ -177,6 +180,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
             int y = mouseEvent.getY();
             if (x >= SearchViewComponentsPosition.MAP_AREA_X && x <= SearchViewComponentsPosition.MAP_AREA_X + SearchViewComponentsPosition.MAP_AREA_WIDTH
                     && y >= SearchViewComponentsPosition.MAP_AREA_Y && y <= SearchViewComponentsPosition.MAP_AREA_Y + SearchViewComponentsPosition.MAP_AREA_HEIGHT) {
+                searchViewModel.clearMapMarkers();
                 SearchState searchState = new SearchState();
                 searchState.setMouseRightClickPosition(new Point(x, y));
                 searchState.setDistance(distanceInputField.getText());
@@ -244,6 +248,10 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
      */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        if ("state".equals(propertyChangeEvent.getPropertyName()) || "mapMarkers".equals(propertyChangeEvent.getPropertyName())) {
+            repaint();
+        }
+
     }
 
     /**
@@ -280,5 +288,24 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
             graphics.drawOval(mousePosition.x - 5, mousePosition.y - 5, 10, 10);
             graphics.drawString("Search Center", mousePosition.x + 10, mousePosition.y);
         }
+
+        // Draw markers only if they fall within the map area
+        if (!searchViewModel.getMapMarkers().isEmpty()) {
+            int mapX = SearchViewComponentsPosition.MAP_AREA_X;
+            int mapY = SearchViewComponentsPosition.MAP_AREA_Y;
+            int mapWidth = SearchViewComponentsPosition.MAP_AREA_WIDTH;
+            int mapHeight = SearchViewComponentsPosition.MAP_AREA_HEIGHT;
+
+            for (Map.Entry<Point, String> entry : searchViewModel.getMapMarkers().entrySet()) {
+                Point p = entry.getKey();
+                if (p.x >= mapX && p.x <= mapX + mapWidth && p.y >= mapY && p.y <= mapY + mapHeight) {
+                    graphics.setColor(Color.RED);
+                    graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+                    graphics.drawString(entry.getValue(), p.x + 5, p.y - 5);
+                }
+            }
+
     }
+
+}
 }

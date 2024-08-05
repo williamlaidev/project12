@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.view.RestaurantViewModel;
+import utils.FetchImageIcon;
+
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
@@ -39,9 +41,19 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         buttonsPanel.removeAll();
         if (restaurantInfos != null) {
             for (String info : restaurantInfos) {
-                JButton button = new JButton("<html>" + info.replaceAll(" - ", "<br/>") + "</html>"); // Using HTML for multiline text
-                button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+                String[] parts = info.split(" - ");
+                JButton button = new JButton("<html>" + parts[1] + "<br/>" + parts[2] + "<br/>" + parts[3] + "<br/>" + parts[4] + "<br/>Rating: " + parts[5] + "</html>");
+                button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
                 button.setAlignmentX(Component.LEFT_ALIGNMENT);
+                if (parts.length > 6) { // Ensure there is a photo URL
+                    Icon icon = FetchImageIcon.fetchImageIcon(parts[6]);
+                    if (icon != null) {
+                        button.setIcon(icon);
+                        button.setHorizontalAlignment(SwingConstants.LEFT);
+                        button.setHorizontalTextPosition(SwingConstants.RIGHT);
+                        button.setVerticalTextPosition(SwingConstants.CENTER);
+                    }
+                }
                 buttonsPanel.add(button);
             }
         } else {

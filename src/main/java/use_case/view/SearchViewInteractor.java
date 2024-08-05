@@ -2,6 +2,7 @@ package use_case.view;
 
 import domain.SearchInputBoundary;
 import entity.DishType;
+import entity.Location;
 import entity.Restaurant;
 import framework.config.EnvConfigServiceImpl;
 import framework.search.GoogleMapsImageService;
@@ -28,7 +29,7 @@ public class SearchViewInteractor implements SearchInputBoundary {
     }
 
     @Override
-    public void execute(RestaurantSearchInput restaurantSearchInput, int maxResults)  {
+    public void execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
         double latitude = restaurantSearchInput.getLatitude();
         double longitude = restaurantSearchInput.getLongitude();
         String distance = restaurantSearchInput.getDistance();
@@ -36,20 +37,25 @@ public class SearchViewInteractor implements SearchInputBoundary {
 
         try {
             double distanceValue = Double.parseDouble(distance);
-            String roundedDistance = Integer.toString((int) Math.round(distanceValue));
-
-            RestaurantSearchInput searchInputByDistance = new RestaurantSearchInput(latitude, longitude, roundedDistance, dishType);
-            List<Restaurant> results = restaurantsInteractor.execute(searchInputByDistance, maxResults).orElse(new ArrayList<>());
-            SearchOutputData searchOutputData = new SearchOutputData(results);
-            searchOutputBoundary.prepareSuccessView(searchOutputData);;
-        } catch (NumberFormatException numberFormatException) {
-            System.out.println("Invalid distance input. Please enter a number.");
-            searchOutputBoundary.prepareFailView("Invalid distance input. Please enter a number.");
+            if (distanceValue > 0) {
+                String roundedDistance = Integer.toString((int) Math.round(distanceValue));
+                RestaurantSearchInput searchInputByDistance = new RestaurantSearchInput(latitude, longitude, roundedDistance, dishType);
+                List<Restaurant> results = restaurantsInteractor.execute(searchInputByDistance, maxResults).orElse(new ArrayList<>());
+                SearchOutputData searchOutputData = new SearchOutputData(results);
+                searchOutputBoundary.prepareSuccessView(searchOutputData, getCenterLatitude(), getCenterLongitude(), getMapHeight(), getMapWidth());
+            } else {
+                throw new IllegalArgumentException("Invalid distance input. Please enter a positive number.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid distance input. Please enter a positive number.");
+            searchOutputBoundary.prepareFailView("Invalid distance input. Please enter a positive number.");
         } catch (Exception e) {
             System.out.println("An error occurred during the search: " + e.getMessage());
             searchOutputBoundary.prepareFailView("An error occurred during the search: " + e.getMessage());
         }
     }
+
+
 
     /**
      * Adjusts the zoom level of the map.
@@ -84,6 +90,21 @@ public class SearchViewInteractor implements SearchInputBoundary {
 
         System.out.println("Center adjusted to: " + latitude + ", " + longitude);
 
+    }
+
+    private double getCenterLatitude() {
+
+        return this.currentMap.getCurrentLatitude();
+    }
+    private double getCenterLongitude() {
+        return this.currentMap.getCurrentLongitude();
+    }
+
+    private int getMapWidth() {
+        return this.currentMap.getWidth();
+    }
+    private int getMapHeight() {
+        return this.currentMap.getHeight();
     }
 }
 

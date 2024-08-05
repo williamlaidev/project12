@@ -13,9 +13,8 @@ public interface SearchOutputBoundary {
      */
     void prepareFailView(String error);
 
-    void prepareSuccessView(SearchOutputData response);
-
 
     void setZoomLevel(int zoomLevel);
 
+    void prepareSuccessView(SearchOutputData searchOutputData, double centerLat, double centerLon, int mapHeight, int mapWidth);
 }
