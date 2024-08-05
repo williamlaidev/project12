@@ -31,26 +31,14 @@ public class GooglePlacesRestaurantClient implements RestaurantSearchGateways {
         String requestUrl = constructUrl(latitude, longitude, radius, apiKey);
 
         try {
-            URL url = new URL(requestUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+            HttpURLConnection conn = createConnection(requestUrl);
 
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 throw new IOException("Failed: HTTP error code : " + responseCode);
             }
 
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-
-                return new JSONObject(response.toString());
-            }
+            return parseResponse(conn);
 
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Invalid URL: " + requestUrl, e);
@@ -59,5 +47,24 @@ public class GooglePlacesRestaurantClient implements RestaurantSearchGateways {
 
     private String constructUrl(double latitude, double longitude, int radius, String apiKey) {
         return PLACES_API_URL + "?key=" + apiKey + "&location=" + latitude + "," + longitude + "&radius=" + radius + "&type=restaurant";
+    }
+
+    private HttpURLConnection createConnection(String requestUrl) throws IOException {
+        URL url = new URL(requestUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+        return conn;
+    }
+
+    private JSONObject parseResponse(HttpURLConnection conn) throws IOException, JSONException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            return new JSONObject(response.toString());
+        }
     }
 }
