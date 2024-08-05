@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class PlacesReviewsGateways implements ReviewRetrievalService {
 
-    private final GooglePlacesReviewsService reviewsService;
+    protected final GooglePlacesReviewsService reviewsService;
     private final AddReview addReviewUseCase;
     private static final Logger logger = LoggerFactory.getLogger(PlacesReviewsGateways.class);
 
