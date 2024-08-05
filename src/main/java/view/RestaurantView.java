@@ -7,13 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-
-/**
- * A view component for displaying restaurant IDs.
- */
 public class RestaurantView extends JPanel implements PropertyChangeListener {
     private RestaurantViewModel viewModel;
-    private JTextArea restaurantListArea;
+    private JPanel buttonsPanel;
 
     public RestaurantView(RestaurantViewModel viewModel) {
         this.viewModel = viewModel;
@@ -28,31 +24,37 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel, BorderLayout.NORTH);
 
-        restaurantListArea = new JTextArea(10, 30);
-        restaurantListArea.setEditable(false);
+        buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-        JScrollPane scrollPane = new JScrollPane(restaurantListArea);
+        JScrollPane scrollPane = new JScrollPane(buttonsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(300, 650));
         add(scrollPane, BorderLayout.CENTER);
 
-        updateRestaurantList();
+        updateRestaurantButtons();
     }
 
-    private void updateRestaurantList() {
-        List<String> restaurants = viewModel.getState().getRestaurantId();
-        restaurantListArea.setText(""); // Clear previous content
-        if (restaurants != null && !restaurants.isEmpty()) {
-            for (String id : restaurants) {
-                restaurantListArea.append(id + "\n");
+    private void updateRestaurantButtons() {
+        List<String> restaurantInfos = viewModel.getState().getRestaurantsInfo();
+        buttonsPanel.removeAll();
+        if (restaurantInfos != null) {
+            for (String info : restaurantInfos) {
+                JButton button = new JButton("<html>" + info.replaceAll(" - ", "<br/>") + "</html>"); // Using HTML for multiline text
+                button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+                button.setAlignmentX(Component.LEFT_ALIGNMENT);
+                buttonsPanel.add(button);
             }
         } else {
-            restaurantListArea.append("No restaurant IDs available.\n");
+            buttonsPanel.add(new JLabel("No restaurants available."));
         }
+        buttonsPanel.revalidate();
+        buttonsPanel.repaint();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            updateRestaurantList();
+            updateRestaurantButtons();
         }
     }
 }

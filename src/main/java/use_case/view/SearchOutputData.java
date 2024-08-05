@@ -3,9 +3,6 @@ import entity.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-
 
 public class SearchOutputData {
     private final List<Restaurant> restaurantsList;
@@ -14,12 +11,19 @@ public class SearchOutputData {
         this.restaurantsList = restaurantsList;
     }
 
-    public List<String> getRestaurantsId() {
+    public List<String> getRestaurantsInfo() {
         List<String> result = new ArrayList<>();
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant != null) {
-                result.add(restaurant.getRestaurantId());
-
+                String info = String.format("%s - %s - %s - %s - %s - Rating: %.2f - %s",
+                        restaurant.getRestaurantId(),
+                        restaurant.getName(),
+                        restaurant.getAddress(),
+                        restaurant.getLocation().toString(), // Assuming Location has a meaningful toString implementation
+                        restaurant.getDishType().name(),
+                        restaurant.getAverageRating(),
+                        restaurant.getPhotoUrl());
+                result.add(info);
             }
         }
         return result;

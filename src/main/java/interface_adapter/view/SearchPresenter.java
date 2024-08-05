@@ -33,7 +33,7 @@ public class SearchPresenter implements SearchOutputBoundary {
     public void prepareSuccessView(SearchOutputData result) {
         // Update RestaurantViewModel with results
         RestaurantState restaurantState = restaurantViewModel.getState();
-        restaurantState.setRestaurantId(result.getRestaurantsId());
+        restaurantState.setRestaurantsInfo(result.getRestaurantsInfo());
         restaurantViewModel.setState(restaurantState);
         restaurantViewModel.firePropertyChanged();
 

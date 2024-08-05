@@ -3,18 +3,22 @@ package interface_adapter.view;
 import java.util.List;
 
 public class RestaurantState {
-    private List<String> restaurantIdList;
+    private List<String> restaurantInfoList;
     public RestaurantState(RestaurantState copy) {
-        restaurantIdList = copy.restaurantIdList;
+        restaurantInfoList = copy.restaurantInfoList;
     }
 
     public RestaurantState() {}
 
-    public List<String>getRestaurantId() {
-        return restaurantIdList;
+    public List<String>getRestaurantLabel() {
+        return restaurantInfoList;
     }
 
-    public void setRestaurantId(List<String> restaurantId) {
-        this.restaurantIdList = restaurantId;
+    public void setRestaurantsInfo(List<String> restaurantId) {
+        this.restaurantInfoList = restaurantId;
+    }
+
+    public List<String> getRestaurantsInfo() {
+        return restaurantInfoList;
     }
 }
