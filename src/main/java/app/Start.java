@@ -1,16 +1,30 @@
 package app;
 
-import framework.search.GoogleGeolocationService;
-import framework.search.GoogleMapsImageService;
+import domain.RestaurantPhotoService;
+import domain.RestaurantRepository;
+import domain.RestaurantSearchService;
+import entity.map.MapDefaultFactory;
+import entity.map.MapFactory;
+import entity.restaurant.RestaurantDefaultFactory;
+import entity.restaurant.RestaurantFactory;
+import framework.data.SQLiteRestaurantRepository;
+import framework.search.*;
 import framework.config.EnvConfigServiceImpl;
-import interface_adapter.search.SearchRestaurantGateways;
+import interface_adapter.search.*;
 import interface_adapter.view.SearchController;
 import interface_adapter.view.SearchViewModel;
+import use_case.data.create.AddRestaurant;
+import use_case.data.read.FindRestaurantById;
+import use_case.data.update.UpdateRestaurant;
+import use_case.search.FetchRestaurantPhotoUrl;
+import use_case.search.RestaurantSearchInteractor;
+import use_case.search.SearchRestaurantsByDistance;
 import use_case.view.Initializer;
 import use_case.view.MapImageInteractor;
-import use_case.search.SearchRestaurantsByDistanceInteractor;
-import use_case.view.SearchViewInteractor;
 import view.SearchView;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,49 +33,59 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Start {
+    private static final Logger logger = LoggerFactory.getLogger(Start.class);
+
     public static void main(String[] args) {
         try {
-            // Initialize necessary services
+            // Initialize configuration and services
             EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
             GoogleGeolocationService geolocationService = new GoogleGeolocationService(envConfigService);
             GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
             MapImageInteractor mapImageInteractor = new MapImageInteractor(googleMapsImageService);
-            Initializer initializer = new Initializer(geolocationService, mapImageInteractor);
+            MapFactory mapFactory = new MapDefaultFactory();
+            Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
             initializer.initializeCurrentLocation();
 
-            // Get dish types and map image
+            // Load dish types and map image
             String[] dishTypeList = initializer.getDishTypes();
             File mapImageFile = new File("src/main/resources/map_images/map.png");
             Image mapImage = ImageIO.read(mapImageFile);
 
-            // Create the SearchViewModel
+            // Set up search components
+            RestaurantSearchGateways restaurantSearchGateways = new GooglePlacesRestaurantClient(envConfigService);
+            RestaurantFactory restaurantFactory = new RestaurantDefaultFactory();
+            GooglePlacesRestaurantSearchAdapter searchAdapter = new GooglePlacesRestaurantSearchAdapter(restaurantFactory);
+            RestaurantRepository restaurantRepository = new SQLiteRestaurantRepository();
+            AddRestaurant addRestaurant = new AddRestaurant(restaurantRepository);
+            UpdateRestaurant updateRestaurant = new UpdateRestaurant(restaurantRepository);
+            FindRestaurantById findRestaurantById = new FindRestaurantById(restaurantRepository);
+            RestaurantPhotoService restaurantPhotoService = new GooglePlacesPhotoClient(envConfigService);
+            FetchRestaurantPhotoUrl fetchRestaurantPhotoUrl = new FetchRestaurantPhotoUrl(restaurantPhotoService);
+            RestaurantSearchService restaurantSearchService = new GooglePlacesRestaurantSearchService(
+                    restaurantSearchGateways, searchAdapter, addRestaurant, updateRestaurant, findRestaurantById, fetchRestaurantPhotoUrl
+            );
+            SearchRestaurantsByDistance searchRestaurantsByDistance = new SearchRestaurantsByDistance(restaurantSearchService);
+            RestaurantSearchInteractor searchViewInteractor = new RestaurantSearchInteractor(searchRestaurantsByDistance);
+
+            // Set up the view and controller
             SearchViewModel searchViewModel = new SearchViewModel();
-
-            // Create the SearchRestaurantsByDistanceInteractor with the repository
-            SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
-
-            // Create the SearchViewInteractor with the SearchRestaurantsByDistanceInteractor instance
-            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor);
-
-            // Create the controller and view model
             SearchController searchController = new SearchController(searchViewInteractor, initializer.getMap(), 200, 200);
-
-            // Create the SearchView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList, mapImage);
 
-            // Set up the JFrame
+            // Create and display the JFrame
             JFrame frame = new JFrame("Search Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 400);
             frame.setContentPane(searchView);
             frame.setLocationRelativeTo(null); // Center the frame on the screen
             frame.setVisible(true);
-        } catch (IOException | RuntimeException e) {
-            // Handle IOException and RuntimeException similarly
-            e.printStackTrace();
+
+        } catch (IOException e) {
+            logger.error("IO error occurred: ", e);
+        } catch (RuntimeException e) {
+            logger.error("Runtime error occurred: ", e);
         } catch (Exception e) {
-            // Handle any other exceptions
-            e.printStackTrace();
+            logger.error("An unexpected error occurred: ", e);
         }
     }
 }
