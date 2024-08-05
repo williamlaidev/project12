@@ -1,6 +1,6 @@
 package domain;
 
-import entity.Review;
+import entity.review.Review;
 import java.util.List;
 
 /**
@@ -15,5 +15,5 @@ public interface ReviewSummarizeService {
      * @return the summarized review
      * @throws InterruptedException if the thread is interrupted during processing
      */
-    Review summarize(List<Review> reviews) throws InterruptedException;
+    Review createSummaryFromReviews(List<Review> reviews) throws InterruptedException;
 }

@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+//TODO: Check clean architecture of geolocation service.
+
 /**
  * Implementation of GeolocationService that interacts with the Google Geolocation API.
  */
