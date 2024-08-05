@@ -1,8 +1,8 @@
 package view;
 
 import interface_adapter.view.SearchController;
+import interface_adapter.view.SearchState;
 import interface_adapter.view.SearchViewModel;
-import interface_adapter.view.SearchViewState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Provides a graphical user interface for the search feature, allowing user interactions for searching and map manipulation.
@@ -85,18 +86,17 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
                 new ActionListener() {
                     public void actionPerformed(ActionEvent event) {
                         if (event.getSource().equals(searchButton)) {
-                            SearchViewState searchViewState = new SearchViewState();
-                            searchViewState.setMousePosition(mousePosition);
-                            searchViewState.setDistance(distanceInputField.getText());
-                            searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-                            searchController.execute(searchViewState);
+                            SearchState searchState = new SearchState();
+                            searchState.setMouseLeftClickPosition(Objects.requireNonNullElseGet(mousePosition, () -> new Point(200, 200)));
+                            searchState.setDistance(distanceInputField.getText());
+                            searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
+                            searchController.execute(searchState);
                         }
                     }
                 }
         );
         add(searchButton);
 
-        addMouseListener(this);
     }
 
     private void setupZoomControls() {
@@ -111,14 +111,14 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         zoomInButton.setBounds(SearchViewComponentsPosition.ZOOM_IN_BUTTON_X, SearchViewComponentsPosition.ZOOM_IN_BUTTON_Y,
                 SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
         zoomInButton.addActionListener(e -> {
-            SearchViewState searchViewState = new SearchViewState();
+            SearchState searchState = new SearchState();
             Point centerPosition = new Point(SearchViewComponentsPosition.MAP_AREA_WIDTH / 2, SearchViewComponentsPosition.MAP_AREA_HEIGHT / 2);
-            searchViewState.setMousePosition(centerPosition);
-            searchViewState.setDistance(distanceInputField.getText());
-            searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-            searchController.changeZoomLevel(1, searchViewState);
+            searchState.setMouseRightClickPosition(centerPosition);
+            searchState.setDistance(distanceInputField.getText());
+            searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
+            searchController.changeZoomLevel(1, searchState);
             try {
-                updateMapViewAfterZoom();
+                updateMapView();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -130,14 +130,14 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         zoomOutButton.setBounds(SearchViewComponentsPosition.ZOOM_OUT_BUTTON_X, SearchViewComponentsPosition.ZOOM_OUT_BUTTON_Y,
                 SearchViewComponentsPosition.ZOOM_BUTTON_WIDTH, SearchViewComponentsPosition.ZOOM_BUTTON_HEIGHT);
         zoomOutButton.addActionListener(e -> {
-            SearchViewState searchViewState = new SearchViewState();
+            SearchState searchState = new SearchState();
             Point centerPosition = new Point(SearchViewComponentsPosition.MAP_AREA_WIDTH / 2, SearchViewComponentsPosition.MAP_AREA_HEIGHT / 2);
-            searchViewState.setMousePosition(centerPosition);
-            searchViewState.setDistance(distanceInputField.getText());
-            searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-            searchController.changeZoomLevel(-1, searchViewState);
+            searchState.setMouseRightClickPosition(centerPosition);
+            searchState.setDistance(distanceInputField.getText());
+            searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
+            searchController.changeZoomLevel(-1, searchState);
             try {
-                updateMapViewAfterZoom();
+                updateMapView();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -146,7 +146,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
     }
 
     // This method is used to update the zoom level label and refresh the view after a zoom change
-    private void updateMapViewAfterZoom() throws IOException {
+    private void updateMapView() throws IOException {
         zoomLabel.setText("Zoom Level: " + searchViewModel.getZoomLevel());
         File mapImageFile = new File("src/main/resources/map_images/map.png");
         Image newmapImage = ImageIO.read(mapImageFile);
@@ -154,12 +154,6 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
         repaint(); // Optionally, if needed to redraw or refresh other components
     }
 
-    private void updateMapViewAfterRightClick() throws IOException {
-        File mapImageFile = new File("src/main/resources/map_images/map.png");
-        Image newmapImage = ImageIO.read(mapImageFile);
-        this.mapImage = newmapImage;
-        repaint(); // Optionally, if needed to redraw or refresh other components
-    }
 
 
     /**
@@ -183,13 +177,13 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
             int y = mouseEvent.getY();
             if (x >= SearchViewComponentsPosition.MAP_AREA_X && x <= SearchViewComponentsPosition.MAP_AREA_X + SearchViewComponentsPosition.MAP_AREA_WIDTH
                     && y >= SearchViewComponentsPosition.MAP_AREA_Y && y <= SearchViewComponentsPosition.MAP_AREA_Y + SearchViewComponentsPosition.MAP_AREA_HEIGHT) {
-                SearchViewState searchViewState = new SearchViewState();
-                searchViewState.setMousePosition(new Point(x, y));
-                searchViewState.setDistance(distanceInputField.getText());
-                searchViewState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-                searchController.changeCenter(new Point(x, y), searchViewState);
+                SearchState searchState = new SearchState();
+                searchState.setMouseRightClickPosition(new Point(x, y));
+                searchState.setDistance(distanceInputField.getText());
+                searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
+                searchController.changeCenter(searchState);
                 try {
-                    updateMapViewAfterZoom();
+                    updateMapView();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -240,7 +234,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
      * @param actionEvent The action event.
      */
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("Your actionPerformed method should be specified within key setting.");
+        System.out.println("Error: this action was not declared. Your actionPerformed method should be specified within key setting.");
     }
 
     /**
@@ -272,7 +266,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
             graphics.setColor(Color.BLACK);
             graphics.drawRect(SearchViewComponentsPosition.MAP_AREA_X, SearchViewComponentsPosition.MAP_AREA_Y,
                     SearchViewComponentsPosition.MAP_AREA_WIDTH, SearchViewComponentsPosition.MAP_AREA_HEIGHT);
-            graphics.drawString("Map Area", SearchViewComponentsPosition.MAP_AREA_X + 10, SearchViewComponentsPosition.MAP_AREA_Y + 20);
+            graphics.drawString("Error During Map Loading", SearchViewComponentsPosition.MAP_AREA_X + 10, SearchViewComponentsPosition.MAP_AREA_Y + 20);
         }
 
         // Draw the map area border

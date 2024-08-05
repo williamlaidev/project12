@@ -12,17 +12,21 @@ public class SearchViewModel extends ViewModel {
     public final String DISH_TYPE_LABEL = "Choose dish type";
     public final String SEARCH_BUTTON_LABEL = "Search";
     public final String ZOOM_LABEL = "Zoom Level";
-    private SearchViewState state;
+
+    private SearchState state;
     private int zoomLevel;
+    private boolean resultViewVisible; // Flag to control the visibility of the ResultView
     private final PropertyChangeSupport changeSupport;
 
     public SearchViewModel() {
         super("search");
-        this.state = new SearchViewState();
+        this.state = new SearchState();
+        this.zoomLevel = 15; // Initial zoom level
+        this.resultViewVisible = false; // Initially, the ResultView is not visible
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
-    public void setState(SearchViewState state) {
+    public void setState(SearchState state) {
         this.state = state;
         firePropertyChanged(); // Notify observers about state change
     }
@@ -32,11 +36,21 @@ public class SearchViewModel extends ViewModel {
         firePropertyChanged(); // Notify observers about zoom level change
     }
 
-    public int getZoomLevel(){
+    public void setResultViewVisible(boolean visible) {
+        boolean oldVisible = this.resultViewVisible;
+        this.resultViewVisible = visible;
+        changeSupport.firePropertyChange("resultViewVisible", oldVisible, visible); // Notify about visibility change
+    }
+
+    public int getZoomLevel() {
         return zoomLevel;
     }
 
-    public SearchViewState getState() {
+    public boolean isResultViewVisible() {
+        return resultViewVisible;
+    }
+
+    public SearchState getState() {
         return state;
     }
 
@@ -45,6 +59,7 @@ public class SearchViewModel extends ViewModel {
         // This method triggers updates in the view layer
         changeSupport.firePropertyChange("state", null, this.state);
         changeSupport.firePropertyChange("zoomLevel", null, this.zoomLevel);
+        changeSupport.firePropertyChange("resultViewVisible", null, this.resultViewVisible);
     }
 
     @Override
@@ -52,4 +67,3 @@ public class SearchViewModel extends ViewModel {
         changeSupport.addPropertyChangeListener(listener);
     }
 }
-

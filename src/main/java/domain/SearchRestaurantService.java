@@ -16,10 +16,10 @@ public interface SearchRestaurantService {
      * Executes a search for restaurants based on the given input criteria.
      *
      * @param restaurantSearchInput The input criteria for searching restaurants.
-     * @param maxResults The maximum number of results to return.
-     * @return An Optional containing a List of Restaurants that match the search criteria,
-     *         or an empty Optional if no matches are found.
+     * @param maxResults            The maximum number of results to return.
      * @throws Exception if an error occurs during the search process.
      */
-    Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults) throws Exception;
+    void execute(RestaurantSearchInput restaurantSearchInput, int maxResults) throws Exception;
+
+    Optional<List<Restaurant>> getRestaurants() throws Exception;
 }

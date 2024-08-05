@@ -1,6 +1,6 @@
 package use_case.view;
 
-import domain.SearchRestaurantService;
+import domain.SearchInputBoundary;
 import entity.DishType;
 import entity.Restaurant;
 import framework.config.EnvConfigServiceImpl;
@@ -11,23 +11,24 @@ import entity.Map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Interactor that handles the business logic for searching restaurants and adjusting map zoom levels.
  */
-public class SearchViewInteractor implements SearchRestaurantService {
+public class SearchViewInteractor implements SearchInputBoundary {
 
-    private final SearchRestaurantsByDistanceInteractor restaurantsInteractor;
+    final SearchRestaurantsByDistanceInteractor restaurantsInteractor;
+    final SearchOutputBoundary searchOutputBoundary;
     private Map currentMap; // Holds the current map context
 
-    public SearchViewInteractor(SearchRestaurantsByDistanceInteractor restaurantsInteractor, Map initialMap) {
+    public SearchViewInteractor(SearchRestaurantsByDistanceInteractor restaurantsInteractor, Map initialMap, SearchOutputBoundary searchOutputBoundary) {
         this.restaurantsInteractor = restaurantsInteractor;
         this.currentMap = initialMap;
+        this.searchOutputBoundary = searchOutputBoundary;
     }
 
     @Override
-    public Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults)  {
+    public void execute(RestaurantSearchInput restaurantSearchInput, int maxResults)  {
         double latitude = restaurantSearchInput.getLatitude();
         double longitude = restaurantSearchInput.getLongitude();
         String distance = restaurantSearchInput.getDistance();
@@ -39,13 +40,14 @@ public class SearchViewInteractor implements SearchRestaurantService {
 
             RestaurantSearchInput searchInputByDistance = new RestaurantSearchInput(latitude, longitude, roundedDistance, dishType);
             List<Restaurant> results = restaurantsInteractor.execute(searchInputByDistance, maxResults).orElse(new ArrayList<>());
-            return Optional.of(results);
+            SearchOutputData searchOutputData = new SearchOutputData(results);
+            searchOutputBoundary.prepareSuccessView(searchOutputData);;
         } catch (NumberFormatException numberFormatException) {
             System.out.println("Invalid distance input. Please enter a number.");
-            return Optional.empty();
+            searchOutputBoundary.prepareFailView("Invalid distance input. Please enter a number.");
         } catch (Exception e) {
             System.out.println("An error occurred during the search: " + e.getMessage());
-            return Optional.empty();
+            searchOutputBoundary.prepareFailView("An error occurred during the search: " + e.getMessage());
         }
     }
 
@@ -72,7 +74,9 @@ public class SearchViewInteractor implements SearchRestaurantService {
         // Here you might also trigger a map refresh or update UI components
     }
 
-    public void adjustCenter(double latitude, double longitude, RestaurantSearchInput restaurantSearchInput) {
+    public void adjustCenter(RestaurantSearchInput restaurantSearchInput) {
+        double latitude = restaurantSearchInput.getLatitude();
+        double longitude = restaurantSearchInput.getLongitude();
         this.currentMap.setCurrentLatitude(latitude);
         this.currentMap.setCurrentLongitude(longitude);
         MapImageInteractor mapImageInteractor = new MapImageInteractor(new GoogleMapsImageService(new EnvConfigServiceImpl()));

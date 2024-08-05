@@ -40,7 +40,10 @@ public class SearchRestaurantsByDistanceInteractor implements SearchRestaurantsB
     public Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
         try {
             // Perform the search for restaurants using the provided search service
-            Optional<List<Restaurant>> result = searchRestaurantService.execute(restaurantSearchInput, maxResults);
+            searchRestaurantService.execute(restaurantSearchInput, maxResults);
+
+            Optional<List<Restaurant>> result = searchRestaurantService.getRestaurants();
+
             List<Restaurant> restaurants = result.orElse(new ArrayList<>());
 
             // Output the search result details

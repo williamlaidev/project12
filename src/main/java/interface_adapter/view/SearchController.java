@@ -5,8 +5,6 @@ import entity.Map;
 import use_case.search.RestaurantSearchInput;
 import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 
@@ -45,12 +43,12 @@ public class SearchController {
      * Executes the search based on the state captured from the SearchView.
      * Converts mouse position to geographic coordinates and initiates a search.
      *
-     * @param searchViewState Current state of the SearchView including user inputs.
+     * @param searchState Current state of the SearchView including user inputs.
      */
-    public void execute(SearchViewState searchViewState) {
-        Point mousePosition = searchViewState.getMousePosition();
-        String distance = searchViewState.getDistance();
-        String selectedDishType = searchViewState.getSelectedDishType();
+    public void execute(SearchState searchState) {
+        Point mousePosition = searchState.getMouseLeftClickPosition();
+        String distance = searchState.getDistance();
+        String selectedDishType = searchState.getSelectedDishType();
 
         double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
         double latitude = latLng[0];
@@ -58,17 +56,17 @@ public class SearchController {
 
         DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
         RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
-        searchViewInteractor.execute(inputData, 10);
+        searchViewInteractor.execute(inputData, 100);
     }
 
     /**
      * Adjusts the zoom level of the map.
      */
-    public void changeZoomLevel(int change, SearchViewState searchViewState) {
+    public void changeZoomLevel(int change, SearchState searchState) {
         this.zoomLevel += change;
 
-        String distance = searchViewState.getDistance();
-        String selectedDishType = searchViewState.getSelectedDishType();
+        String distance = searchState.getDistance();
+        String selectedDishType = searchState.getSelectedDishType();
         DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
 
         RestaurantSearchInput inputData = new RestaurantSearchInput(centerLat, centerLng, distance, dishType);
@@ -81,10 +79,12 @@ public class SearchController {
     /**
      * Adjusts the center of the map.
      */
-    public void changeCenter(Point rightClickPosition, SearchViewState searchViewState) {
-        String distance = searchViewState.getDistance();
-        String selectedDishType = searchViewState.getSelectedDishType();
+    public void changeCenter(SearchState searchState) {
+        String distance = searchState.getDistance();
+        String selectedDishType = searchState.getSelectedDishType();
         DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
+
+        Point rightClickPosition = searchState.getMouseRightClickPosition();
 
         double[] latLng = MapCoordinateToLocation.convert(rightClickPosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
         double latitude = latLng[0];
@@ -95,7 +95,7 @@ public class SearchController {
 
         RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
 
-        searchViewInteractor.adjustCenter(latitude, longitude, inputData);
+        searchViewInteractor.adjustCenter(inputData);
 
     }
 

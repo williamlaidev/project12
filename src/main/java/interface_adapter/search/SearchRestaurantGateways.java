@@ -30,6 +30,7 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
     private final AddRestaurant addRestaurantUseCase;
     private final UpdateRestaurant updateRestaurantUseCase;
     private final FindRestaurantById findRestaurantByIdUseCase;
+    private Optional<List<Restaurant>> restaurantResult;
 
     /**
      * Constructs a {@code SearchRestaurantGateways} with dependencies for restaurant search,
@@ -51,11 +52,9 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
      *
      * @param restaurantSearchInput the input containing search parameters including location, distance, and dish type
      * @param maxResults            the maximum number of restaurants to return
-     * @return an {@link Optional} containing a list of {@link Restaurant} objects if the search is successful;
-     *         otherwise, an empty {@link Optional}
      */
     @Override
-    public Optional<List<Restaurant>> execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
+    public void execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
         try {
             DishType dishTypeFilter = restaurantSearchInput.getDishType();
             Location location = new Location(restaurantSearchInput.getLatitude(), restaurantSearchInput.getLongitude());
@@ -66,13 +65,21 @@ public class SearchRestaurantGateways implements SearchRestaurantService {
 
             List<Restaurant> restaurants = fetchNearbyRestaurants(location, dishTypeFilter, Integer.parseInt(restaurantSearchInput.getDistance()), maxResults);
 
-            return Optional.of(restaurants);
+            this.restaurantResult = Optional.of(restaurants);
+
+
         } catch (Exception e) {
             System.err.println("Error during restaurant search: " + e.getMessage());
             logger.error("Error during restaurant search: {}", e.getMessage(), e);
-            return Optional.empty();
+
         }
     }
+
+    @Override
+    public Optional<List<Restaurant>> getRestaurants() throws Exception {
+        return restaurantResult;
+    }
+
 
     /**
      * Fetches nearby restaurants from the Google Places API based on the provided location,

@@ -6,16 +6,18 @@ import java.awt.Point;
  * Holds the state information for search operations in the view layer, including
  * user interactions such as selected location, search distance, dish type, and zoom level.
  */
-public class SearchViewState {
-    private Point mousePosition;
+public class SearchState {
+    private Point mouseLeftClickPosition;
+    private Point mouseRightClickPosition;
     private String distance;
     private String selectedDishType;
     private String distanceError;
  // Adding zoom level to the state
 
     // Copy constructor
-    public SearchViewState(SearchViewState copy) {
-        this.mousePosition = copy.mousePosition;
+    public SearchState(SearchState copy) {
+        this.mouseLeftClickPosition = copy.mouseLeftClickPosition;
+        this.mouseRightClickPosition = copy.mouseRightClickPosition;
         this.distance = copy.distance;
         this.selectedDishType = copy.selectedDishType;
         this.distanceError = copy.distanceError;
@@ -23,15 +25,22 @@ public class SearchViewState {
     }
 
     // Default constructor
-    public SearchViewState() {}
+    public SearchState() {}
 
-    public Point getMousePosition() {
-        return mousePosition;
+    public Point getMouseLeftClickPosition() {
+        return mouseLeftClickPosition;
     }
 
-    public void setMousePosition(Point mousePosition) {
-        this.mousePosition = mousePosition;
+    public void setMouseLeftClickPosition(Point mouseLeftClickPosition) {this.mouseLeftClickPosition = mouseLeftClickPosition;}
+
+    public Point getMouseRightClickPosition() {
+        return mouseRightClickPosition;
     }
+    public void setMouseRightClickPosition(Point mouseRightClickPosition) {
+        this.mouseRightClickPosition = mouseRightClickPosition;
+    }
+
+
 
     public String getDistance() {
         return distance;
@@ -62,8 +71,8 @@ public class SearchViewState {
 
     @Override
     public String toString() {
-        return "SearchViewState{" +
-                "mousePosition=" + mousePosition +
+        return "SearchState{" +
+                "mouseLeftClickPosition=" + mouseLeftClickPosition +
                 ", distance='" + distance + '\'' +
                 ", selectedDishType='" + selectedDishType + '\'' +
                 ", distanceError='" + distanceError + '\'' +

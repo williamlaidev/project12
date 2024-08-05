@@ -4,14 +4,14 @@ import framework.search.GoogleGeolocationService;
 import framework.search.GoogleMapsImageService;
 import framework.config.EnvConfigServiceImpl;
 import interface_adapter.search.SearchRestaurantGateways;
-import interface_adapter.view.SearchController;
-import interface_adapter.view.SearchViewModel;
+import interface_adapter.view.*;
 import use_case.view.Initializer;
 import use_case.view.MapImageInteractor;
 import use_case.search.SearchRestaurantsByDistanceInteractor;
 import use_case.view.SearchViewInteractor;
+import view.RestaurantView;
 import view.SearchView;
-import interface_adapter.view.SearchPresenter;
+import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,38 +32,40 @@ public class Start {
 
             // Get dish types and map image
             String[] dishTypeList = initializer.getDishTypes();
-            
 
-            // Create the SearchViewModel
+            // Create ViewModels
             SearchViewModel searchViewModel = new SearchViewModel();
+            RestaurantViewModel restaurantViewModel = new RestaurantViewModel();
 
-            // Create the SearchRestaurantsByDistanceInteractor with the repository
+            // Create ViewManagerModel
+            ViewManagerModel viewManagerModel = new ViewManagerModel();
+
+            // Create Interactors and Presenters
             SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
-
-            // Create the SearchViewInteractor with the SearchRestaurantsByDistanceInteractor instance
-            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap());
-
-            SearchPresenter searchPresenter = new SearchPresenter(searchViewModel);
-            searchPresenter.setZoomLevel(15);
+            SearchPresenter searchPresenter = new SearchPresenter(viewManagerModel, searchViewModel, restaurantViewModel);
+            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap(), searchPresenter);
 
             // Create the controller and view model
             SearchController searchController = new SearchController(searchViewInteractor, searchPresenter, initializer.getMap(), 400, 400);
 
-            // Create the SearchView
+            // Create the SearchView and RestaurantView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList);
+            RestaurantView restaurantView = new RestaurantView(restaurantViewModel);  // Assume it's properly initialized
 
-            // Set up the JFrame
+            // Set up the JFrame with a split pane to show both views
             JFrame frame = new JFrame("Search Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(450, 650);
-            frame.setContentPane(searchView);
-            frame.setLocationRelativeTo(null); // Center the frame on the screen
+            frame.setSize(900, 650); // Updated size to fit both views
+
+            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, searchView, restaurantView);
+            splitPane.setDividerLocation(450); // Adjust this value as needed for better balance
+
+            frame.setContentPane(splitPane);
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         } catch (IOException | RuntimeException e) {
-            // Handle IOException and RuntimeException similarly
             e.printStackTrace();
         } catch (Exception e) {
-            // Handle any other exceptions
             e.printStackTrace();
         }
     }
