@@ -37,7 +37,7 @@ cd /path/to/project12
 
 Create a virtual environment with:
 ```bash
-python3 -m venv myenv
+python -m venv myenv
 ```
 
 **2.3 Activate the Virtual Environment**

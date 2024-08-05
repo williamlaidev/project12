@@ -1,20 +1,20 @@
 package interface_adapter.view;
 
 import entity.DishType;
-import entity.map.Map;
-import entity.restaurant.Restaurant;
-import use_case.search.SearchRestaurantInput;
-import use_case.search.RestaurantSearchInteractor;
+import entity.Map;
+import use_case.search.RestaurantSearchInput;
+import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 import utils.ZoomLevelToMeter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
-import java.util.List;
+
+// TODO: Add JavaDoc documentation to describe the purpose and usage.
 
 public class SearchController {
-    private final RestaurantSearchInteractor searchInteractor;
+    private final SearchViewInteractor searchViewInteractor;
     private final double centerLat;
     private final double centerLng;
     private final int zoomLevel;
@@ -22,8 +22,8 @@ public class SearchController {
     private final int mapHeight;
     private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
-    public SearchController(RestaurantSearchInteractor searchInteractor, Map map, int mapWidth, int mapHeight) {
-        this.searchInteractor = searchInteractor;
+    public SearchController(SearchViewInteractor searchViewInteractor, Map map, int mapWidth, int mapHeight) {
+        this.searchViewInteractor = searchViewInteractor;
         this.centerLat = map.getCurrentLatitude();
         this.centerLng = map.getCurrentLongitude();
         this.zoomLevel = map.getZoomLevel();
@@ -56,17 +56,12 @@ public class SearchController {
             longitude = centerLng;
         }
 
-        // Create SearchRestaurantInput object
-        SearchRestaurantInput searchInput = new SearchRestaurantInput(latitude, longitude, distance, dishType);
-
-        // Define maxRestaurantsToSearch and maxResults parameters
-        int maxRestaurantsToSearch = 30; // Example value, adjust as needed
-        int maxResults = 10; // Example value, adjust as needed
+        // Create RestaurantSearchInput object
+        RestaurantSearchInput searchInput = new RestaurantSearchInput(latitude, longitude, distance, dishType);
 
         // Execute the search and handle any exceptions
         try {
-            List<Restaurant> results = searchInteractor.fetchNearbyRestaurants(searchInput, maxRestaurantsToSearch, maxResults);
-            // Handle results (e.g., update UI or display results)
+            searchViewInteractor.execute(searchInput, 10); // Assuming maxResults is 10
         } catch (Exception e) {
             System.err.println("An error occurred while executing the search: " + e.getMessage()); // Retaining the println call
             logger.error("An error occurred while executing the search: {}", e.getMessage(), e);

@@ -69,20 +69,11 @@ public enum DishType {
         if (dishTypeString == null || dishTypeString.trim().isEmpty()) {
             return null; // Return null if the input is null or empty
         }
-
-        // Normalize the input string
-        String normalizedInput = dishTypeString.trim().toLowerCase();
-
-        // Check each DishType for a matching API type
-        for (DishType dishType : DishType.values()) {
-            for (String apiType : dishType.getApiTypes()) {
-                if (apiType.equalsIgnoreCase(normalizedInput)) {
-                    return dishType;
-                }
-            }
+        try {
+            return DishType.valueOf(dishTypeString.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null; // Return null if no match is found
         }
-
-        return null; // Return null if no match is found
     }
 
     @Override
