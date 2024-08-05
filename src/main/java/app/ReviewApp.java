@@ -5,7 +5,7 @@
 //import framework.data.SQLiteReviewRepository;
 //import interface_adapter.search.PlacesReviewsGateways;
 //import use_case.data.create.AddReview;
-//import use_case.search.GetReviewsForRestaurant;
+//import use_case.search.FetchRestaurantReviews;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //
@@ -23,7 +23,7 @@
 //            AddReview addReviewUseCase = new AddReview(reviewRepository);
 //
 //            ReviewRetrievalService reviewRetrievalService = new PlacesReviewsGateways(addReviewUseCase); // Inject AddReview
-//            GetReviewsForRestaurant getReviewsForRestaurant = new GetReviewsForRestaurant(reviewRetrievalService);
+//            FetchRestaurantReviews getReviewsForRestaurant = new FetchRestaurantReviews(reviewRetrievalService);
 //
 //            // Read user input
 //            Scanner scanner = new Scanner(System.in);

@@ -7,21 +7,21 @@ import entity.DishType;
  * This class encapsulates the details of the search criteria such as the location,
  * search radius, and dish type, which can be used by the use case layer to perform the search.
  */
-public class RestaurantSearchInput {
+public class SearchRestaurantInput {
     private final double latitude;
     private final double longitude;
     private final String distance;
     private final DishType dishType;
 
     /**
-     * Constructs a {@code RestaurantSearchInput} instance with the specified parameters.
+     * Constructs a {@code SearchRestaurantInput} instance with the specified parameters.
      *
      * @param latitude  the latitude of the search center, expressed in degrees
      * @param longitude the longitude of the search center, expressed in degrees
      * @param distance  the search radius around the location, expressed in meters
      * @param dishType  the type of dish to filter the search results by
      */
-    public RestaurantSearchInput(double latitude, double longitude, String distance, DishType dishType) {
+    public SearchRestaurantInput(double latitude, double longitude, String distance, DishType dishType) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.distance = distance;

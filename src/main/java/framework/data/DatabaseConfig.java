@@ -18,9 +18,7 @@ public class DatabaseConfig {
      */
     public Connection connect() {
         try {
-            Connection conn = DriverManager.getConnection(URL);
-            System.out.println("Connection to SQLite has been established.");
-            return conn;
+            return DriverManager.getConnection(URL);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;

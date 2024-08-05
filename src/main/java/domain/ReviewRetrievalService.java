@@ -17,5 +17,5 @@ public interface ReviewRetrievalService {
      * @param restaurantId the ID of the restaurant whose reviews are to be retrieved
      * @return a list of the most relevant reviews if present, otherwise an empty list
      */
-    List<Review> getReviewsForRestaurant(String restaurantId);
+    List<Review> fetchRelevantReviews(String restaurantId);
 }
