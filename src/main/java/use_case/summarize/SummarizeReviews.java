@@ -1,7 +1,7 @@
 package use_case.summarize;
 
 import domain.ReviewSummarizeService;
-import entity.Review;
+import entity.review.Review;
 
 import java.util.List;
 
@@ -31,6 +31,6 @@ public class SummarizeReviews {
      * @throws InterruptedException if the thread is interrupted while processing
      */
     public Review execute(List<Review> reviews) throws InterruptedException {
-        return summarizeService.summarize(reviews);
+        return summarizeService.createSummaryFromReviews(reviews);
     }
 }

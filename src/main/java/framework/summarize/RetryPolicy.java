@@ -1,4 +1,4 @@
-package interface_adapter.summarize;
+package framework.summarize;
 
 /**
  * Interface for defining retry policies.

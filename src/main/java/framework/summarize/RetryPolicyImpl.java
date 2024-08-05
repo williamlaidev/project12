@@ -1,4 +1,4 @@
-package interface_adapter.summarize;
+package framework.summarize;
 
 /**
  * Retry policy implementation for review summarization.

@@ -1,4 +1,4 @@
-package interface_adapter.summarize;
+package framework.summarize;
 
 import java.time.Duration;
 import java.time.Instant;
