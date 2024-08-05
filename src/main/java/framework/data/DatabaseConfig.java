@@ -7,28 +7,33 @@ import java.sql.SQLException;
 
 /**
  * Provides utility methods for managing SQLite database connections and configurations.
+ * Includes methods to establish a connection to the database and to create a new database.
  */
 public class DatabaseConfig {
     private static final String URL = "jdbc:sqlite:app_database.sqlite";
 
     /**
      * Establishes a connection to the SQLite database specified by the {@code URL}.
+     * Prints a message indicating the success or failure of the connection attempt.
      *
      * @return a {@link Connection} object to the SQLite database, or {@code null} if the connection could not be established
      */
-    public Connection connect() {
+    public static Connection connect() {
+        Connection conn = null;
         try {
-            return DriverManager.getConnection(URL);
+            conn = DriverManager.getConnection(URL);
+            System.out.println("Connection to SQLite has been established.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
         }
+        return conn;
     }
 
     /**
      * Creates a new SQLite database by establishing a connection and printing database metadata.
+     * Prints the driver name and a message indicating that a new database has been created.
      */
-    public void createNewDatabase() {
+    public static void createNewDatabase() {
         try (Connection conn = connect()) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
