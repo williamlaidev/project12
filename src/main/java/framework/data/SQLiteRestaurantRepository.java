@@ -18,13 +18,20 @@ import java.util.Optional;
 
 public class SQLiteRestaurantRepository implements RestaurantRepository {
     private static final Logger logger = LoggerFactory.getLogger(SQLiteRestaurantRepository.class);
-    private final OperationResultFactory successFactory = new OperationResultSuccessFactory();
-    private final OperationResultFactory failureFactory = new OperationResultFailureFactory();
-    private final DatabaseConfig databaseConfig = new DatabaseConfig();
+    private final OperationResultFactory successFactory;
+    private final OperationResultFactory failureFactory;
+    private final DatabaseConfig databaseConfig;
     private final SQLiteRestaurantDataAdapter dataAdapter;
 
     public SQLiteRestaurantRepository() {
-        this.dataAdapter = new SQLiteRestaurantDataAdapter();
+        this(new DatabaseConfig(), new SQLiteRestaurantDataAdapter(), new OperationResultSuccessFactory(), new OperationResultFailureFactory());
+    }
+
+    public SQLiteRestaurantRepository(DatabaseConfig databaseConfig, SQLiteRestaurantDataAdapter dataAdapter, OperationResultFactory successFactory, OperationResultFactory failureFactory) {
+        this.databaseConfig = databaseConfig;
+        this.dataAdapter = dataAdapter;
+        this.successFactory = successFactory;
+        this.failureFactory = failureFactory;
         initializeDatabase();
     }
 

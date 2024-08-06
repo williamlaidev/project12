@@ -1,6 +1,6 @@
 package framework.search;
 
-import framework.config.EnvConfigService;
+import framework.EnvConfigService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

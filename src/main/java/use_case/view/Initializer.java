@@ -2,7 +2,7 @@ package use_case.view;
 
 import framework.search.GoogleGeolocationService;
 import framework.search.GoogleMapsImageService;
-import framework.config.EnvConfigServiceImpl;
+import framework.EnvConfigServiceImpl;
 import entity.DishType;
 import entity.location.Location;
 import entity.map.Map;

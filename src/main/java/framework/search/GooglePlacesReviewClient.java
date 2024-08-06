@@ -1,6 +1,6 @@
 package framework.search;
 
-import framework.config.EnvConfigService;
+import framework.EnvConfigService;
 import interface_adapter.search.ReviewSearchGateways;
 import org.json.JSONArray;
 import org.json.JSONException;

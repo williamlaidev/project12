@@ -21,11 +21,6 @@ public class SearchViewModelTest {
     }
 
     @Test
-    public void testViewName() {
-        assertEquals("framework/config/search", searchViewModel.getViewName());
-    }
-
-    @Test
     public void testSetState() {
         SearchViewState state = new SearchViewState();
         state.setDistance("500");

@@ -1,4 +1,4 @@
-package framework.config;
+package framework;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

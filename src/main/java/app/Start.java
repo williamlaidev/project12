@@ -9,7 +9,7 @@ import entity.restaurant.RestaurantDefaultFactory;
 import entity.restaurant.RestaurantFactory;
 import framework.data.SQLiteRestaurantRepository;
 import framework.search.*;
-import framework.config.EnvConfigServiceImpl;
+import framework.EnvConfigServiceImpl;
 import interface_adapter.search.*;
 import interface_adapter.view.SearchController;
 import interface_adapter.view.SearchViewModel;
