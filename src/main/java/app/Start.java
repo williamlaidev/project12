@@ -1,10 +1,15 @@
 package app;
 
+import domain.ReviewRetrievalService;
 import framework.search.GoogleGeolocationService;
 import framework.search.GoogleMapsImageService;
 import framework.config.EnvConfigServiceImpl;
+import interface_adapter.data.SQLiteReviewRepository;
+import interface_adapter.search.PlacesReviewsGateways;
 import interface_adapter.search.SearchRestaurantGateways;
 import interface_adapter.view.*;
+import use_case.data.AddReview;
+import use_case.search.GetReviewsForRestaurant;
 import use_case.view.Initializer;
 import use_case.view.MapImageInteractor;
 import use_case.search.SearchRestaurantsByDistanceInteractor;
@@ -45,12 +50,22 @@ public class Start {
             SearchPresenter searchPresenter = new SearchPresenter(viewManagerModel, searchViewModel, restaurantViewModel);
             SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap(), searchPresenter);
 
+
+
             // Create the controller and view model
             SearchController searchController = new SearchController(searchViewInteractor, searchPresenter, initializer.getMap(), 400, 400);
 
+
+            SQLiteReviewRepository reviewRepository = new SQLiteReviewRepository();
+            AddReview addReviewUseCase = new AddReview(reviewRepository);
+
+            ReviewRetrievalService reviewRetrievalService = new PlacesReviewsGateways(addReviewUseCase); // Inject AddReview
+            GetReviewsForRestaurant getReviewsForRestaurant = new GetReviewsForRestaurant(reviewRetrievalService);
+
             // Create the SearchView and RestaurantView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList);
-            RestaurantView restaurantView = new RestaurantView(restaurantViewModel);  // Assume it's properly initialized
+
+            RestaurantView restaurantView = new RestaurantView(restaurantViewModel, getReviewsForRestaurant);  // Assume it's properly initialized
 
             // Set up the JFrame with a split pane to show both views
             JFrame frame = new JFrame("Search Application");
