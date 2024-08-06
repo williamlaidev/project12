@@ -1,7 +1,7 @@
 package framework.search;
 
 import domain.RestaurantPhotoService;
-import framework.config.EnvConfigService;
+import framework.EnvConfigService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

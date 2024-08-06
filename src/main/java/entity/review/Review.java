@@ -61,4 +61,5 @@ public class Review {
         return Objects.equals(restaurantId, review.restaurantId) &&
                 Objects.equals(author, review.author);
     }
+
 }

@@ -1,6 +1,6 @@
 package framework.search;
 
-import framework.config.EnvConfigService;
+import framework.EnvConfigService;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

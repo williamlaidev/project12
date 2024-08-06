@@ -107,7 +107,7 @@ public class Restaurant {
                 ", address='" + address + '\'' +
                 ", dishType=" + dishType +
                 ", averageRating=" + averageRating +
-                ", photoUrl='" + photoUrl +
+                ", photoUrl='" + photoUrl + '\'' +
                 '}';
     }
 

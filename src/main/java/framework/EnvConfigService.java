@@ -1,4 +1,4 @@
-package framework.config;
+package framework;
 
 /**
  * Interface for accessing environment-specific API keys.

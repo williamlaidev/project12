@@ -1,6 +1,6 @@
 package framework.search;
 
-import framework.config.EnvConfigService;
+import framework.EnvConfigService;
 import interface_adapter.search.RestaurantSearchGateways;
 import org.json.JSONObject;
 import org.json.JSONException;
