@@ -22,7 +22,7 @@ public class SearchViewModelTest {
 
     @Test
     public void testViewName() {
-        assertEquals("search", searchViewModel.getViewName());
+        assertEquals("framework/config/search", searchViewModel.getViewName());
     }
 
     @Test

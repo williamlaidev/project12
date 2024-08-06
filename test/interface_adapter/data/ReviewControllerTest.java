@@ -69,55 +69,58 @@ public class ReviewControllerTest {
 
     @Test
     public void testAddReview() {
-        Review review = new Review("id1", "Kera", "Excellent food and service!", false);
+        Review review = new Review("1", "Kera", "The food was amazing.", false);
         OperationResult expected = successFactory.create("Review added successfully");
         when(addReviewUseCase.execute(review)).thenReturn(expected);
 
-        OperationResult result = controller.addReview("id1", "Kera", "Excellent food and service!", false);
+        OperationResult result = controller.addReview("1", "Kera", "The food was amazing.", false);
         assertEquals(expected.getMessage(), result.getMessage());
     }
 
     @Test
     public void testUpdateReview() {
-        Review review = new Review("id1", "Kera", "Updated review with new details.", false);
+        Review review = new Review("1", "Kera", "The food was amazing.", false);
         OperationResult expected = successFactory.create("Review updated successfully");
         when(updateReviewUseCase.execute(review)).thenReturn(expected);
 
-        OperationResult result = controller.updateReview("id1", "Kera", "Updated review with new details.");
+        OperationResult result = controller.updateReview("1", "Kera", "The food was amazing.");
         assertEquals(expected.getMessage(), result.getMessage());
     }
 
     @Test
     public void testDeleteUserReviews() {
-        when(deleteUserReviewsByIdUseCase.execute("id1")).thenReturn(true);
+        String restaurantId = "1";
         OperationResult expected = successFactory.create("User reviews deleted successfully");
+        when(deleteUserReviewsByIdUseCase.execute(restaurantId)).thenReturn(true);
 
-        OperationResult result = controller.deleteUserReviews("id1");
+        OperationResult result = controller.deleteUserReviews(restaurantId);
         assertEquals(expected.getMessage(), result.getMessage());
     }
 
     @Test
     public void testDeleteSummarizedReviews() {
-        when(deleteSummarizedReviewByIdUseCase.execute("id1")).thenReturn(true);
+        String restaurantId = "1";
         OperationResult expected = successFactory.create("Summarized reviews deleted successfully");
+        when(deleteSummarizedReviewByIdUseCase.execute(restaurantId)).thenReturn(true);
 
-        OperationResult result = controller.deleteSummarizedReviews("id1");
+        OperationResult result = controller.deleteSummarizedReviews(restaurantId);
         assertEquals(expected.getMessage(), result.getMessage());
     }
 
     @Test
     public void testDeleteAllReviews() {
-        when(deleteAllReviewsByIdUseCase.execute("id1")).thenReturn(true);
+        String restaurantId = "1";
         OperationResult expected = successFactory.create("All reviews deleted successfully");
+        when(deleteAllReviewsByIdUseCase.execute(restaurantId)).thenReturn(true);
 
-        OperationResult result = controller.deleteAllReviews("id1");
+        OperationResult result = controller.deleteAllReviews(restaurantId);
         assertEquals(expected.getMessage(), result.getMessage());
     }
 
     @Test
     public void testClearAllReviews() {
-        when(clearAllReviewsUseCase.execute()).thenReturn(true);
         OperationResult expected = successFactory.create("All reviews cleared successfully");
+        when(clearAllReviewsUseCase.execute()).thenReturn(true);
 
         OperationResult result = controller.clearAllReviews();
         assertEquals(expected.getMessage(), result.getMessage());
@@ -125,29 +128,117 @@ public class ReviewControllerTest {
 
     @Test
     public void testFindUserReviews() {
-        List<Review> expectedReviews = List.of(new Review("id1", "Kera", "The ambiance was perfect.", false));
-        when(findUserReviewsUseCase.execute("id1")).thenReturn(expectedReviews);
+        String restaurantId = "1";
+        List<Review> expectedReviews = List.of(new Review(restaurantId, "Kera", "The food was amazing.", false));
+        when(findUserReviewsUseCase.execute(restaurantId)).thenReturn(expectedReviews);
 
-        List<Review> result = controller.findUserReviews("id1");
+        List<Review> result = controller.findUserReviews(restaurantId);
         assertEquals(expectedReviews, result);
     }
 
     @Test
     public void testFindSummarizedReview() {
-        Review expectedReview = new Review("id1", "Gemini", "Summary of multiple reviews.", true);
-        when(findSummarizedReviewUseCase.execute("id1")).thenReturn(Optional.of(expectedReview));
+        String restaurantId = "1";
+        Optional<Review> expectedReview = Optional.of(new Review(restaurantId, "Gemini", "Summary review.", true));
+        when(findSummarizedReviewUseCase.execute(restaurantId)).thenReturn(expectedReview);
 
-        Optional<Review> result = controller.findSummarizedReview("id1");
-        assertTrue(result.isPresent());
-        assertEquals(expectedReview, result.get());
+        Optional<Review> result = controller.findSummarizedReview(restaurantId);
+        assertEquals(expectedReview, result);
     }
 
     @Test
     public void testFindAllReviews() {
-        List<Review> expectedReviews = List.of(new Review("id1", "Kera", "Loved the experience!", false));
+        List<Review> expectedReviews = List.of(new Review("1", "Kera", "The food was amazing.", false));
         when(findAllReviewsUseCase.execute()).thenReturn(expectedReviews);
 
         List<Review> result = controller.findAllReviews();
         assertEquals(expectedReviews, result);
+    }
+
+    // 추가된 실패 테스트 메서드들
+
+    @Test
+    public void testAddReviewFailure() {
+        Review review = new Review("1", "Kera", "The food was amazing.", false);
+        OperationResult expected = failureFactory.create("Failed to add review");
+        when(addReviewUseCase.execute(review)).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.addReview("1", "Kera", "The food was amazing.", false);
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testUpdateReviewFailure() {
+        Review review = new Review("1", "Kera", "The food was amazing.", false);
+        OperationResult expected = failureFactory.create("Failed to update review");
+        when(updateReviewUseCase.execute(review)).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.updateReview("1", "Kera", "The food was amazing.");
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testDeleteUserReviewsFailure() {
+        String restaurantId = "1";
+        OperationResult expected = failureFactory.create("Failed to delete user reviews");
+        when(deleteUserReviewsByIdUseCase.execute(restaurantId)).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.deleteUserReviews(restaurantId);
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testDeleteSummarizedReviewsFailure() {
+        String restaurantId = "1";
+        OperationResult expected = failureFactory.create("Failed to delete summarized reviews");
+        when(deleteSummarizedReviewByIdUseCase.execute(restaurantId)).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.deleteSummarizedReviews(restaurantId);
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testDeleteAllReviewsFailure() {
+        String restaurantId = "1";
+        OperationResult expected = failureFactory.create("Failed to delete all reviews");
+        when(deleteAllReviewsByIdUseCase.execute(restaurantId)).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.deleteAllReviews(restaurantId);
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testClearAllReviewsFailure() {
+        OperationResult expected = failureFactory.create("Failed to clear all reviews");
+        when(clearAllReviewsUseCase.execute()).thenThrow(new RuntimeException("Error"));
+
+        OperationResult result = controller.clearAllReviews();
+        assertEquals(expected.getMessage(), result.getMessage());
+    }
+
+    @Test
+    public void testFindUserReviewsFailure() {
+        String restaurantId = "1";
+        when(findUserReviewsUseCase.execute(restaurantId)).thenThrow(new RuntimeException("Error"));
+
+        List<Review> result = controller.findUserReviews(restaurantId);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testFindSummarizedReviewFailure() {
+        String restaurantId = "1";
+        when(findSummarizedReviewUseCase.execute(restaurantId)).thenThrow(new RuntimeException("Error"));
+
+        Optional<Review> result = controller.findSummarizedReview(restaurantId);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void testFindAllReviewsFailure() {
+        when(findAllReviewsUseCase.execute()).thenThrow(new RuntimeException("Error"));
+
+        List<Review> result = controller.findAllReviews();
+        assertTrue(result.isEmpty());
     }
 }
