@@ -87,6 +87,6 @@ public enum DishType {
 
     @Override
     public String toString() {
-        return name() ;
+        return name();
     }
 }
