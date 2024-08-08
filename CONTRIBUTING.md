@@ -8,6 +8,7 @@
     - [Commit & Pull Request Naming](#commit--pull-request-naming)
     - [SOLID Principles](#solid-principles)
     - [Clean Architecture](#clean-architecture)
+- [Additional Information](#additional-information)
 
 ## Getting Started
 
@@ -135,3 +136,9 @@ Key rules for Clean Architecture include:
 - **Separation of Concerns**: Keep different system parts focused on specific tasks, making the system easier to understand and maintain.
 - **Domain Models**: Use models to represent core business logic and rules, keeping business logic separate from concerns like data storage or user interfaces.
 - **Testing**: Write automated tests to ensure your system works as expected and remains functional after changes. Testing helps catch bugs early and ensures reliability.
+
+## Additional Information
+
+### UML Diagrams
+
+Visual representations of class and sequence diagrams are available [here](https://lucid.app/lucidchart/a25d3238-67e7-49fb-b829-9c842485de22/edit?invitationId=inv_403f0f3f-3919-487a-9133-a82ce071034f).
