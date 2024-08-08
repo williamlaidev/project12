@@ -14,14 +14,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Client for fetching restaurant reviews from Google Places API.
+ * Implements the ReviewSearchGateways interface.
+ */
 public class GooglePlacesReviewClient implements ReviewSearchGateways {
     private static final String PLACES_API_URL = "https://maps.googleapis.com/maps/api/place/details/json";
     private final EnvConfigService envConfigService;
 
+    /**
+     * Constructs a new GooglePlacesReviewClient.
+     *
+     * @param envConfigService The service for accessing environment configuration.
+     */
     public GooglePlacesReviewClient(EnvConfigService envConfigService) {
         this.envConfigService = envConfigService;
     }
 
+    /**
+     * Fetches relevant reviews for a given restaurant ID.
+     * Constructs a request URL using the restaurant ID and API key, performs an HTTP GET request to the
+     * Google Places API, and processes the response to extract reviews.
+     *
+     * @param restaurantId The ID of the restaurant for which to fetch reviews.
+     * @return A list of JSONObjects representing the reviews.
+     * @throws RuntimeException If there is an error fetching or parsing the reviews.
+     */
     @Override
     public List<JSONObject> fetchRelevantReviews(String restaurantId) {
         List<JSONObject> reviews = new ArrayList<>();
@@ -57,12 +75,26 @@ public class GooglePlacesReviewClient implements ReviewSearchGateways {
         return reviews;
     }
 
+    /**
+     * Constructs the URL for the Google Places API request to fetch reviews.
+     *
+     * @param apiKey The API key for authenticating with Google Places API.
+     * @param restaurantId The ID of the restaurant for which to fetch reviews.
+     * @return The constructed URL as a string.
+     */
     private String buildRequestUrl(String apiKey, String restaurantId) {
         return PLACES_API_URL + "?key=" + apiKey +
                 "&place_id=" + restaurantId +
                 "&fields=reviews";
     }
 
+    /**
+     * Creates an HTTP connection to the given URL for a GET request.
+     *
+     * @param requestUrl The URL to connect to.
+     * @return An HttpURLConnection object for the connection.
+     * @throws Exception If there is an error opening the connection.
+     */
     private HttpURLConnection createConnection(String requestUrl) throws Exception {
         URL url = new URL(requestUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -71,6 +103,13 @@ public class GooglePlacesReviewClient implements ReviewSearchGateways {
         return conn;
     }
 
+    /**
+     * Reads the response from the HTTP connection as a string.
+     *
+     * @param conn The HttpURLConnection object from which to read the response.
+     * @return The response content as a string.
+     * @throws Exception If there is an error reading the response.
+     */
     private String readResponse(HttpURLConnection conn) throws Exception {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
@@ -82,6 +121,13 @@ public class GooglePlacesReviewClient implements ReviewSearchGateways {
         }
     }
 
+    /**
+     * Extracts the reviews array from the JSON response.
+     *
+     * @param jsonResponse The response content as a JSON string.
+     * @return A JSONArray containing the reviews, or null if no reviews are found.
+     * @throws JSONException If there is an error parsing the JSON response.
+     */
     private JSONArray extractReviewsArray(String jsonResponse) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonResponse);
         JSONObject result = jsonObject.optJSONObject("result");

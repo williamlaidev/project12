@@ -1,15 +1,11 @@
 package use_case.view;
 
-import entity.DishType;
-import entity.location.Location;
 import entity.map.Map;
 import entity.map.MapFactory;
 import framework.search.GoogleGeolocationService;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,9 +32,9 @@ public class InitializerTest {
                         .put("lat", 37.7749)
                         .put("lng", -122.4194));
         when(geolocationService.getCurrentLocation()).thenReturn(locationJson);
-        when(mapImageInteractor.fetchAndSaveMapImage(37.7749, -122.4194, 15, 200, 200)).thenReturn(true);
+        when(mapImageInteractor.fetchAndSaveMapImage(37.7749, -122.4194, 15, 400, 400)).thenReturn(true);
         Map mockMap = mock(Map.class);
-        when(mapFactory.createMap(37.7749, -122.4194, 15, List.of())).thenReturn(mockMap);
+        when(mapFactory.createMap(37.7749, -122.4194, 15, 400, 400)).thenReturn(mockMap);
 
         initializer.initializeCurrentLocation();
 
@@ -54,7 +50,7 @@ public class InitializerTest {
                         .put("lat", 37.7749)
                         .put("lng", -122.4194));
         when(geolocationService.getCurrentLocation()).thenReturn(locationJson);
-        when(mapImageInteractor.fetchAndSaveMapImage(37.7749, -122.4194, 15, 200, 200)).thenReturn(false);
+        when(mapImageInteractor.fetchAndSaveMapImage(37.7749, -122.4194, 15, 400, 400)).thenReturn(false);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             initializer.initializeCurrentLocation();
@@ -62,5 +58,4 @@ public class InitializerTest {
 
         assertEquals("Failed to fetch and save the map image.", exception.getMessage());
     }
-
 }

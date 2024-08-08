@@ -8,13 +8,26 @@ import use_case.data.update.UpdateReview;
 
 import java.util.List;
 
+/**
+ * Provides review summarization services including creating, updating, and finding reviews.
+ */
 public class GeminiReviewSummarizeService implements ReviewSummarizeService {
+
     private final ReviewSummarizeGateways reviewSummarizeGateways;
     private final ReviewSummarizeAdapter reviewSummarizeAdapter;
     private final AddReview addReviewUseCase;
     private final UpdateReview updateReviewUseCase;
     private final FindSummarizedReview findSummarizedReviewUseCase;
 
+    /**
+     * Constructs a GeminiReviewSummarizeService with the given dependencies.
+     *
+     * @param reviewSummarizeGateways  Gateway for summarizing reviews
+     * @param reviewSummarizeAdapter   Adapter for converting reviews to strings and entities
+     * @param addReviewUseCase         Use case for adding reviews
+     * @param updateReviewUseCase      Use case for updating reviews
+     * @param findSummarizedReviewUseCase Use case for finding summarized reviews
+     */
     public GeminiReviewSummarizeService(ReviewSummarizeGateways reviewSummarizeGateways,
                                         ReviewSummarizeAdapter reviewSummarizeAdapter,
                                         AddReview addReviewUseCase,
@@ -27,6 +40,13 @@ public class GeminiReviewSummarizeService implements ReviewSummarizeService {
         this.findSummarizedReviewUseCase = findSummarizedReviewUseCase;
     }
 
+    /**
+     * Creates a summarized review from a list of reviews.
+     *
+     * @param reviews List of reviews to be summarized
+     * @return The summarized review
+     * @throws InterruptedException If the summarization process is interrupted
+     */
     @Override
     public Review createSummaryFromReviews(List<Review> reviews) throws InterruptedException {
         String reviewContent = reviewSummarizeAdapter.adaptToReviewString(reviews);

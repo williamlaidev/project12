@@ -3,6 +3,7 @@ package interface_adapter.search;
 import entity.DishType;
 import entity.location.Location;
 import entity.restaurant.Restaurant;
+import interface_adapter.view.SearchPresenter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,7 @@ public class GooglePlacesRestaurantSearchServiceTest {
     private FindRestaurantById findRestaurantByIdUseCase;
     private FetchRestaurantPhotoUrl fetchRestaurantPhotoUrlUseCase;
     private GooglePlacesRestaurantSearchService service;
+    private SearchPresenter searchPresenter;
 
     @BeforeEach
     public void setUp() {
@@ -39,7 +41,8 @@ public class GooglePlacesRestaurantSearchServiceTest {
         updateRestaurantUseCase = mock(UpdateRestaurant.class);
         findRestaurantByIdUseCase = mock(FindRestaurantById.class);
         fetchRestaurantPhotoUrlUseCase = mock(FetchRestaurantPhotoUrl.class);
-        service = new GooglePlacesRestaurantSearchService(searchGateways, inputAdapter, addRestaurantUseCase, updateRestaurantUseCase, findRestaurantByIdUseCase, fetchRestaurantPhotoUrlUseCase);
+        searchPresenter = mock(SearchPresenter.class);
+        service = new GooglePlacesRestaurantSearchService(searchGateways, inputAdapter, addRestaurantUseCase, updateRestaurantUseCase, findRestaurantByIdUseCase, fetchRestaurantPhotoUrlUseCase, searchPresenter);
     }
 
     @Test
