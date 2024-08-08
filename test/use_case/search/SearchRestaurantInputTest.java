@@ -30,7 +30,7 @@ public class SearchRestaurantInputTest {
         DishType dishType = DishType.ITALIAN;
 
         SearchRestaurantInput input = new SearchRestaurantInput(latitude, longitude, distance, dishType);
-        String expectedString = "SearchInput{" +
+        String expectedString = "SearchRestaurantInput{" +
                 "latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", distance='" + distance + '\'' +

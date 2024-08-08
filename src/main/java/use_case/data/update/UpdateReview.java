@@ -5,7 +5,7 @@ import entity.review.Review;
 import domain.ReviewRepository;
 
 /**
- * Handles the use case for updating an existing review in the repository.
+ * Use case for updating an existing review.
  * It uses the {@link ReviewRepository} to update the review.
  */
 public class UpdateReview {
@@ -22,10 +22,10 @@ public class UpdateReview {
     }
 
     /**
-     * Updates the specified review in the repository.
+     * Updates the specified review.
      *
      * @param review the {@link Review} to be updated.
-     * @return {@code true} if the update operation was successful, {@code false} otherwise.
+     * @return an {@link OperationResult} indicating the outcome of the operation.
      */
     public OperationResult execute(Review review) {
         return repository.update(review);

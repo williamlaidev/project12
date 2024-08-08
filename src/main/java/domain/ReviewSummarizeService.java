@@ -4,7 +4,7 @@ import entity.review.Review;
 import java.util.List;
 
 /**
- * Interface for summarizing a list of reviews.
+ * Interface for summarizing a list of reviews into a single review.
  */
 public interface ReviewSummarizeService {
 

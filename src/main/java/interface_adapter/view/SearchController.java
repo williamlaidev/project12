@@ -3,27 +3,50 @@ package interface_adapter.view;
 import entity.DishType;
 import entity.map.Map;
 import entity.restaurant.Restaurant;
-import use_case.search.SearchRestaurantInput;
 import use_case.search.RestaurantSearchInteractor;
+import use_case.search.SearchRestaurantInput;
+import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
-import utils.ZoomLevelToMeter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 import java.util.List;
 
+/**
+ * Manages interactions between the SearchView and use cases, such as searching for restaurants and adjusting map views.
+ */
 public class SearchController {
-    private final RestaurantSearchInteractor searchInteractor;
-    private final double centerLat;
-    private final double centerLng;
-    private final int zoomLevel;
+
+    private final SearchViewInteractor searchViewInteractor;
+    private final RestaurantSearchInteractor searchRestaurantInteractor;
+    private final SearchPresenter searchPresenter;
+    private final SearchViewModel searchViewModel;
+    private double centerLat;
+    private double centerLng;
     private final int mapWidth;
     private final int mapHeight;
-    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+    private int zoomLevel;
 
-    public SearchController(RestaurantSearchInteractor searchInteractor, Map map, int mapWidth, int mapHeight) {
-        this.searchInteractor = searchInteractor;
+    /**
+     * Constructs a SearchController with the given parameters.
+     *
+     * @param searchRestaurantInteractor The interactor to fetch restaurant data.
+     * @param searchViewInteractor       The interactor for updating the search view.
+     * @param searchPresenter            The presenter to update the view with search results.
+     * @param map                        The initial map containing geographic information.
+     * @param mapWidth                   The width of the map area.
+     * @param mapHeight                  The height of the map area.
+     */
+    public SearchController(RestaurantSearchInteractor searchRestaurantInteractor,
+                            SearchViewInteractor searchViewInteractor,
+                            SearchPresenter searchPresenter,
+                            SearchViewModel searchViewModel,
+                            Map map,
+                            int mapWidth,
+                            int mapHeight) {
+        this.searchRestaurantInteractor = searchRestaurantInteractor;
+        this.searchViewInteractor = searchViewInteractor;
+        this.searchPresenter = searchPresenter;
+        this.searchViewModel = searchViewModel;
         this.centerLat = map.getCurrentLatitude();
         this.centerLng = map.getCurrentLongitude();
         this.zoomLevel = map.getZoomLevel();
@@ -31,45 +54,62 @@ public class SearchController {
         this.mapHeight = mapHeight;
     }
 
-    public void execute(SearchViewState searchViewState) {
-        Point mousePosition = searchViewState.getMousePosition();
-        String distance = searchViewState.getDistance();
-        String selectedDishType = searchViewState.getSelectedDishType();
+    /**
+     * Executes a search for nearby restaurants based on the current search state.
+     * Converts mouse position to geographic coordinates and initiates the search.
+     *
+     * @param searchState The current state of the search view including user inputs and search parameters.
+     */
+    public void execute(SearchState searchState) {
+        Point mousePosition = searchState.getMouseLeftClickPosition();
+        String distance = searchState.getDistance();
+        String selectedDishType = searchState.getSelectedDishType();
 
-        // Convert zoom level to distance if not provided
-        if (distance.isEmpty()) {
-            distance = Double.toString(ZoomLevelToMeter.zoomLevelToMeter(zoomLevel, centerLat, mapWidth));
-        }
+        double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
+        double latitude = latLng[0];
+        double longitude = latLng[1];
 
-        // Convert selected dish type string to DishType enum
-        DishType dishType = DishType.fromDishTypeString(selectedDishType);
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+        int maxRestaurantsToSearch = 50;
+        int maxResults = 10;
+        List<Restaurant> results = searchRestaurantInteractor.fetchNearbyRestaurants(inputData, maxRestaurantsToSearch, maxResults);
+        searchViewModel.setRestaurants(results);
+    }
 
-        // Determine latitude and longitude based on mouse position or default to center
-        double latitude;
-        double longitude;
-        if (mousePosition != null) {
-            double[] latLng = MapCoordinateToLocation.convert(mousePosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
-            latitude = latLng[0];
-            longitude = latLng[1];
-        } else {
-            latitude = centerLat;
-            longitude = centerLng;
-        }
+    /**
+     * Updates the zoom level of the map based on user interaction.
+     *
+     * @param change       The amount by which to change the zoom level.
+     */
+    public void changeZoomLevel(int change) {
+        this.zoomLevel += change;
 
-        // Create SearchRestaurantInput object
-        SearchRestaurantInput searchInput = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+        searchViewInteractor.adjustZoomLevel(change);
+        searchPresenter.setZoomLevel(this.zoomLevel);
+    }
 
-        // Define maxRestaurantsToSearch and maxResults parameters
-        int maxRestaurantsToSearch = 30; // Example value, adjust as needed
-        int maxResults = 10; // Example value, adjust as needed
+    /**
+     * Updates the center position of the map based on user interaction.
+     * Converts right-click position to geographic coordinates and adjusts the map center.
+     *
+     * @param searchState The current state of the search view including user inputs.
+     */
+    public void changeCenter(SearchState searchState) {
+        String distance = searchState.getDistance();
+        String selectedDishType = searchState.getSelectedDishType();
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
 
-        // Execute the search and handle any exceptions
-        try {
-            List<Restaurant> results = searchInteractor.fetchNearbyRestaurants(searchInput, maxRestaurantsToSearch, maxResults);
-            // Handle results (e.g., update UI or display results)
-        } catch (Exception e) {
-            System.err.println("An error occurred while executing the search: " + e.getMessage()); // Retaining the println call
-            logger.error("An error occurred while executing the search: {}", e.getMessage(), e);
-        }
+        Point rightClickPosition = searchState.getMouseRightClickPosition();
+
+        double[] latLng = MapCoordinateToLocation.convert(rightClickPosition, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
+        double latitude = latLng[0];
+        double longitude = latLng[1];
+        this.centerLat = latitude;
+        this.centerLng = longitude;
+
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+
+        searchViewInteractor.adjustCenter(inputData);
     }
 }

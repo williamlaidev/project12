@@ -16,18 +16,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * SQLite-based implementation of {@link RestaurantRepository} for managing restaurant data.
+ */
 public class SQLiteRestaurantRepository implements RestaurantRepository {
+
     private static final Logger logger = LoggerFactory.getLogger(SQLiteRestaurantRepository.class);
+
     private final OperationResultFactory successFactory;
     private final OperationResultFactory failureFactory;
     private final DatabaseConfig databaseConfig;
     private final SQLiteRestaurantDataAdapter dataAdapter;
 
+    /**
+     * Default constructor initializing with default configurations.
+     */
     public SQLiteRestaurantRepository() {
         this(new DatabaseConfig(), new SQLiteRestaurantDataAdapter(), new OperationResultSuccessFactory(), new OperationResultFailureFactory());
     }
 
-    public SQLiteRestaurantRepository(DatabaseConfig databaseConfig, SQLiteRestaurantDataAdapter dataAdapter, OperationResultFactory successFactory, OperationResultFactory failureFactory) {
+    /**
+     * Constructs a SQLiteRestaurantRepository with specified configurations.
+     *
+     * @param databaseConfig the configuration for database connection
+     * @param dataAdapter the adapter for converting database results to Restaurant objects
+     * @param successFactory factory for creating successful operation results
+     * @param failureFactory factory for creating failed operation results
+     */
+    public SQLiteRestaurantRepository(DatabaseConfig databaseConfig, SQLiteRestaurantDataAdapter dataAdapter,
+                                      OperationResultFactory successFactory, OperationResultFactory failureFactory) {
         this.databaseConfig = databaseConfig;
         this.dataAdapter = dataAdapter;
         this.successFactory = successFactory;
@@ -35,6 +52,9 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         initializeDatabase();
     }
 
+    /**
+     * Initializes the database schema if not already present.
+     */
     private void initializeDatabase() {
         try (Connection conn = databaseConfig.connect()) {
             if (conn != null) {
@@ -57,11 +77,23 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         }
     }
 
+    /**
+     * Adds a new restaurant to the repository.
+     *
+     * @param restaurant the restaurant to add
+     * @return an {@link OperationResult} indicating the result of the operation
+     */
     @Override
     public OperationResult add(Restaurant restaurant) {
         return save(restaurant);
     }
 
+    /**
+     * Finds a restaurant by its ID.
+     *
+     * @param id the ID of the restaurant
+     * @return an {@link Optional} containing the restaurant if found, or {@link Optional#empty()} if not
+     */
     @Override
     public Optional<Restaurant> findById(String id) {
         try (Connection conn = databaseConfig.connect()) {
@@ -83,6 +115,11 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         return Optional.empty();
     }
 
+    /**
+     * Retrieves all restaurants from the repository.
+     *
+     * @return a list of all restaurants
+     */
     @Override
     public List<Restaurant> findAll() {
         List<Restaurant> restaurants = new ArrayList<>();
@@ -103,6 +140,12 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         return restaurants;
     }
 
+    /**
+     * Saves a restaurant to the repository. If the restaurant already exists, it will be updated.
+     *
+     * @param restaurant the restaurant to save
+     * @return an {@link OperationResult} indicating the result of the operation
+     */
     @Override
     public OperationResult save(Restaurant restaurant) {
         if (findById(restaurant.getRestaurantId()).isPresent()) {
@@ -135,6 +178,12 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         }
     }
 
+    /**
+     * Updates an existing restaurant in the repository.
+     *
+     * @param restaurant the restaurant to update
+     * @return an {@link OperationResult} indicating the result of the operation
+     */
     @Override
     public OperationResult update(Restaurant restaurant) {
         String sql = "UPDATE restaurants SET name = ?, latitude = ?, longitude = ?, address = ?, dishType = ?, averageRating = ?, photoUrl = ? WHERE restaurantId = ?";
@@ -164,6 +213,12 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         }
     }
 
+    /**
+     * Deletes a restaurant by its ID.
+     *
+     * @param id the ID of the restaurant to delete
+     * @return {@code true} if the restaurant was successfully deleted, {@code false} otherwise
+     */
     @Override
     public boolean deleteById(String id) {
         String sql = "DELETE FROM restaurants WHERE restaurantId = ?";
@@ -179,6 +234,11 @@ public class SQLiteRestaurantRepository implements RestaurantRepository {
         }
     }
 
+    /**
+     * Deletes all restaurants from the repository.
+     *
+     * @return {@code true} if all restaurants were successfully deleted, {@code false} otherwise
+     */
     @Override
     public boolean clearAll() {
         String sql = "DELETE FROM restaurants";
