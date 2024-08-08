@@ -63,7 +63,6 @@ public class GoogleMapsImageService implements MapImageService {
             while ((n = in.read(buffer)) != -1) {
                 out.write(buffer, 0, n);
             }
-            System.out.println("Map image data retrieved successfully.");
 
             return out.toByteArray();
         } finally {
