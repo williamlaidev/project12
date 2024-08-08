@@ -1,18 +1,19 @@
 package utils;
 
+/**
+ * Converts zoom levels to meters per pixel.
+ */
 public class ZoomLevelToMeterPerPixel {
 
     /**
-     * Converts the given zoom level to meters per pixel at the specified latitude.
+     * Converts zoom level to meters per pixel at a specified latitude.
      *
-     * @param zoomLevel The zoom level.
-     * @param latitude  The latitude.
-     * @return The meters per pixel at the specified zoom level and latitude.
+     * @param zoomLevel the zoom level
+     * @param latitude  the latitude
+     * @return meters per pixel at the specified zoom level and latitude
      */
     public static double zoomLevelToMeter(int zoomLevel, double latitude) {
-        // Constants
-        final double initialResolution = 156543.03392; // Initial resolution (meters/pixel) for zoom level 0
-
+        final double initialResolution = 156543.03392; // Resolution for zoom level 0
         return initialResolution * Math.cos(Math.toRadians(latitude)) / Math.pow(2, zoomLevel);
     }
 

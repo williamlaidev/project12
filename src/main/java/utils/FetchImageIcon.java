@@ -1,5 +1,8 @@
 package utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,28 +11,27 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * This class is responsible for fetching and resizing images from a URL.
- * It provides a method to fetch an image and return it as an {@link Icon},
- * which can be used in a Swing interface.
+ * Provides utility methods for fetching and resizing images from URLs.
  */
 public class FetchImageIcon {
+    private static final Logger logger = LoggerFactory.getLogger(FetchImageIcon.class);
 
     /**
-     * Fetches an image from a specified URL, resizes it, and returns it as an Icon.
-     * If the image cannot be fetched or processed, an empty icon is returned.
+     * Fetches an image from a URL, resizes it to 100x100 pixels, and returns it as an Icon.
+     * Returns an empty icon if the image cannot be fetched or processed.
      *
-     * @param photoUrl the URL of the photo to fetch
-     * @return an {@link Icon} containing the fetched and resized image
+     * @param photoUrl the URL of the image
+     * @return an {@link Icon} with the resized image, or an empty icon if an error occurs
      */
     public static Icon fetchImageIcon(String photoUrl) {
         try {
             URL url = new URL(photoUrl);
             BufferedImage img = ImageIO.read(url);
-            Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Resize image to 100x100 pixels
+            Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImg);
         } catch (IOException e) {
-            System.err.println("Error fetching image: " + e.getMessage());
-            return new ImageIcon(); // Return an empty icon in case of failure
+            logger.error("Error fetching image from URL {}: {}", photoUrl, e.getMessage());
+            return new ImageIcon();
         }
     }
 }

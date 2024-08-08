@@ -26,13 +26,6 @@ public class SearchPresenter implements SearchOutputBoundary {
     }
 
     @Override
-    public void prepareFailView(String error) {
-        SearchState state = searchViewModel.getState();
-        state.setDistanceError(error);
-        searchViewModel.firePropertyChanged();
-    }
-
-    @Override
     public void prepareSuccessView(SearchOutputData result, double centerLat, double centerLon, int mapWidth, int mapHeight) {
         // Update RestaurantViewModel with results
         RestaurantState restaurantState = restaurantViewModel.getState();

@@ -1,12 +1,10 @@
 package entity;
 
 /**
- * Enum representing different types of dishes that a restaurant can offer.
- * Each type is associated with one or more API types used to query restaurant information.
+ * Enum representing various dish types with associated API query types.
  */
 public enum DishType {
 
-    // Enum constants, each associated with one or more API type strings.
     AMERICAN("american_restaurant"),
     BAKERY("bakery"),
     BAR("bar"),
@@ -38,20 +36,19 @@ public enum DishType {
     VEGETARIAN("vegetarian_restaurant", "vegan_restaurant"),
     VIETNAMESE("vietnamese_restaurant");
 
-    // Array of API types associated with each DishType enum constant.
     private final String[] apiTypes;
 
     /**
-     * Constructor for the enum. Associates one or more API type strings with the DishType.
+     * Constructs a DishType with associated API types.
      *
-     * @param apiTypes Array of API type strings.
+     * @param apiTypes API type strings for the dish type.
      */
     DishType(String... apiTypes) {
         this.apiTypes = apiTypes;
     }
 
     /**
-     * Gets the array of API types associated with this DishType.
+     * Returns the API types for this DishType.
      *
      * @return Array of API type strings.
      */
@@ -60,20 +57,18 @@ public enum DishType {
     }
 
     /**
-     * Converts a string representing the dish type into the corresponding DishType enum constant.
+     * Converts a string to its corresponding DishType enum constant.
      *
-     * @param dishTypeString The string representation of the dish type.
-     * @return The corresponding DishType enum constant, or null if no match is found.
+     * @param dishTypeString The dish type string.
+     * @return The corresponding DishType, or null if not found.
      */
     public static DishType fromDishTypeString(String dishTypeString) {
         if (dishTypeString == null || dishTypeString.trim().isEmpty()) {
-            return null; // Return null if the input is null or empty
+            return null;
         }
 
-        // Normalize the input string
         String normalizedInput = dishTypeString.trim().toLowerCase();
 
-        // Check each DishType for a matching API type
         for (DishType dishType : DishType.values()) {
             for (String apiType : dishType.getApiTypes()) {
                 if (apiType.equalsIgnoreCase(normalizedInput)) {
@@ -82,7 +77,7 @@ public enum DishType {
             }
         }
 
-        return null; // Return null if no match is found
+        return null;
     }
 
     @Override

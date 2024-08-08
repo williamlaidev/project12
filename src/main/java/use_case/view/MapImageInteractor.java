@@ -1,7 +1,6 @@
 package use_case.view;
 
 import framework.search.GoogleMapsImageService;
-import framework.EnvConfigServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,31 +9,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * MapImageInteractor class acts as the use case for fetching the map image using GoogleMapsImageService.
+ * Handles fetching and saving map images using GoogleMapsImageService.
  */
 public class MapImageInteractor {
     private static final Logger logger = LoggerFactory.getLogger(MapImageInteractor.class);
-
     private final GoogleMapsImageService googleMapsImageService;
 
     /**
-     * Constructor to initialize MapImageInteractor with GoogleMapsImageService.
+     * Constructs a MapImageInteractor with the given GoogleMapsImageService.
      *
-     * @param googleMapsImageService An instance of GoogleMapsImageService.
+     * @param googleMapsImageService service to fetch map images
      */
     public MapImageInteractor(GoogleMapsImageService googleMapsImageService) {
         this.googleMapsImageService = googleMapsImageService;
     }
 
     /**
-     * Gets the map image based on provided parameters.
+     * Fetches and saves a map image based on the specified parameters.
      *
-     * @param latitude  The latitude of the location.
-     * @param longitude The longitude of the location.
-     * @param zoom      The zoom level of the map.
-     * @param width     The width of the desired map image in pixels.
-     * @param height    The height of the desired map image in pixels.
-     * @return boolean indicating the success of the operation.
+     * @param latitude  the latitude of the map center
+     * @param longitude the longitude of the map center
+     * @param zoom      the zoom level of the map
+     * @param width     the width of the map image
+     * @param height    the height of the map image
+     * @return true if successful, false otherwise
      */
     public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom, int width, int height) {
         try {
@@ -48,32 +46,18 @@ public class MapImageInteractor {
     }
 
     /**
-     * Saves the image data to the specified file path.
+     * Saves image data to a file.
      *
-     * @param imageData The image data in byte array.
-     * @throws IOException if an I/O error occurs during saving.
+     * @param imageData the image data in byte array
+     * @throws IOException if an I/O error occurs
      */
     private void saveImage(byte[] imageData) throws IOException {
         File file = new File("src/main/resources/map_images/map.png");
-        // Ensure the directories are created and handle the result
         if (!file.getParentFile().mkdirs() && !file.getParentFile().exists()) {
-            throw new IOException("Failed to create directories for path: " + "src/main/resources/map_images/map.png");
+            throw new IOException("Failed to create directories for path: " + file.getPath());
         }
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(imageData);
         }
-    }
-
-    public static void main(String[] args) {
-        // Create instances of EnvConfigService and GoogleMapsImageService
-        EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
-        GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
-
-        // Create the MapImageInteractor with the GoogleMapsImageService
-        MapImageInteractor interactor = new MapImageInteractor(googleMapsImageService);
-
-        // Example usage
-        boolean success = interactor.fetchAndSaveMapImage(37.7749, -122.4194, 12, 800, 600);
-        System.out.println("Map image fetched and saved: " + success);
     }
 }

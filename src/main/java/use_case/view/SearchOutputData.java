@@ -5,6 +5,9 @@ import entity.restaurant.Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds and processes search output data.
+ */
 public class SearchOutputData {
     private final List<Restaurant> restaurantsList;
 
@@ -12,6 +15,11 @@ public class SearchOutputData {
         this.restaurantsList = restaurantsList;
     }
 
+    /**
+     * Gets formatted information about the restaurants.
+     *
+     * @return list of restaurant info strings
+     */
     public List<String> getRestaurantsInfo() {
         List<String> result = new ArrayList<>();
         for (Restaurant restaurant : restaurantsList) {
@@ -20,7 +28,7 @@ public class SearchOutputData {
                         restaurant.getRestaurantId(),
                         restaurant.getName(),
                         restaurant.getAddress(),
-                        restaurant.getLocation().toString(),
+                        restaurant.getLocation(),
                         restaurant.getDishType().name(),
                         restaurant.getAverageRating(),
                         restaurant.getPhotoUrl());

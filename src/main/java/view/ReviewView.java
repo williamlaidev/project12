@@ -7,15 +7,15 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * A view component for displaying reviews of a restaurant.
+ * Displays a list of restaurant reviews.
  */
 public class ReviewView extends JPanel {
     private final List<Review> reviews;
 
     /**
-     * Constructs a ReviewView with the specified list of reviews.
+     * Creates a ReviewView to show the given list of reviews.
      *
-     * @param reviews the list of reviews to display
+     * @param reviews the reviews to display
      */
     public ReviewView(List<Review> reviews) {
         this.reviews = reviews;
@@ -23,7 +23,7 @@ public class ReviewView extends JPanel {
     }
 
     /**
-     * Initializes the user interface for displaying reviews.
+     * Sets up the user interface for displaying reviews.
      */
     private void initializeUI() {
         JPanel reviewsPanel = new JPanel();
@@ -47,7 +47,7 @@ public class ReviewView extends JPanel {
     }
 
     /**
-     * Creates a JPanel for a single review.
+     * Creates a panel to display a single review.
      *
      * @param review the review to display
      * @return a JPanel representing the review

@@ -2,8 +2,8 @@ package view;
 
 import interface_adapter.view.RestaurantViewModel;
 import use_case.search.FetchRestaurantReviews;
-import entity.review.Review;
 import use_case.summarize.SummarizeReviews;
+import entity.review.Review;
 import utils.FetchImageIcon;
 
 import javax.swing.*;
@@ -16,16 +16,18 @@ import java.util.List;
  * A view component for displaying a list of restaurants and their reviews.
  */
 public class RestaurantView extends JPanel implements PropertyChangeListener {
+
     private final RestaurantViewModel viewModel;
     private final FetchRestaurantReviews fetchRestaurantReviews;
     private final SummarizeReviews summarizeReviews;
     private JPanel buttonsPanel;
 
     /**
-     * Constructs a RestaurantView with the specified view model and fetch reviews use case.
+     * Constructs a RestaurantView with the specified view model, fetch reviews use case, and summarize reviews use case.
      *
      * @param viewModel the view model containing restaurant data
      * @param fetchRestaurantReviews the use case to fetch restaurant reviews
+     * @param summarizeReviews the use case to summarize reviews
      */
     public RestaurantView(RestaurantViewModel viewModel, FetchRestaurantReviews fetchRestaurantReviews, SummarizeReviews summarizeReviews) {
         this.viewModel = viewModel;
@@ -41,6 +43,7 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
      */
     private void initializeUI() {
         setLayout(new BorderLayout());
+
         JLabel titleLabel = new JLabel(viewModel.TITLE_LABEL);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel, BorderLayout.NORTH);
@@ -59,34 +62,44 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
      * Updates the buttons representing restaurants.
      */
     private void updateRestaurantButtons() {
-
         List<String> restaurantInfos = viewModel.getState().getRestaurants();
-
-        // List<String> restaurantInfos = viewModel.getState().getRestaurantsInfo();
         buttonsPanel.removeAll();
+
         if (restaurantInfos != null) {
             for (String info : restaurantInfos) {
-                String[] parts = info.split(" - ");
-                String restaurantId = parts[0];
-                String restaurantName = parts[1];
-                JButton button = new JButton("<html>" + parts[1] + "<br/>Address: " + parts[2] + "<br/>Dish Type: " + parts[4] + "<br/>Rating: " + parts[5] + "</html>");
-                button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
-                button.setAlignmentX(Component.LEFT_ALIGNMENT);
-                button.addActionListener(e -> displayReviews(restaurantId, restaurantName));
-                if (parts.length > 6) { // Ensure there is a photo URL
-                    Icon icon = FetchImageIcon.fetchImageIcon(parts[6]);
-                    button.setIcon(icon);
-                    button.setHorizontalAlignment(SwingConstants.LEFT);
-                    button.setHorizontalTextPosition(SwingConstants.RIGHT);
-                    button.setVerticalTextPosition(SwingConstants.CENTER);
-                }
-                buttonsPanel.add(button);
+                addRestaurantButton(info);
             }
         } else {
             buttonsPanel.add(new JLabel("No restaurants available."));
         }
         buttonsPanel.revalidate();
         buttonsPanel.repaint();
+    }
+
+    /**
+     * Creates and adds a button for a restaurant.
+     *
+     * @param info the information about the restaurant
+     */
+    private void addRestaurantButton(String info) {
+        String[] parts = info.split(" - ");
+        String restaurantId = parts[0];
+        String restaurantName = parts[1];
+
+        JButton button = new JButton("<html>" + parts[1] + "<br/>Address: " + parts[2] + "<br/>Dish Type: " + parts[4] + "<br/>Rating: " + parts[5] + "</html>");
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        button.addActionListener(e -> displayReviews(restaurantId, restaurantName));
+
+        if (parts.length > 6) { // Ensure there is a photo URL
+            Icon icon = FetchImageIcon.fetchImageIcon(parts[6]);
+            button.setIcon(icon);
+            button.setHorizontalAlignment(SwingConstants.LEFT);
+            button.setHorizontalTextPosition(SwingConstants.RIGHT);
+            button.setVerticalTextPosition(SwingConstants.CENTER);
+        }
+
+        buttonsPanel.add(button);
     }
 
     /**
