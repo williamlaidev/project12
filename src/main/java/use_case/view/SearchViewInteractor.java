@@ -5,13 +5,10 @@ import framework.EnvConfigServiceImpl;
 import framework.search.GoogleMapsImageService;
 import use_case.search.SearchRestaurantInput;
 
-import java.util.logging.Logger;
-
 /**
  * Manages map adjustments and interactions.
  */
 public class SearchViewInteractor {
-    private static final Logger LOGGER = Logger.getLogger(SearchViewInteractor.class.getName());
     private final Map currentMap;
 
     /**
@@ -32,7 +29,6 @@ public class SearchViewInteractor {
         int newZoomLevel = this.currentMap.getZoomLevel() + zoomChange;
         this.currentMap.setZoomLevel(newZoomLevel);
         updateMapImage();
-        LOGGER.info("Zoom level adjusted to: " + newZoomLevel);
     }
 
     /**
@@ -46,7 +42,6 @@ public class SearchViewInteractor {
         this.currentMap.setCurrentLatitude(latitude);
         this.currentMap.setCurrentLongitude(longitude);
         updateMapImage();
-        LOGGER.info("Center adjusted to: " + latitude + ", " + longitude);
     }
 
     /**
