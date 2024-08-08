@@ -3,7 +3,7 @@ package use_case.data.delete;
 import domain.ReviewRepository;
 
 /**
- * Handles the use case for deleting all reviews for a specific restaurant.
+ * Use case for deleting all reviews for a specific restaurant.
  * It uses the {@link ReviewRepository} to perform the deletion.
  */
 public class DeleteAllReviewsById {
@@ -20,7 +20,7 @@ public class DeleteAllReviewsById {
     }
 
     /**
-     * Deletes all reviews associated with the specified restaurant ID.
+     * Deletes all reviews for the given restaurant ID.
      *
      * @param restaurantId the ID of the restaurant whose reviews are to be deleted.
      * @return {@code true} if the deletion was successful, {@code false} otherwise.

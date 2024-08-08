@@ -3,14 +3,25 @@ package use_case.search;
 import domain.RestaurantSearchService;
 import entity.DishType;
 import entity.restaurant.Restaurant;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements the {@link RestaurantSearchService} for searching restaurants.
+ * Uses a search strategy to perform the search.
+ */
 public class RestaurantSearchInteractor implements RestaurantSearchService {
 
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantSearchInteractor.class);
     private final SearchRestaurants searchStrategy;
 
+    /**
+     * Constructs an instance with the given search strategy.
+     *
+     * @param searchStrategy the strategy used to search for restaurants.
+     */
     public RestaurantSearchInteractor(SearchRestaurants searchStrategy) {
         this.searchStrategy = searchStrategy;
     }
@@ -31,10 +42,11 @@ public class RestaurantSearchInteractor implements RestaurantSearchService {
 
             return results != null ? results : new ArrayList<>();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid distance input. Please enter a valid number.");
+            logger.error("Error parsing distance input: '{}' is not a valid number. Please enter a valid numerical value.", distance, e);
             return new ArrayList<>();
         } catch (Exception e) {
-            System.out.println("An error occurred during the search: " + e.getMessage());
+            logger.error("An unexpected error occurred during restaurant search with input (latitude: {}, longitude: {}, distance: {}, dishType: {}): {}",
+                    latitude, longitude, distance, dishType, e.getMessage(), e);
             return new ArrayList<>();
         }
     }

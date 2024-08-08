@@ -1,8 +1,7 @@
 package framework.summarize;
 
 /**
- * Retry policy implementation for review summarization.
- * This class defines the maximum number of retry attempts allowed when performing review summarization.
+ * Retry policy implementation that defines the maximum number of retry attempts.
  */
 public class RetryPolicyImpl implements RetryPolicy {
 
@@ -17,6 +16,11 @@ public class RetryPolicyImpl implements RetryPolicy {
         this.maxRetries = maxRetries;
     }
 
+    /**
+     * Returns the maximum number of retry attempts.
+     *
+     * @return the maximum number of retries
+     */
     @Override
     public int getMaxRetries() {
         return maxRetries;
