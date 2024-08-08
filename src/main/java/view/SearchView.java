@@ -121,12 +121,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
 
     private void handleZoom(int zoomChange) {
         searchViewModel.clearMapMarkers();
-        SearchState searchState = new SearchState();
-        Point centerPosition = new Point(SearchViewComponentsPosition.MAP_AREA_WIDTH / 2, SearchViewComponentsPosition.MAP_AREA_HEIGHT / 2);
-        searchState.setMouseRightClickPosition(centerPosition);
-        searchState.setDistance(distanceInputField.getText());
-        searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
-        searchController.changeZoomLevel(zoomChange, searchState);
+        searchController.changeZoomLevel(zoomChange);
         try {
             updateMapView();
         } catch (IOException ex) {

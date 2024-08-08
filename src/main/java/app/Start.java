@@ -71,11 +71,12 @@ public class Start {
             FindRestaurantById findRestaurantByIdUseCase = new FindRestaurantById(restaurantRepository);
             RestaurantSearchService restaurantSearchService = new GooglePlacesRestaurantSearchService(
                     restaurantSearchGateways, googlePlacesRestaurantSearchAdapter, addRestaurantUseCase,
-                    updateRestaurantUseCase, findRestaurantByIdUseCase, fetchRestaurantPhotoUrl);
+                    updateRestaurantUseCase, findRestaurantByIdUseCase, fetchRestaurantPhotoUrl, searchPresenter);
             SearchRestaurantsByDistance searchRestaurantsByDistance = new SearchRestaurantsByDistance(restaurantSearchService);
             RestaurantSearchInteractor restaurantSearchInteractor = new RestaurantSearchInteractor(searchRestaurantsByDistance);
             SearchController searchController = new SearchController(
                     restaurantSearchInteractor, searchViewInteractor, searchPresenter,
+                    searchViewModel,
                     initializer.getMap(), 400, 400);
 
             // Set up add review use case

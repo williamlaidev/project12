@@ -18,7 +18,7 @@ public class RestaurantState {
         this.restaurantInfoList = restaurantId;
     }
 
-    public List<String> getRestaurantsInfo() {
+    public List<String> getRestaurants() {
         return restaurantInfoList;
     }
 }

@@ -3,6 +3,7 @@ package interface_adapter.search;
 import domain.RestaurantSearchService;
 import entity.restaurant.Restaurant;
 import entity.DishType;
+import interface_adapter.view.SearchPresenter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import use_case.data.read.FindRestaurantById;
 import use_case.data.update.UpdateRestaurant;
 import use_case.search.FetchRestaurantPhotoUrl;
 import use_case.search.SearchRestaurantInput;
+import use_case.view.SearchOutputData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,19 +28,22 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
     private final UpdateRestaurant updateRestaurantUseCase;
     private final FindRestaurantById findRestaurantByIdUseCase;
     private final FetchRestaurantPhotoUrl fetchRestaurantPhotoUrlUseCase;
+    private final SearchPresenter searchPresenter;
 
     public GooglePlacesRestaurantSearchService(RestaurantSearchGateways searchGateways,
                                                GooglePlacesRestaurantSearchAdapter inputAdapter,
                                                AddRestaurant addRestaurantUseCase,
                                                UpdateRestaurant updateRestaurantUseCase,
                                                FindRestaurantById findRestaurantByIdUseCase,
-                                               FetchRestaurantPhotoUrl fetchRestaurantPhotoUrlUseCase) {
+                                               FetchRestaurantPhotoUrl fetchRestaurantPhotoUrlUseCase,
+                                               SearchPresenter searchPresenter) {
         this.searchGateways = searchGateways;
         this.inputAdapter = inputAdapter;
         this.addRestaurantUseCase = addRestaurantUseCase;
         this.updateRestaurantUseCase = updateRestaurantUseCase;
         this.findRestaurantByIdUseCase = findRestaurantByIdUseCase;
         this.fetchRestaurantPhotoUrlUseCase = fetchRestaurantPhotoUrlUseCase;
+        this.searchPresenter = searchPresenter;
     }
 
     @Override
@@ -80,6 +85,13 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
                 resultCount++;
             }
         }
+
+        // Prepare SearchOutputData
+        SearchOutputData outputData = new SearchOutputData(restaurants);
+
+        // Call prepareSuccessView
+        searchPresenter.prepareSuccessView(outputData, searchInput.getLatitude(), searchInput.getLongitude(), /* mapWidth */ 400, /* mapHeight */ 400);
+
         return restaurants;
     }
 

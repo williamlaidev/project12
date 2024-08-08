@@ -14,7 +14,7 @@ public class SearchPresenter implements SearchOutputBoundary {
     private final RestaurantViewModel restaurantViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public SearchPresenter(ViewManagerModel viewManagerModel,SearchViewModel searchViewModel, RestaurantViewModel restaurantViewModel) {
+    public SearchPresenter(ViewManagerModel viewManagerModel, SearchViewModel searchViewModel, RestaurantViewModel restaurantViewModel) {
 
         this.searchViewModel = searchViewModel;
         this.restaurantViewModel = restaurantViewModel;
@@ -57,7 +57,6 @@ public class SearchPresenter implements SearchOutputBoundary {
         searchViewModel.firePropertyChanged();
     }
 
-
     private Point parseLocation(String locationString, double centerLat, double centerLon, int mapWidth, int mapHeight) {
         // Removing all non-numeric characters except for the decimal point and minus sign
         String cleanedLocation = locationString.replaceAll("[^0-9.,-]", "");
@@ -71,7 +70,4 @@ public class SearchPresenter implements SearchOutputBoundary {
             throw e;
         }
     }
-
-
-
 }

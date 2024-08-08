@@ -1,6 +1,9 @@
 package interface_adapter.view;
 
+import entity.restaurant.Restaurant;
+
 import java.awt.Point;
+import java.util.List;
 
 /**
  * Holds the state information for search operations in the view layer, including
@@ -12,7 +15,7 @@ public class SearchState {
     private String distance;
     private String selectedDishType;
     private String distanceError;
- // Adding zoom level to the state
+    private List<Restaurant> restaurants;
 
     // Copy constructor
     public SearchState(SearchState copy) {
@@ -21,7 +24,7 @@ public class SearchState {
         this.distance = copy.distance;
         this.selectedDishType = copy.selectedDishType;
         this.distanceError = copy.distanceError;
-
+        this.restaurants = copy.restaurants;
     }
 
     // Default constructor
@@ -39,8 +42,6 @@ public class SearchState {
     public void setMouseRightClickPosition(Point mouseRightClickPosition) {
         this.mouseRightClickPosition = mouseRightClickPosition;
     }
-
-
 
     public String getDistance() {
         return distance;
@@ -66,8 +67,13 @@ public class SearchState {
         this.distanceError = distanceError;
     }
 
+    public List<Restaurant> getRestaurants() {
+        return restaurants;
+    }
 
-
+    public void setRestaurants(List<Restaurant> restaurants) {
+        this.restaurants = restaurants;
+    }
 
     @Override
     public String toString() {

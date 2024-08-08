@@ -2,12 +2,14 @@ package interface_adapter.view;
 
 import entity.DishType;
 import entity.map.Map;
+import entity.restaurant.Restaurant;
 import use_case.search.RestaurantSearchInteractor;
 import use_case.search.SearchRestaurantInput;
 import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 
 import java.awt.Point;
+import java.util.List;
 
 /**
  * Manages interactions between the SearchView and use cases, such as searching for restaurants and adjusting map views.
@@ -17,6 +19,7 @@ public class SearchController {
     private final SearchViewInteractor searchViewInteractor;
     private final RestaurantSearchInteractor searchRestaurantInteractor;
     private final SearchPresenter searchPresenter;
+    private final SearchViewModel searchViewModel;
     private double centerLat;
     private double centerLng;
     private final int mapWidth;
@@ -36,12 +39,14 @@ public class SearchController {
     public SearchController(RestaurantSearchInteractor searchRestaurantInteractor,
                             SearchViewInteractor searchViewInteractor,
                             SearchPresenter searchPresenter,
+                            SearchViewModel searchViewModel,
                             Map map,
                             int mapWidth,
                             int mapHeight) {
         this.searchRestaurantInteractor = searchRestaurantInteractor;
         this.searchViewInteractor = searchViewInteractor;
         this.searchPresenter = searchPresenter;
+        this.searchViewModel = searchViewModel;
         this.centerLat = map.getCurrentLatitude();
         this.centerLng = map.getCurrentLongitude();
         this.zoomLevel = map.getZoomLevel();
@@ -68,16 +73,16 @@ public class SearchController {
         SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
         int maxRestaurantsToSearch = 50;
         int maxResults = 10;
-        searchRestaurantInteractor.fetchNearbyRestaurants(inputData, maxRestaurantsToSearch, maxResults);
+        List<Restaurant> results = searchRestaurantInteractor.fetchNearbyRestaurants(inputData, maxRestaurantsToSearch, maxResults);
+        searchViewModel.setRestaurants(results);
     }
 
     /**
      * Updates the zoom level of the map based on user interaction.
      *
      * @param change       The amount by which to change the zoom level.
-     * @param searchState  The current state of the search view.
      */
-    public void changeZoomLevel(int change, SearchState searchState) {
+    public void changeZoomLevel(int change) {
         this.zoomLevel += change;
 
         searchViewInteractor.adjustZoomLevel(change);

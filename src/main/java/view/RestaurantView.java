@@ -56,7 +56,10 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
      * Updates the buttons representing restaurants.
      */
     private void updateRestaurantButtons() {
-        List<String> restaurantInfos = viewModel.getState().getRestaurantsInfo();
+
+        List<String> restaurantInfos = viewModel.getState().getRestaurants();
+
+        // List<String> restaurantInfos = viewModel.getState().getRestaurantsInfo();
         buttonsPanel.removeAll();
         if (restaurantInfos != null) {
             for (String info : restaurantInfos) {

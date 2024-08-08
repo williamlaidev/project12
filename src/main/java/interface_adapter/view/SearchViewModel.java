@@ -1,9 +1,12 @@
 package interface_adapter.view;
 
+import entity.restaurant.Restaurant;
+
 import java.awt.Point;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,5 +88,10 @@ public class SearchViewModel extends ViewModel {
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void setRestaurants(List<Restaurant> restaurants) {
+        this.state.setRestaurants(restaurants); // Assuming you have a method to set the list of restaurants in `SearchState`
+        firePropertyChanged(); // Notify observers about the change
     }
 }
