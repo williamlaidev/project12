@@ -2,35 +2,44 @@ package interface_adapter.view;
 
 import entity.DishType;
 import entity.map.Map;
-import entity.restaurant.Restaurant;
-import use_case.search.SearchRestaurantInput;
 import use_case.search.RestaurantSearchInteractor;
+import use_case.search.SearchRestaurantInput;
+import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 
 import java.awt.Point;
 
 /**
- * Controls interactions from the SearchView and triggers use cases based on user actions,
- * such as searching and zooming on a map.
+ * Manages interactions between the SearchView and use cases, such as searching for restaurants and adjusting map views.
  */
 public class SearchController {
+
     private final SearchViewInteractor searchViewInteractor;
+    private final RestaurantSearchInteractor searchRestaurantInteractor;
     private final SearchPresenter searchPresenter;
     private double centerLat;
     private double centerLng;
     private final int mapWidth;
     private final int mapHeight;
-    private int zoomLevel; // Mutable state to handle zoom level changes dynamically
+    private int zoomLevel;
 
     /**
-     * Initializes the SearchController with necessary components and map information.
+     * Constructs a SearchController with the given parameters.
      *
-     * @param searchViewInteractor The interactor handling search and map updates.
-     * @param map                  The initial map setup.
-     * @param mapWidth             The width of the map area.
-     * @param mapHeight            The height of the map area.
+     * @param searchRestaurantInteractor The interactor to fetch restaurant data.
+     * @param searchViewInteractor       The interactor for updating the search view.
+     * @param searchPresenter            The presenter to update the view with search results.
+     * @param map                        The initial map containing geographic information.
+     * @param mapWidth                   The width of the map area.
+     * @param mapHeight                  The height of the map area.
      */
-    public SearchController(SearchViewInteractor searchViewInteractor, SearchPresenter searchPresenter, Map map, int mapWidth, int mapHeight) {
+    public SearchController(RestaurantSearchInteractor searchRestaurantInteractor,
+                            SearchViewInteractor searchViewInteractor,
+                            SearchPresenter searchPresenter,
+                            Map map,
+                            int mapWidth,
+                            int mapHeight) {
+        this.searchRestaurantInteractor = searchRestaurantInteractor;
         this.searchViewInteractor = searchViewInteractor;
         this.searchPresenter = searchPresenter;
         this.centerLat = map.getCurrentLatitude();
@@ -41,10 +50,10 @@ public class SearchController {
     }
 
     /**
-     * Executes the search based on the state captured from the SearchView.
-     * Converts mouse position to geographic coordinates and initiates a search.
+     * Executes a search for nearby restaurants based on the current search state.
+     * Converts mouse position to geographic coordinates and initiates the search.
      *
-     * @param searchState Current state of the SearchView including user inputs.
+     * @param searchState The current state of the search view including user inputs and search parameters.
      */
     public void execute(SearchState searchState) {
         Point mousePosition = searchState.getMouseLeftClickPosition();
@@ -55,35 +64,36 @@ public class SearchController {
         double latitude = latLng[0];
         double longitude = latLng[1];
 
-        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
-        RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
-        searchViewInteractor.execute(inputData, 50);
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+        int maxRestaurantsToSearch = 50;
+        int maxResults = 10;
+        searchRestaurantInteractor.fetchNearbyRestaurants(inputData, maxRestaurantsToSearch, maxResults);
     }
 
     /**
-     * Adjusts the zoom level of the map.
+     * Updates the zoom level of the map based on user interaction.
+     *
+     * @param change       The amount by which to change the zoom level.
+     * @param searchState  The current state of the search view.
      */
     public void changeZoomLevel(int change, SearchState searchState) {
         this.zoomLevel += change;
 
-        String distance = searchState.getDistance();
-        String selectedDishType = searchState.getSelectedDishType();
-        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
-
-        RestaurantSearchInput inputData = new RestaurantSearchInput(centerLat, centerLng, distance, dishType);
-
-        searchViewInteractor.adjustZoomLevel(change, inputData);
+        searchViewInteractor.adjustZoomLevel(change);
         searchPresenter.setZoomLevel(this.zoomLevel);
     }
 
-
     /**
-     * Adjusts the center of the map.
+     * Updates the center position of the map based on user interaction.
+     * Converts right-click position to geographic coordinates and adjusts the map center.
+     *
+     * @param searchState The current state of the search view including user inputs.
      */
     public void changeCenter(SearchState searchState) {
         String distance = searchState.getDistance();
         String selectedDishType = searchState.getSelectedDishType();
-        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase()); // Converts string to enum
+        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
 
         Point rightClickPosition = searchState.getMouseRightClickPosition();
 
@@ -93,10 +103,8 @@ public class SearchController {
         this.centerLat = latitude;
         this.centerLng = longitude;
 
-
-        RestaurantSearchInput inputData = new RestaurantSearchInput(latitude, longitude, distance, dishType);
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
 
         searchViewInteractor.adjustCenter(inputData);
-
     }
 }

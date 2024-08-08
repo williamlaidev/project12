@@ -53,4 +53,3 @@ public class SearchViewComponentsPosition {
     public static final int ZOOM_OUT_BUTTON_X = 362;
     public static final int ZOOM_OUT_BUTTON_Y = 550;
 }
-

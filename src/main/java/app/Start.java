@@ -1,87 +1,120 @@
 package app;
 
-import domain.ReviewRetrievalService;
-import framework.search.GoogleGeolocationService;
-import framework.search.GoogleMapsImageService;
-import framework.config.EnvConfigServiceImpl;
-import interface_adapter.data.SQLiteReviewRepository;
-import interface_adapter.search.PlacesReviewsGateways;
-import interface_adapter.search.SearchRestaurantGateways;
+import domain.*;
+import entity.map.MapDefaultFactory;
+import entity.map.MapFactory;
+import entity.operation_result.OperationResultFailureFactory;
+import entity.operation_result.OperationResultSuccessFactory;
+import entity.restaurant.RestaurantDefaultFactory;
+import entity.restaurant.RestaurantFactory;
+import framework.EnvConfigService;
+import framework.EnvConfigServiceImpl;
+import framework.data.DatabaseConfig;
+import framework.data.SQLiteRestaurantRepository;
+import framework.data.SQLiteReviewRepository;
+import framework.search.*;
+import interface_adapter.data.SQLiteReviewDataAdapter;
+import interface_adapter.search.*;
 import interface_adapter.view.*;
-import use_case.data.AddReview;
-import use_case.search.GetReviewsForRestaurant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import use_case.data.create.AddRestaurant;
+import use_case.data.create.AddReview;
+import use_case.data.read.FindRestaurantById;
+import use_case.data.update.UpdateRestaurant;
+import use_case.search.FetchRestaurantPhotoUrl;
+import use_case.search.FetchRestaurantReviews;
+import use_case.search.RestaurantSearchInteractor;
+import use_case.search.SearchRestaurantsByDistance;
 import use_case.view.Initializer;
 import use_case.view.MapImageInteractor;
-import use_case.search.SearchRestaurantsByDistanceInteractor;
 import use_case.view.SearchViewInteractor;
 import view.RestaurantView;
 import view.SearchView;
-import view.ViewManager;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class Start {
+
+    private static final Logger logger = LoggerFactory.getLogger(Start.class);
+
     public static void main(String[] args) {
         try {
             // Initialize necessary services
-            EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
+            EnvConfigService envConfigService = new EnvConfigServiceImpl();
             GoogleGeolocationService geolocationService = new GoogleGeolocationService(envConfigService);
             GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
             MapImageInteractor mapImageInteractor = new MapImageInteractor(googleMapsImageService);
-            Initializer initializer = new Initializer(geolocationService, mapImageInteractor);
+            MapFactory mapFactory = new MapDefaultFactory();
+            Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
             initializer.initializeCurrentLocation();
 
-            // Get dish types and map image
             String[] dishTypeList = initializer.getDishTypes();
-
-            // Create ViewModels
             SearchViewModel searchViewModel = new SearchViewModel();
             RestaurantViewModel restaurantViewModel = new RestaurantViewModel();
-
-            // Create ViewManagerModel
             ViewManagerModel viewManagerModel = new ViewManagerModel();
-
-            // Create Interactors and Presenters
-            SearchRestaurantsByDistanceInteractor restaurantsInteractor = new SearchRestaurantsByDistanceInteractor(new SearchRestaurantGateways());
             SearchPresenter searchPresenter = new SearchPresenter(viewManagerModel, searchViewModel, restaurantViewModel);
-            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(restaurantsInteractor, initializer.getMap(), searchPresenter);
+            SearchViewInteractor searchViewInteractor = new SearchViewInteractor(initializer.getMap());
 
+            // Set up fetch restaurant photo URL use case
+            RestaurantPhotoService restaurantPhotoService = new GooglePlacesPhotoClient(envConfigService);
+            FetchRestaurantPhotoUrl fetchRestaurantPhotoUrl = new FetchRestaurantPhotoUrl(restaurantPhotoService);
 
+            // Set up search controller
+            RestaurantSearchGateways restaurantSearchGateways = new GooglePlacesRestaurantClient(envConfigService);
+            RestaurantFactory restaurantFactory = new RestaurantDefaultFactory();
+            GooglePlacesRestaurantSearchAdapter googlePlacesRestaurantSearchAdapter = new GooglePlacesRestaurantSearchAdapter(restaurantFactory);
+            RestaurantRepository restaurantRepository = new SQLiteRestaurantRepository();
+            AddRestaurant addRestaurantUseCase = new AddRestaurant(restaurantRepository);
+            UpdateRestaurant updateRestaurantUseCase = new UpdateRestaurant(restaurantRepository);
+            FindRestaurantById findRestaurantByIdUseCase = new FindRestaurantById(restaurantRepository);
+            RestaurantSearchService restaurantSearchService = new GooglePlacesRestaurantSearchService(
+                    restaurantSearchGateways, googlePlacesRestaurantSearchAdapter, addRestaurantUseCase,
+                    updateRestaurantUseCase, findRestaurantByIdUseCase, fetchRestaurantPhotoUrl);
+            SearchRestaurantsByDistance searchRestaurantsByDistance = new SearchRestaurantsByDistance(restaurantSearchService);
+            RestaurantSearchInteractor restaurantSearchInteractor = new RestaurantSearchInteractor(searchRestaurantsByDistance);
+            SearchController searchController = new SearchController(
+                    restaurantSearchInteractor, searchViewInteractor, searchPresenter,
+                    initializer.getMap(), 400, 400);
 
-            // Create the controller and view model
-            SearchController searchController = new SearchController(searchViewInteractor, searchPresenter, initializer.getMap(), 400, 400);
-
-
-            SQLiteReviewRepository reviewRepository = new SQLiteReviewRepository();
+            // Set up add review use case
+            DatabaseConfig databaseConfig = new DatabaseConfig();
+            SQLiteReviewDataAdapter sqLiteReviewDataAdapter = new SQLiteReviewDataAdapter();
+            OperationResultSuccessFactory operationResultSuccessFactory = new OperationResultSuccessFactory();
+            OperationResultFailureFactory operationResultFailureFactory = new OperationResultFailureFactory();
+            ReviewRepository reviewRepository = new SQLiteReviewRepository(
+                    databaseConfig, sqLiteReviewDataAdapter, operationResultSuccessFactory,
+                    operationResultFailureFactory);
             AddReview addReviewUseCase = new AddReview(reviewRepository);
 
-            ReviewRetrievalService reviewRetrievalService = new PlacesReviewsGateways(addReviewUseCase); // Inject AddReview
-            GetReviewsForRestaurant getReviewsForRestaurant = new GetReviewsForRestaurant(reviewRetrievalService);
+            // Set up fetch restaurant review use case
+            GooglePlacesReviewSearchAdapter googlePlacesReviewSearchAdapter = new GooglePlacesReviewSearchAdapter();
+            ReviewSearchGateways reviewSearchGateways = new GooglePlacesReviewClient(envConfigService);
+            ReviewSearchService reviewSearchService = new GooglePlacesReviewSearchService(
+                    googlePlacesReviewSearchAdapter, reviewSearchGateways, addReviewUseCase);
+            FetchRestaurantReviews fetchRestaurantReviews = new FetchRestaurantReviews(reviewSearchService);
 
             // Create the SearchView and RestaurantView
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList);
-
-            RestaurantView restaurantView = new RestaurantView(restaurantViewModel, getReviewsForRestaurant);  // Assume it's properly initialized
+            RestaurantView restaurantView = new RestaurantView(restaurantViewModel, fetchRestaurantReviews);
 
             // Set up the JFrame with a split pane to show both views
             JFrame frame = new JFrame("Search Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 650); // Updated size to fit both views
+            frame.setSize(900, 650);
 
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, searchView, restaurantView);
-            splitPane.setDividerLocation(450); // Adjust this value as needed for better balance
+            splitPane.setDividerLocation(450);
 
             frame.setContentPane(splitPane);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+
         } catch (IOException | RuntimeException e) {
-            e.printStackTrace();
+            logger.error("Runtime exception occurred", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception occurred", e);
         }
     }
 }

@@ -12,12 +12,8 @@ public class ZoomLevelToMeterPerPixel {
     public static double zoomLevelToMeter(int zoomLevel, double latitude) {
         // Constants
         final double initialResolution = 156543.03392; // Initial resolution (meters/pixel) for zoom level 0
-        final double earthRadius = 6378137.0; // Earth's radius in meters
 
-        // Calculate meters per pixel
-        double metersPerPixel = initialResolution * Math.cos(Math.toRadians(latitude)) / Math.pow(2, zoomLevel);
-
-        return metersPerPixel;
+        return initialResolution * Math.cos(Math.toRadians(latitude)) / Math.pow(2, zoomLevel);
     }
 
     public static void main(String[] args) {

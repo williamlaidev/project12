@@ -1,111 +1,71 @@
 package use_case.view;
 
-import domain.SearchInputBoundary;
-import entity.DishType;
-import entity.Location;
-import entity.Restaurant;
-import framework.config.EnvConfigServiceImpl;
+import entity.map.Map;
+import framework.EnvConfigServiceImpl;
 import framework.search.GoogleMapsImageService;
-import use_case.search.RestaurantSearchInput;
-import use_case.search.SearchRestaurantsByDistanceInteractor;
-import entity.Map;
+import use_case.search.SearchRestaurantInput;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
- * Interactor that handles the business logic for searching restaurants and adjusting map zoom levels.
+ * Manages the business logic for adjusting map settings and interacting with map services.
  */
-public class SearchViewInteractor implements SearchInputBoundary {
+public class SearchViewInteractor {
 
-    final SearchRestaurantsByDistanceInteractor restaurantsInteractor;
-    final SearchOutputBoundary searchOutputBoundary;
-    private Map currentMap; // Holds the current map context
+    private static final Logger LOGGER = Logger.getLogger(SearchViewInteractor.class.getName());
 
-    public SearchViewInteractor(SearchRestaurantsByDistanceInteractor restaurantsInteractor, Map initialMap, SearchOutputBoundary searchOutputBoundary) {
-        this.restaurantsInteractor = restaurantsInteractor;
-        this.currentMap = initialMap;
-        this.searchOutputBoundary = searchOutputBoundary;
-    }
-
-    @Override
-    public void execute(RestaurantSearchInput restaurantSearchInput, int maxResults) {
-        double latitude = restaurantSearchInput.getLatitude();
-        double longitude = restaurantSearchInput.getLongitude();
-        String distance = restaurantSearchInput.getDistance();
-        DishType dishType = restaurantSearchInput.getDishType();
-
-        try {
-            double distanceValue = Double.parseDouble(distance);
-            if (distanceValue > 0) {
-                String roundedDistance = Integer.toString((int) Math.round(distanceValue));
-                RestaurantSearchInput searchInputByDistance = new RestaurantSearchInput(latitude, longitude, roundedDistance, dishType);
-                List<Restaurant> results = restaurantsInteractor.execute(searchInputByDistance, maxResults).orElse(new ArrayList<>());
-                SearchOutputData searchOutputData = new SearchOutputData(results);
-                searchOutputBoundary.prepareSuccessView(searchOutputData, getCenterLatitude(), getCenterLongitude(), getMapHeight(), getMapWidth());
-            } else {
-                throw new IllegalArgumentException("Invalid distance input. Please enter a positive number.");
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid distance input. Please enter a positive number.");
-            searchOutputBoundary.prepareFailView("Invalid distance input. Please enter a positive number.");
-        } catch (Exception e) {
-            System.out.println("An error occurred during the search: " + e.getMessage());
-            searchOutputBoundary.prepareFailView("An error occurred during the search: " + e.getMessage());
-        }
-    }
-
-
+    private final Map currentMap;
 
     /**
-     * Adjusts the zoom level of the map.
+     * Creates a new SearchViewInteractor to manage the given map.
      *
-     * @param zoomChange the change in zoom level (+1 or -1 typically)
+     * @param initialMap the initial map to be managed by this interactor
      */
-    public void adjustZoomLevel(int zoomChange, RestaurantSearchInput restaurantSearchInput) {
+    public SearchViewInteractor(Map initialMap) {
+        this.currentMap = initialMap;
+    }
+
+    /**
+     * Adjusts the zoom level of the map by the specified amount.
+     *
+     * @param zoomChange the amount to change the zoom level (typically +1 or -1)
+     */
+    public void adjustZoomLevel(int zoomChange) {
         int newZoomLevel = this.currentMap.getZoomLevel() + zoomChange;
         this.currentMap.setZoomLevel(newZoomLevel);
-        // Optionally trigger a map refresh or update other components dependent on the zoom level
 
-        double newLatitude = this.currentMap.getCurrentLatitude();
-        double newLongitude = this.currentMap.getCurrentLongitude();
+        // Update the map image to reflect the new zoom level
+        updateMapImage();
 
-
-        MapImageInteractor mapImageInteractor = new MapImageInteractor(new GoogleMapsImageService(new EnvConfigServiceImpl()));
-        mapImageInteractor.fetchAndSaveMapImage(newLatitude, newLongitude, newZoomLevel, 400, 400);
-
-
-
-        System.out.println("Zoom level adjusted to: " + newZoomLevel);
-        // Here you might also trigger a map refresh or update UI components
+        LOGGER.info("Zoom level adjusted to: " + newZoomLevel);
     }
 
-    public void adjustCenter(RestaurantSearchInput restaurantSearchInput) {
-        double latitude = restaurantSearchInput.getLatitude();
-        double longitude = restaurantSearchInput.getLongitude();
+    /**
+     * Changes the center of the map to the specified latitude and longitude.
+     *
+     * @param searchRestaurantInput contains latitude and longitude for the new map center
+     */
+    public void adjustCenter(SearchRestaurantInput searchRestaurantInput) {
+        double latitude = searchRestaurantInput.getLatitude();
+        double longitude = searchRestaurantInput.getLongitude();
         this.currentMap.setCurrentLatitude(latitude);
         this.currentMap.setCurrentLongitude(longitude);
+
+        // Update the map image to reflect the new center
+        updateMapImage();
+
+        LOGGER.info("Center adjusted to: " + latitude + ", " + longitude);
+    }
+
+    /**
+     * Updates the map image based on the current map's latitude, longitude, and zoom level.
+     */
+    private void updateMapImage() {
+        double latitude = this.currentMap.getCurrentLatitude();
+        double longitude = this.currentMap.getCurrentLongitude();
+        int zoomLevel = this.currentMap.getZoomLevel();
+
         MapImageInteractor mapImageInteractor = new MapImageInteractor(new GoogleMapsImageService(new EnvConfigServiceImpl()));
-        mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, currentMap.getZoomLevel(), 400, 400);
-
-        System.out.println("Center adjusted to: " + latitude + ", " + longitude);
-
-    }
-
-    private double getCenterLatitude() {
-
-        return this.currentMap.getCurrentLatitude();
-    }
-    private double getCenterLongitude() {
-        return this.currentMap.getCurrentLongitude();
-    }
-
-    private int getMapWidth() {
-        return this.currentMap.getWidth();
-    }
-    private int getMapHeight() {
-        return this.currentMap.getHeight();
+        mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoomLevel, 400, 400);
     }
 }
-
-

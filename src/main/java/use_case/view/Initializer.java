@@ -1,18 +1,11 @@
 package use_case.view;
 
 import framework.search.GoogleGeolocationService;
-import framework.search.GoogleMapsImageService;
-import framework.EnvConfigServiceImpl;
 import entity.DishType;
 import entity.location.Location;
 import entity.map.Map;
 import entity.map.MapFactory;
-import entity.map.MapDefaultFactory;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * Initializer class is responsible for creating and storing the necessary information
@@ -22,8 +15,6 @@ import java.util.List;
  * Additionally, it creates a map centered at the current location.
  */
 public class Initializer {
-
-    private static final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     private final GoogleGeolocationService geolocationService;
     private Location currentLocation;
@@ -61,33 +52,28 @@ public class Initializer {
 
         // Create a map entity
         int zoom = 15; // Approximate zoom level for 1km radius
-        this.map = mapFactory.createMap(latitude, longitude, zoom, List.of()); // Empty list of restaurant IDs for now
         int width = 400; // Width of the image in pixels
         int height = 400; // Height of the image in pixels
 
-        this.map = MapFactory.createMap(latitude, longitude, zoom, width, height); // Empty list of restaurant IDs for now
+        this.map = mapFactory.createMap(latitude, longitude, zoom, width, height); // Creating map with updated parameters
 
         // Create and save the map image centered at the current location
-
         boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");
         }
     }
 
-    public void initializeNewMap(int zoom, double latitude, double longitude) throws Exception {
-        JSONObject currentLocationJson = geolocationService.getCurrentLocation();
-
+    public void initializeNewMap(int zoom, double latitude, double longitude) {
         this.currentLocation = new Location(latitude, longitude);
 
         // Create a map entity
         int width = 400; // Width of the image in pixels
         int height = 400; // Height of the image in pixels
 
-        this.map = MapFactory.createMap(latitude, longitude, zoom, width, height); // Empty list of restaurant IDs for now
+        this.map = mapFactory.createMap(latitude, longitude, zoom, width, height); // Creating map with updated parameters
 
-        // Create and save the map image centered at the current location
-
+        // Create and save the map image centered at the new location
         boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");
@@ -127,36 +113,5 @@ public class Initializer {
 
     public Map getMap() {
         return map;
-    }
-
-    /**
-     * Main method for testing purposes.
-     */
-    public static void main(String[] args) {
-        try {
-            // Initialize EnvConfigService and GoogleGeolocationService
-            EnvConfigServiceImpl envConfigService = new EnvConfigServiceImpl();
-            GoogleGeolocationService geolocationService = new GoogleGeolocationService(envConfigService);
-
-            // Initialize GoogleMapsImageService with EnvConfigService
-            GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
-            MapImageInteractor mapImageInteractor = new MapImageInteractor(googleMapsImageService);
-
-            // Initialize MapFactory
-            MapFactory mapFactory = new MapDefaultFactory();
-
-            // Initialize the Initializer with the updated services
-            Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
-            initializer.initializeCurrentLocation();
-            System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());
-
-            String[] dishTypes = initializer.getDishTypes();
-            System.out.println("Available Dish Types:");
-            for (String dishType : dishTypes) {
-                System.out.println(dishType);
-            }
-        } catch (Exception e) {
-            logger.error("An error occurred during initialization", e);
-        }
     }
 }

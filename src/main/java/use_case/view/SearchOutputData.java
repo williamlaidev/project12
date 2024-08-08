@@ -1,5 +1,6 @@
 package use_case.view;
-import entity.Restaurant;
+
+import entity.restaurant.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class SearchOutputData {
                         restaurant.getRestaurantId(),
                         restaurant.getName(),
                         restaurant.getAddress(),
-                        restaurant.getLocation().toString(), // Assuming Location has a meaningful toString implementation
+                        restaurant.getLocation().toString(),
                         restaurant.getDishType().name(),
                         restaurant.getAverageRating(),
                         restaurant.getPhotoUrl());

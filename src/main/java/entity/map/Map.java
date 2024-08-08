@@ -7,8 +7,8 @@ public class Map {
     private double currentLatitude;
     private double currentLongitude;
     private int zoomLevel;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     /**
      * Constructs a Map object with the specified location, zoom level, and dimensions.

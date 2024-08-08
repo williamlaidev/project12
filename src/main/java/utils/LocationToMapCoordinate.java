@@ -36,26 +36,4 @@ public class LocationToMapCoordinate {
 
         return new Point(pixelX, pixelY);
     }
-
-    public static void main(String[] args) {
-        // Define the geographic coordinates to convert
-        double latitude = 37.7749;  // Example: San Francisco latitude
-        double longitude = -122.4194;  // Example: San Francisco longitude
-
-        // Define the center of the map (could be the same as the location you want to convert)
-        double centerLat = 37.7749;  // Center of the map latitude
-        double centerLng = -122.4194;  // Center of the map longitude
-
-        // Define the map properties
-        int zoomLevel = 12;  // Example zoom level
-        int mapWidth = 800;  // Width of the map in pixels
-        int mapHeight = 600;  // Height of the map in pixels
-
-        // Convert the geographic coordinates to map coordinates
-        Point mapPoint = LocationToMapCoordinate.convert(latitude, longitude, centerLat, centerLng, zoomLevel, mapWidth, mapHeight);
-
-        // Print the results
-        System.out.println("The point on the map is at: x = " + mapPoint.x + ", y = " + mapPoint.y);
-    }
 }
-

@@ -39,7 +39,7 @@ public class MapImageInteractor {
     public boolean fetchAndSaveMapImage(double latitude, double longitude, int zoom, int width, int height) {
         try {
             byte[] imageData = googleMapsImageService.getMapImage(latitude, longitude, zoom, width, height);
-            saveImage(imageData, "src/main/resources/map_images/map.png");
+            saveImage(imageData);
             return true;
         } catch (IOException e) {
             logger.error("Failed to fetch and save the map image", e);
@@ -51,14 +51,13 @@ public class MapImageInteractor {
      * Saves the image data to the specified file path.
      *
      * @param imageData The image data in byte array.
-     * @param filePath  The file path where the image will be saved.
      * @throws IOException if an I/O error occurs during saving.
      */
-    private void saveImage(byte[] imageData, String filePath) throws IOException {
-        File file = new File(filePath);
+    private void saveImage(byte[] imageData) throws IOException {
+        File file = new File("src/main/resources/map_images/map.png");
         // Ensure the directories are created and handle the result
         if (!file.getParentFile().mkdirs() && !file.getParentFile().exists()) {
-            throw new IOException("Failed to create directories for path: " + filePath);
+            throw new IOException("Failed to create directories for path: " + "src/main/resources/map_images/map.png");
         }
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(imageData);

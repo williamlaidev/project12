@@ -1,6 +1,5 @@
 package interface_adapter.view;
 
-import entity.Location;
 import use_case.view.SearchOutputBoundary;
 import use_case.view.SearchOutputData;
 import utils.LocationToMapCoordinate;
@@ -13,7 +12,7 @@ import java.awt.*;
 public class SearchPresenter implements SearchOutputBoundary {
     private final SearchViewModel searchViewModel;
     private final RestaurantViewModel restaurantViewModel;
-    private ViewManagerModel viewManagerModel;
+    private final ViewManagerModel viewManagerModel;
 
     public SearchPresenter(ViewManagerModel viewManagerModel,SearchViewModel searchViewModel, RestaurantViewModel restaurantViewModel) {
 
@@ -66,8 +65,7 @@ public class SearchPresenter implements SearchOutputBoundary {
         try {
             double lat = Double.parseDouble(latLng[0].trim());
             double lng = Double.parseDouble(latLng[1].trim());
-            Point result = LocationToMapCoordinate.convert(lat, lng, centerLat, centerLon, searchViewModel.getZoomLevel(), mapWidth, mapHeight);
-            return result;
+            return LocationToMapCoordinate.convert(lat, lng, centerLat, centerLon, searchViewModel.getZoomLevel(), mapWidth, mapHeight);
         } catch (NumberFormatException e) {
             System.err.println("Failed to parse latitude or longitude from: " + locationString);
             throw e;

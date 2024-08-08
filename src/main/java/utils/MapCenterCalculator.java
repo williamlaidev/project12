@@ -14,13 +14,4 @@ public class MapCenterCalculator {
         int centerY = height / 2;
         return new int[]{centerX, centerY};
     }
-
-    public static void main(String[] args) {
-        // Example usage
-        int width = 200;
-        int height = 200;
-
-        int[] center = calculateMapCenter(width, height);
-        System.out.println("Center coordinates for a " + width + "x" + height + " pixel map are: (" + center[0] + ", " + center[1] + ")");
-    }
 }
