@@ -19,4 +19,3 @@ public class MapFactory {
         return new Map(currentLatitude, currentLongitude, zoomLevel, width, height);
     }
 }
-

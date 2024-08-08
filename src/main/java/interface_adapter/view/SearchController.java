@@ -1,9 +1,10 @@
 package interface_adapter.view;
 
 import entity.DishType;
-import entity.Map;
-import use_case.search.RestaurantSearchInput;
-import use_case.view.SearchViewInteractor;
+import entity.map.Map;
+import entity.restaurant.Restaurant;
+import use_case.search.SearchRestaurantInput;
+import use_case.search.RestaurantSearchInteractor;
 import utils.MapCoordinateToLocation;
 
 import java.awt.Point;
@@ -98,5 +99,4 @@ public class SearchController {
         searchViewInteractor.adjustCenter(inputData);
 
     }
-
 }

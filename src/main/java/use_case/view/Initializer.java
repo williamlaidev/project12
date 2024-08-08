@@ -2,11 +2,12 @@ package use_case.view;
 
 import framework.search.GoogleGeolocationService;
 import framework.search.GoogleMapsImageService;
-import framework.config.EnvConfigServiceImpl;
+import framework.EnvConfigServiceImpl;
 import entity.DishType;
-import entity.Location;
-import entity.Map;
-import entity.MapFactory;
+import entity.location.Location;
+import entity.map.Map;
+import entity.map.MapFactory;
+import entity.map.MapDefaultFactory;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class Initializer {
     private Location currentLocation;
     private final DishType[] dishTypes;
     private final MapImageInteractor mapImageInteractor;
+    private final MapFactory mapFactory; // Add a MapFactory instance
     private Map map;
 
     /**
@@ -35,11 +37,13 @@ public class Initializer {
      *
      * @param geolocationService    An instance of GoogleGeolocationService to get the current location.
      * @param mapImageInteractor    An instance of MapImageInteractor to fetch and save the map image.
+     * @param mapFactory            An instance of MapFactory to create map objects.
      */
-    public Initializer(GoogleGeolocationService geolocationService, MapImageInteractor mapImageInteractor) {
+    public Initializer(GoogleGeolocationService geolocationService, MapImageInteractor mapImageInteractor, MapFactory mapFactory) {
         this.geolocationService = geolocationService;
-        this.dishTypes = DishType.values(); // Initialize dish types
+        this.dishTypes = DishType.values();
         this.mapImageInteractor = mapImageInteractor;
+        this.mapFactory = mapFactory;
     }
 
     /**
@@ -57,6 +61,7 @@ public class Initializer {
 
         // Create a map entity
         int zoom = 15; // Approximate zoom level for 1km radius
+        this.map = mapFactory.createMap(latitude, longitude, zoom, List.of()); // Empty list of restaurant IDs for now
         int width = 400; // Width of the image in pixels
         int height = 400; // Height of the image in pixels
 
@@ -137,8 +142,11 @@ public class Initializer {
             GoogleMapsImageService googleMapsImageService = new GoogleMapsImageService(envConfigService);
             MapImageInteractor mapImageInteractor = new MapImageInteractor(googleMapsImageService);
 
+            // Initialize MapFactory
+            MapFactory mapFactory = new MapDefaultFactory();
+
             // Initialize the Initializer with the updated services
-            Initializer initializer = new Initializer(geolocationService, mapImageInteractor);
+            Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
             initializer.initializeCurrentLocation();
             System.out.println("Current Location: Latitude = " + initializer.getLatitude() + ", Longitude = " + initializer.getLongitude());
 
