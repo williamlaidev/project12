@@ -6,7 +6,6 @@ import entity.operation_result.OperationResultSuccessFactory;
 import entity.review.Review;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import use_case.data.create.AddReview;
 import use_case.data.delete.ClearAllReviews;
 import use_case.data.delete.DeleteAllReviewsById;
