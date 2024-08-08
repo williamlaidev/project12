@@ -7,25 +7,34 @@ import entity.operation_result.OperationResultFailureFactory;
 import entity.operation_result.OperationResultSuccessFactory;
 import entity.restaurant.RestaurantDefaultFactory;
 import entity.restaurant.RestaurantFactory;
+import entity.review.ReviewGeminiFactory;
 import framework.EnvConfigService;
 import framework.EnvConfigServiceImpl;
 import framework.data.DatabaseConfig;
 import framework.data.SQLiteRestaurantRepository;
 import framework.data.SQLiteReviewRepository;
 import framework.search.*;
+import framework.summarize.GeminiSummarizeClient;
 import interface_adapter.data.SQLiteReviewDataAdapter;
 import interface_adapter.search.*;
+import interface_adapter.summarize.GeminiReviewSummarizeAdapter;
+import interface_adapter.summarize.GeminiReviewSummarizeService;
+import interface_adapter.summarize.ReviewSummarizeAdapter;
+import interface_adapter.summarize.ReviewSummarizeGateways;
 import interface_adapter.view.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import use_case.data.create.AddRestaurant;
 import use_case.data.create.AddReview;
 import use_case.data.read.FindRestaurantById;
+import use_case.data.read.FindSummarizedReview;
 import use_case.data.update.UpdateRestaurant;
+import use_case.data.update.UpdateReview;
 import use_case.search.FetchRestaurantPhotoUrl;
 import use_case.search.FetchRestaurantReviews;
 import use_case.search.RestaurantSearchInteractor;
 import use_case.search.SearchRestaurantsByDistance;
+import use_case.summarize.SummarizeReviews;
 import use_case.view.Initializer;
 import use_case.view.MapImageInteractor;
 import use_case.view.SearchViewInteractor;
@@ -96,9 +105,16 @@ public class Start {
                     googlePlacesReviewSearchAdapter, reviewSearchGateways, addReviewUseCase);
             FetchRestaurantReviews fetchRestaurantReviews = new FetchRestaurantReviews(reviewSearchService);
 
-            // Create the SearchView and RestaurantView
+            // Create the SearchView and RestaurantView and review Summarize service
+            ReviewSummarizeGateways reviewSummarizeGateways = new GeminiSummarizeClient();
+            ReviewGeminiFactory reviewGeminiFactory = new ReviewGeminiFactory();
+            ReviewSummarizeAdapter reviewSummarizeAdapter = new GeminiReviewSummarizeAdapter(findRestaurantByIdUseCase, reviewGeminiFactory);
+            UpdateReview updateReviewUseCase = new UpdateReview(reviewRepository);
+            FindSummarizedReview findSummarizedReviewUseCase = new FindSummarizedReview(reviewRepository);
+            ReviewSummarizeService reviewSummarizeService = new GeminiReviewSummarizeService(reviewSummarizeGateways, reviewSummarizeAdapter, addReviewUseCase, updateReviewUseCase, findSummarizedReviewUseCase);
+            SummarizeReviews summarizeReviews = new SummarizeReviews(reviewSummarizeService);
             SearchView searchView = new SearchView(searchController, searchViewModel, dishTypeList);
-            RestaurantView restaurantView = new RestaurantView(restaurantViewModel, fetchRestaurantReviews);
+            RestaurantView restaurantView = new RestaurantView(restaurantViewModel, fetchRestaurantReviews, summarizeReviews);
 
             // Set up the JFrame with a split pane to show both views
             JFrame frame = new JFrame("Search Application");

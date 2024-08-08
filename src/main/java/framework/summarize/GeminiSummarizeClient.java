@@ -32,7 +32,7 @@ public class GeminiSummarizeClient implements ReviewSummarizeGateways {
     }
 
     private String createInputPrompt(String reviewContent) {
-        return "Summarize the following reviews from the same restaurant, including pros and cons: " + reviewContent;
+        return "Summarize the following reviews briefly, including pros and cons: " + reviewContent;
     }
 
     private String executeWithRetries(String inputPrompt) throws InterruptedException {

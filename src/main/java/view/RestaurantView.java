@@ -3,6 +3,7 @@ package view;
 import interface_adapter.view.RestaurantViewModel;
 import use_case.search.FetchRestaurantReviews;
 import entity.review.Review;
+import use_case.summarize.SummarizeReviews;
 import utils.FetchImageIcon;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.util.List;
 public class RestaurantView extends JPanel implements PropertyChangeListener {
     private final RestaurantViewModel viewModel;
     private final FetchRestaurantReviews fetchRestaurantReviews;
+    private final SummarizeReviews summarizeReviews;
     private JPanel buttonsPanel;
 
     /**
@@ -25,9 +27,10 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
      * @param viewModel the view model containing restaurant data
      * @param fetchRestaurantReviews the use case to fetch restaurant reviews
      */
-    public RestaurantView(RestaurantViewModel viewModel, FetchRestaurantReviews fetchRestaurantReviews) {
+    public RestaurantView(RestaurantViewModel viewModel, FetchRestaurantReviews fetchRestaurantReviews, SummarizeReviews summarizeReviews) {
         this.viewModel = viewModel;
         this.fetchRestaurantReviews = fetchRestaurantReviews;
+        this.summarizeReviews = summarizeReviews;
         this.viewModel.addPropertyChangeListener(this);
 
         initializeUI();
@@ -95,6 +98,9 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
     private void displayReviews(String restaurantId, String restaurantName) {
         try {
             List<Review> reviews = fetchRestaurantReviews.execute(restaurantId, 10);
+            Review summarizedReview = summarizeReviews.execute(reviews);
+            reviews.add(0, summarizedReview);
+
             ReviewView reviewView = new ReviewView(reviews);
             JFrame frame = new JFrame("Reviews for " + restaurantName);
             frame.setContentPane(reviewView);
