@@ -1,10 +1,9 @@
 package view;
 
 import interface_adapter.view.RestaurantViewModel;
-import use_case.search.GetReviewsForRestaurant;
-import entity.Review;
+import use_case.search.FetchRestaurantReviews;
+import entity.review.Review;
 import utils.FetchImageIcon;
-import view.ReviewView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,19 +11,31 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+/**
+ * A view component for displaying a list of restaurants and their reviews.
+ */
 public class RestaurantView extends JPanel implements PropertyChangeListener {
-    private RestaurantViewModel viewModel;
+    private final RestaurantViewModel viewModel;
+    private final FetchRestaurantReviews fetchRestaurantReviews;
     private JPanel buttonsPanel;
-    private GetReviewsForRestaurant getReviewsForRestaurant;  // Use case for fetching reviews
 
-    public RestaurantView(RestaurantViewModel viewModel, GetReviewsForRestaurant getReviewsForRestaurant) {
+    /**
+     * Constructs a RestaurantView with the specified view model and fetch reviews use case.
+     *
+     * @param viewModel the view model containing restaurant data
+     * @param fetchRestaurantReviews the use case to fetch restaurant reviews
+     */
+    public RestaurantView(RestaurantViewModel viewModel, FetchRestaurantReviews fetchRestaurantReviews) {
         this.viewModel = viewModel;
-        this.getReviewsForRestaurant = getReviewsForRestaurant;
+        this.fetchRestaurantReviews = fetchRestaurantReviews;
         this.viewModel.addPropertyChangeListener(this);
 
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface components.
+     */
     private void initializeUI() {
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel(viewModel.TITLE_LABEL);
@@ -41,6 +52,9 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         updateRestaurantButtons();
     }
 
+    /**
+     * Updates the buttons representing restaurants.
+     */
     private void updateRestaurantButtons() {
         List<String> restaurantInfos = viewModel.getState().getRestaurantsInfo();
         buttonsPanel.removeAll();
@@ -55,12 +69,10 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
                 button.addActionListener(e -> displayReviews(restaurantId, restaurantName));
                 if (parts.length > 6) { // Ensure there is a photo URL
                     Icon icon = FetchImageIcon.fetchImageIcon(parts[6]);
-                    if (icon != null) {
-                        button.setIcon(icon);
-                        button.setHorizontalAlignment(SwingConstants.LEFT);
-                        button.setHorizontalTextPosition(SwingConstants.RIGHT);
-                        button.setVerticalTextPosition(SwingConstants.CENTER);
-                    }
+                    button.setIcon(icon);
+                    button.setHorizontalAlignment(SwingConstants.LEFT);
+                    button.setHorizontalTextPosition(SwingConstants.RIGHT);
+                    button.setVerticalTextPosition(SwingConstants.CENTER);
                 }
                 buttonsPanel.add(button);
             }
@@ -71,9 +83,15 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         buttonsPanel.repaint();
     }
 
+    /**
+     * Displays the reviews of the selected restaurant in a new window.
+     *
+     * @param restaurantId the ID of the selected restaurant
+     * @param restaurantName the name of the selected restaurant
+     */
     private void displayReviews(String restaurantId, String restaurantName) {
         try {
-            List<Review> reviews = getReviewsForRestaurant.execute(restaurantId);
+            List<Review> reviews = fetchRestaurantReviews.execute(restaurantId, 10);
             ReviewView reviewView = new ReviewView(reviews);
             JFrame frame = new JFrame("Reviews for " + restaurantName);
             frame.setContentPane(reviewView);
@@ -94,6 +112,11 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Handles property change events to update the restaurant buttons when the state changes.
+     *
+     * @param evt the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
@@ -101,4 +124,3 @@ public class RestaurantView extends JPanel implements PropertyChangeListener {
         }
     }
 }
-

@@ -1,6 +1,6 @@
 package view;
 
-import entity.Review;
+import entity.review.Review;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +10,22 @@ import java.util.List;
  * A view component for displaying reviews of a restaurant.
  */
 public class ReviewView extends JPanel {
-    private List<Review> reviews;
+    private final List<Review> reviews;
 
+    /**
+     * Constructs a ReviewView with the specified list of reviews.
+     *
+     * @param reviews the list of reviews to display
+     */
     public ReviewView(List<Review> reviews) {
         this.reviews = reviews;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface for displaying reviews.
+     */
     private void initializeUI() {
-        // Using a temporary panel to hold review panels
         JPanel reviewsPanel = new JPanel();
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
 
@@ -30,11 +37,10 @@ public class ReviewView extends JPanel {
             }
         }
 
-        // Adding the reviews panel to a JScrollPane for scrollability
         JScrollPane scrollPane = new JScrollPane(reviewsPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(300, 650)); // Set preferred size as needed
+        scrollPane.setPreferredSize(new Dimension(300, 650));
 
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
@@ -43,8 +49,8 @@ public class ReviewView extends JPanel {
     /**
      * Creates a JPanel for a single review.
      *
-     * @param review The review to display.
-     * @return A JPanel representing the review.
+     * @param review the review to display
+     * @return a JPanel representing the review
      */
     private JPanel createReviewPanel(Review review) {
         JPanel panel = new JPanel();
@@ -69,4 +75,3 @@ public class ReviewView extends JPanel {
         return panel;
     }
 }
-
