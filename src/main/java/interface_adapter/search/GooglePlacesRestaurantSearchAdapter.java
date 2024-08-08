@@ -7,28 +7,14 @@ import entity.restaurant.RestaurantFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Adapter for converting Google Places JSON data into Restaurant entities.
- */
 public class GooglePlacesRestaurantSearchAdapter implements RestaurantSearchAdapter {
 
     private final RestaurantFactory restaurantFactory;
 
-    /**
-     * Constructs a GooglePlacesRestaurantSearchAdapter with the given RestaurantFactory.
-     *
-     * @param restaurantFactory Factory to create Restaurant entities
-     */
     public GooglePlacesRestaurantSearchAdapter(RestaurantFactory restaurantFactory) {
         this.restaurantFactory = restaurantFactory;
     }
 
-    /**
-     * Converts a JSONObject representing a place into a Restaurant entity.
-     *
-     * @param placeJson JSON object representing the place
-     * @return A Restaurant entity created from the JSON object
-     */
     @Override
     public Restaurant adaptToRestaurant(JSONObject placeJson) {
         String placeId = placeJson.optString("place_id", "");

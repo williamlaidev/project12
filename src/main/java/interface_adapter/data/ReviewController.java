@@ -1,7 +1,7 @@
 package interface_adapter.data;
 
-import entity.review.Review;
 import entity.operation_result.OperationResult;
+import entity.review.Review;
 import entity.operation_result.OperationResultSuccessFactory;
 import entity.operation_result.OperationResultFailureFactory;
 import org.slf4j.Logger;
@@ -19,9 +19,6 @@ import use_case.data.update.UpdateReview;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Manages review-related operations and communicates with use cases.
- */
 public class ReviewController {
     private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
@@ -38,20 +35,6 @@ public class ReviewController {
     private final OperationResultSuccessFactory successFactory;
     private final OperationResultFailureFactory failureFactory;
 
-    /**
-     * Constructs a ReviewController with the specified use cases and factories.
-     * @param addReviewUseCase Use case for adding reviews.
-     * @param updateReviewUseCase Use case for updating reviews.
-     * @param deleteUserReviewsByIdUseCase Use case for deleting user reviews by ID.
-     * @param deleteSummarizedReviewByIdUseCase Use case for deleting summarized reviews by ID.
-     * @param deleteAllReviewsByIdUseCase Use case for deleting all reviews by ID.
-     * @param clearAllReviewsUseCase Use case for clearing all reviews.
-     * @param findAllReviewsUseCase Use case for finding all reviews.
-     * @param findUserReviewsUseCase Use case for finding user reviews.
-     * @param findSummarizedReviewUseCase Use case for finding summarized reviews.
-     * @param successFactory Factory for creating successful operation results.
-     * @param failureFactory Factory for creating failed operation results.
-     */
     public ReviewController(AddReview addReviewUseCase,
                             UpdateReview updateReviewUseCase,
                             DeleteUserReviewsById deleteUserReviewsByIdUseCase,
@@ -76,14 +59,6 @@ public class ReviewController {
         this.failureFactory = failureFactory;
     }
 
-    /**
-     * Adds a review for a restaurant.
-     * @param restaurantId The ID of the restaurant being reviewed.
-     * @param author The author of the review.
-     * @param content The content of the review.
-     * @param isSummarized Whether the review is summarized.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult addReview(String restaurantId, String author, String content, boolean isSummarized) {
         Review review = new Review(restaurantId, author, content, isSummarized);
         try {
@@ -94,13 +69,6 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Updates a review.
-     * @param restaurantId The ID of the restaurant being reviewed.
-     * @param author The author of the review.
-     * @param content The updated content of the review.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult updateReview(String restaurantId, String author, String content) {
         Review review = new Review(restaurantId, author, content, false); // assuming isSummarized as false for update
         try {
@@ -111,11 +79,6 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Deletes all user reviews for a restaurant.
-     * @param restaurantId The ID of the restaurant.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult deleteUserReviews(String restaurantId) {
         try {
             boolean result = deleteUserReviewsByIdUseCase.execute(restaurantId);
@@ -127,11 +90,6 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Deletes summarized reviews for a restaurant.
-     * @param restaurantId The ID of the restaurant.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult deleteSummarizedReviews(String restaurantId) {
         try {
             boolean result = deleteSummarizedReviewByIdUseCase.execute(restaurantId);
@@ -143,11 +101,6 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Deletes all reviews for a restaurant.
-     * @param restaurantId The ID of the restaurant.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult deleteAllReviews(String restaurantId) {
         try {
             boolean result = deleteAllReviewsByIdUseCase.execute(restaurantId);
@@ -159,10 +112,6 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Clears all reviews.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult clearAllReviews() {
         try {
             boolean result = clearAllReviewsUseCase.execute();
@@ -174,44 +123,30 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Finds all user reviews for a restaurant.
-     * @param restaurantId The ID of the restaurant.
-     * @return A list of user reviews.
-     */
     public List<Review> findUserReviews(String restaurantId) {
         try {
             return findUserReviewsUseCase.execute(restaurantId);
         } catch (Exception e) {
             logger.error("Error finding user reviews", e);
-            return List.of();
+            return List.of(); // or handle as appropriate
         }
     }
 
-    /**
-     * Finds a summarized review for a restaurant.
-     * @param restaurantId The ID of the restaurant.
-     * @return An Optional containing the summarized review, if found.
-     */
     public Optional<Review> findSummarizedReview(String restaurantId) {
         try {
             return findSummarizedReviewUseCase.execute(restaurantId);
         } catch (Exception e) {
             logger.error("Error finding summarized review", e);
-            return Optional.empty();
+            return Optional.empty(); // or handle as appropriate
         }
     }
 
-    /**
-     * Finds all reviews.
-     * @return A list of all reviews.
-     */
     public List<Review> findAllReviews() {
         try {
             return findAllReviewsUseCase.execute();
         } catch (Exception e) {
             logger.error("Error finding all reviews", e);
-            return List.of();
+            return List.of(); // or handle as appropriate
         }
     }
 }

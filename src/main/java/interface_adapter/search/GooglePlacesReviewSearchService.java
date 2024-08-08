@@ -10,23 +10,13 @@ import use_case.data.create.AddReview;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Service for fetching and processing reviews using Google Places API.
- */
 public class GooglePlacesReviewSearchService implements ReviewSearchService {
-
     private static final Logger logger = LoggerFactory.getLogger(GooglePlacesReviewSearchService.class);
     private final GooglePlacesReviewSearchAdapter searchAdapter;
     private final ReviewSearchGateways reviewSearchGateways;
     private final AddReview addReviewUseCase;
 
-    /**
-     * Constructs a GooglePlacesReviewSearchService with the given dependencies.
-     *
-     * @param searchAdapter        Adapter for converting JSON reviews into Review entities
-     * @param reviewSearchGateways Gateway for fetching review data
-     * @param addReviewUseCase     Use case for adding reviews
-     */
+    // Constructor with dependency injection
     public GooglePlacesReviewSearchService(GooglePlacesReviewSearchAdapter searchAdapter,
                                            ReviewSearchGateways reviewSearchGateways,
                                            AddReview addReviewUseCase) {
@@ -35,13 +25,6 @@ public class GooglePlacesReviewSearchService implements ReviewSearchService {
         this.addReviewUseCase = addReviewUseCase;
     }
 
-    /**
-     * Fetches relevant reviews for a restaurant and adds them to the system.
-     *
-     * @param restaurantId The ID of the restaurant to fetch reviews for
-     * @param maxReviews   Maximum number of reviews to fetch
-     * @return List of reviews fetched and added to the system
-     */
     @Override
     public List<Review> fetchRelevantReviews(String restaurantId, int maxReviews) {
         List<Review> reviews = new ArrayList<>();

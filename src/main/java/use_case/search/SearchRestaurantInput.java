@@ -3,8 +3,9 @@ package use_case.search;
 import entity.DishType;
 
 /**
- * Represents input parameters for searching restaurants.
- * Contains details such as location, search radius, and dish type.
+ * Represents the input parameters for a search query to find restaurants.
+ * This class encapsulates the details of the search criteria such as the location,
+ * search radius, and dish type, which can be used by the use case layer to perform the search.
  */
 public class SearchRestaurantInput {
     private final double latitude;
@@ -13,12 +14,12 @@ public class SearchRestaurantInput {
     private final DishType dishType;
 
     /**
-     * Constructs an instance with the specified parameters.
+     * Constructs a {@code SearchRestaurantInput} instance with the specified parameters.
      *
-     * @param latitude  the latitude of the search center, in degrees.
-     * @param longitude the longitude of the search center, in degrees.
-     * @param distance  the search radius, in meters.
-     * @param dishType  the type of dish to filter by.
+     * @param latitude  the latitude of the search center, expressed in degrees
+     * @param longitude the longitude of the search center, expressed in degrees
+     * @param distance  the search radius around the location, expressed in meters
+     * @param dishType  the type of dish to filter the search results by
      */
     public SearchRestaurantInput(double latitude, double longitude, String distance, DishType dishType) {
         this.latitude = latitude;
@@ -30,7 +31,7 @@ public class SearchRestaurantInput {
     /**
      * Returns the latitude of the search center.
      *
-     * @return the latitude, in degrees.
+     * @return the latitude, expressed in degrees
      */
     public double getLatitude() {
         return latitude;
@@ -39,33 +40,38 @@ public class SearchRestaurantInput {
     /**
      * Returns the longitude of the search center.
      *
-     * @return the longitude, in degrees.
+     * @return the longitude, expressed in degrees
      */
     public double getLongitude() {
         return longitude;
     }
 
     /**
-     * Returns the search radius.
+     * Returns the search radius around the location.
      *
-     * @return the distance, in meters.
+     * @return the distance, expressed in meters
      */
     public String getDistance() {
         return distance;
     }
 
     /**
-     * Returns the dish type to filter by.
+     * Returns the type of dish to filter the search results by.
      *
-     * @return the dish type.
+     * @return the dish type
      */
     public DishType getDishType() {
         return dishType;
     }
 
+    /**
+     * Returns a string representation of the SearchInput.
+     *
+     * @return a string representation of the object
+     */
     @Override
     public String toString() {
-        return "SearchRestaurantInput{" +
+        return "SearchInput{" +
                 "latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", distance='" + distance + '\'' +

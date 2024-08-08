@@ -8,35 +8,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Adapts reviews to a string format and creates review entities for the Gemini system.
- */
 public class GeminiReviewSummarizeAdapter implements ReviewSummarizeAdapter {
 
     private final FindRestaurantById getRestaurantById;
     private final ReviewGeminiFactory reviewFactory;
 
-    /**
-     * Constructs a GeminiReviewSummarizeAdapter with the given dependencies.
-     *
-     * @param getRestaurantById  Use case to find a restaurant by ID
-     * @param reviewFactory      Factory to create Review entities
-     */
     public GeminiReviewSummarizeAdapter(FindRestaurantById getRestaurantById, ReviewGeminiFactory reviewFactory) {
         this.getRestaurantById = getRestaurantById;
         this.reviewFactory = reviewFactory;
     }
 
-    /**
-     * Adapts a list of reviews to a formatted string.
-     *
-     * @param reviews List of reviews to be adapted
-     * @return A formatted string containing the restaurant name and the review contents
-     */
     @Override
     public String adaptToReviewString(List<Review> reviews) {
         if (reviews == null || reviews.isEmpty()) {
-            return "This restaurant has no reviews";
+            return "This restaurant have no reviews";
         }
 
         Optional<String> restaurantNameOpt = reviews.stream()
@@ -56,13 +41,6 @@ public class GeminiReviewSummarizeAdapter implements ReviewSummarizeAdapter {
         return restaurantName + ":\n" + reviewContents;
     }
 
-    /**
-     * Creates a Review entity with the given restaurant ID and content.
-     *
-     * @param restaurantId The ID of the restaurant
-     * @param content       The review content
-     * @return A Review entity
-     */
     @Override
     public Review adaptToReview(String restaurantId, String content) {
         return reviewFactory.createReview(restaurantId, content);

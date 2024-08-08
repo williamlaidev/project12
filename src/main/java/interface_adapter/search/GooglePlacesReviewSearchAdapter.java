@@ -6,21 +6,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Adapter for converting Google Places JSON review data into Review entities.
- */
 public class GooglePlacesReviewSearchAdapter implements ReviewSearchAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(GooglePlacesReviewSearchAdapter.class);
     private static final ReviewUserFactory reviewUserFactory = new ReviewUserFactory();
 
-    /**
-     * Converts a JSONObject representing a review into a Review entity.
-     *
-     * @param reviewJson  JSON object representing the review
-     * @param restaurantId The ID of the restaurant associated with the review
-     * @return A Review entity created from the JSON object
-     */
     @Override
     public Review adaptToReview(JSONObject reviewJson, String restaurantId) {
         try {
