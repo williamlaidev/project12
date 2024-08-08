@@ -8,6 +8,7 @@
     - [Commit & Pull Request Naming](#commit--pull-request-naming)
     - [SOLID Principles](#solid-principles)
     - [Clean Architecture](#clean-architecture)
+- [Additional Information](#additional-information)
 
 ## Getting Started
 

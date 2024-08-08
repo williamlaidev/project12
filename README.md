@@ -93,8 +93,7 @@ Ensure that installation and configuration are complete before using the program
 
 1. Run `src/main/java/app/Start.java`.
 2. Enter a distance in meters in the "Choose Distance" field below the map. Restaurants within the specified range will be displayed on the right, with a maximum of 10 results.
-3. If no distance is entered, the search will default to the map's visible area.
-4. Invalid inputs will trigger an error message.
+3. Invalid or empty inputs will trigger an error message.
 
 ### Viewing Restaurant Reviews
 
