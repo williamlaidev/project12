@@ -20,7 +20,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service for searching restaurants using Google Places API and managing search results.
+ */
 public class GooglePlacesRestaurantSearchService implements RestaurantSearchService {
+
     private final RestaurantSearchGateways searchGateways;
     private final GooglePlacesRestaurantSearchAdapter inputAdapter;
     private static final Logger logger = LoggerFactory.getLogger(GooglePlacesRestaurantSearchService.class);
@@ -30,6 +34,17 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
     private final FetchRestaurantPhotoUrl fetchRestaurantPhotoUrlUseCase;
     private final SearchPresenter searchPresenter;
 
+    /**
+     * Constructs a GooglePlacesRestaurantSearchService with the given dependencies.
+     *
+     * @param searchGateways             Gateway for fetching restaurant data
+     * @param inputAdapter               Adapter for converting JSON data to Restaurant entities
+     * @param addRestaurantUseCase       Use case for adding restaurants
+     * @param updateRestaurantUseCase    Use case for updating restaurants
+     * @param findRestaurantByIdUseCase  Use case for finding restaurants by ID
+     * @param fetchRestaurantPhotoUrlUseCase Use case for fetching restaurant photo URLs
+     * @param searchPresenter            Presenter for preparing search results view
+     */
     public GooglePlacesRestaurantSearchService(RestaurantSearchGateways searchGateways,
                                                GooglePlacesRestaurantSearchAdapter inputAdapter,
                                                AddRestaurant addRestaurantUseCase,
@@ -46,6 +61,14 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
         this.searchPresenter = searchPresenter;
     }
 
+    /**
+     * Fetches nearby restaurants based on the search input and updates the list of restaurants.
+     *
+     * @param searchInput                Search parameters including location and dish type
+     * @param maxRestaurantsToSearch     Maximum number of restaurants to search
+     * @param maxResults                 Maximum number of results to return
+     * @return List of restaurants found in the search
+     */
     @Override
     public List<Restaurant> fetchNearbyRestaurants(SearchRestaurantInput searchInput, int maxRestaurantsToSearch, int maxResults) {
         logger.info("Starting search for restaurants within {} meters from location ({}, {}).",
@@ -95,17 +118,25 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
         return restaurants;
     }
 
+    /**
+     * Checks if the restaurant's dish type matches the filtered dish type.
+     *
+     * @param filteredDishType The dish type to filter
+     * @param restaurant       The restaurant to check
+     * @return True if the dish types match, otherwise false
+     */
     private boolean isDishTypeMatching(DishType filteredDishType, Restaurant restaurant) {
-        // TODO: Investigate why some filter DishType values are not being applied correctly.
-        System.out.println("Filter DishType : " + filteredDishType);
-        System.out.println("Restaurant DishType: " + restaurant.getDishType());
-
         if (filteredDishType == null) {
             return true;
         }
         return filteredDishType == restaurant.getDishType();
     }
 
+    /**
+     * Saves or updates the restaurant in the system.
+     *
+     * @param restaurant The restaurant to be saved or updated
+     */
     private void saveOrUpdateRestaurant(Restaurant restaurant) {
         if (findRestaurantByIdUseCase.execute(restaurant.getRestaurantId()).isPresent()) {
             updateRestaurantUseCase.execute(restaurant);
@@ -114,6 +145,11 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
         }
     }
 
+    /**
+     * Logs details of the restaurant.
+     *
+     * @param restaurant The restaurant whose details are to be logged
+     */
     private void logRestaurantDetails(Restaurant restaurant) {
         double averageRating = restaurant.getAverageRating();
         String address = restaurant.getAddress();

@@ -7,11 +7,21 @@ import entity.review.ReviewUserFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implements ReviewDataAdapter for SQLite database.
+ */
 public class SQLiteReviewDataAdapter implements ReviewDataAdapter {
 
     private final ReviewUserFactory userReviewFactory = new ReviewUserFactory();
     private final ReviewGeminiFactory geminiReviewFactory = new ReviewGeminiFactory();
 
+    /**
+     * Creates a Review from a ResultSet row.
+     *
+     * @param rs the ResultSet with review data
+     * @return a Review object
+     * @throws SQLException if an SQL error occurs
+     */
     @Override
     public Review adaptToReview(ResultSet rs) throws SQLException {
         String restaurantId = rs.getString("restaurantId");
