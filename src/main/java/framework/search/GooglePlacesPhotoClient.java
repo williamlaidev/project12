@@ -5,30 +5,13 @@ import framework.EnvConfigService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Client for fetching restaurant photo URLs from Google Places API.
- * Implements the RestaurantPhotoService interface.
- */
 public class GooglePlacesPhotoClient implements RestaurantPhotoService {
     private final EnvConfigService envConfigService;
 
-    /**
-     * Constructs a new GooglePlacesPhotoClient.
-     *
-     * @param envConfigService The service for accessing environment configuration.
-     */
     public GooglePlacesPhotoClient(EnvConfigService envConfigService) {
         this.envConfigService = envConfigService;
     }
 
-    /**
-     * Fetches the photo URL for a given place JSON object.
-     * The photo URL is constructed using the photo reference and API key from the environment configuration.
-     *
-     * @param placeJson The JSON object containing place details, including photos.
-     * @return The URL of the first photo in the array, or null if no photos are available.
-     * @throws IllegalArgumentException If the API key is missing or empty.
-     */
     @Override
     public String fetchPhotoUrl(JSONObject placeJson) {
         String apiKey = envConfigService.getGoogleMapsApiKey();

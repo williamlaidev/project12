@@ -5,11 +5,7 @@ import use_case.search.SearchRestaurantInput;
 
 import java.util.List;
 
-/**
- * Service for searching restaurants based on given criteria.
- */
 public interface RestaurantSearchService {
-
     /**
      * Searches for restaurants based on the provided search input parameters and limits.
      *

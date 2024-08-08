@@ -1,50 +1,74 @@
 package entity.map;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MapTest {
 
     @Test
     public void testMapConstructor() {
-        Map map = new Map(37.7749, -122.4194, 10, 800, 600);
+        List<Integer> restaurantIds = new ArrayList<>();
+        restaurantIds.add(1);
+        restaurantIds.add(2);
+        restaurantIds.add(3);
 
-        assertEquals(37.7749, map.getCurrentLatitude());
-        assertEquals(-122.4194, map.getCurrentLongitude());
-        assertEquals(10, map.getZoomLevel());
-        assertEquals(800, map.getWidth());
-        assertEquals(600, map.getHeight());
+        Map map = new Map(40.7128, -74.0060, 12, restaurantIds);
+
+        assertEquals(40.7128, map.getCurrentLatitude());
+        assertEquals(-74.0060, map.getCurrentLongitude());
+        assertEquals(12, map.getZoomLevel());
+        assertEquals(restaurantIds, map.getDisplayedRestaurantIds());
     }
 
     @Test
     public void testSetCurrentLatitude() {
-        Map map = new Map(37.7749, -122.4194, 10, 800, 600);
-        map.setCurrentLatitude(40.7128);
+        Map map = new Map(0, 0, 10, new ArrayList<>());
+        map.setCurrentLatitude(37.7749);
 
-        assertEquals(40.7128, map.getCurrentLatitude());
+        assertEquals(37.7749, map.getCurrentLatitude());
     }
 
     @Test
     public void testSetCurrentLongitude() {
-        Map map = new Map(37.7749, -122.4194, 10, 800, 600);
-        map.setCurrentLongitude(-74.0060);
+        Map map = new Map(0, 0, 10, new ArrayList<>());
+        map.setCurrentLongitude(-122.4194);
 
-        assertEquals(-74.0060, map.getCurrentLongitude());
+        assertEquals(-122.4194, map.getCurrentLongitude());
     }
 
     @Test
     public void testSetZoomLevel() {
-        Map map = new Map(37.7749, -122.4194, 10, 800, 600);
-        map.setZoomLevel(12);
+        Map map = new Map(0, 0, 10, new ArrayList<>());
+        map.setZoomLevel(15);
 
-        assertEquals(12, map.getZoomLevel());
+        assertEquals(15, map.getZoomLevel());
+    }
+
+    @Test
+    public void testSetDisplayedRestaurantIds() {
+        Map map = new Map(0, 0, 10, new ArrayList<>());
+        List<Integer> restaurantIds = new ArrayList<>();
+        restaurantIds.add(1);
+        restaurantIds.add(2);
+
+        map.setDisplayedRestaurantIds(restaurantIds);
+
+        assertEquals(restaurantIds, map.getDisplayedRestaurantIds());
     }
 
     @Test
     public void testToString() {
-        Map map = new Map(37.7749, -122.4194, 10, 800, 600);
+        List<Integer> restaurantIds = new ArrayList<>();
+        restaurantIds.add(1);
+        restaurantIds.add(2);
 
-        String expectedString = "Map{currentLatitude=37.7749, currentLongitude=-122.4194, zoomLevel=10, width=800, height=600}";
+        Map map = new Map(37.7749, -122.4194, 10, restaurantIds);
+        String expectedString = "Map{currentLatitude=37.7749, currentLongitude=-122.4194, zoomLevel=10, displayedRestaurantIds=[1, 2]}";
+
         assertEquals(expectedString, map.toString());
     }
 }

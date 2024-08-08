@@ -15,9 +15,6 @@ import use_case.data.update.UpdateRestaurant;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Manages restaurant-related operations and communicates with use cases.
- */
 public class RestaurantController {
 
     private final AddRestaurant addRestaurantUseCase;
@@ -30,10 +27,6 @@ public class RestaurantController {
     private final OperationResultSuccessFactory successFactory;
     private final OperationResultFailureFactory failureFactory;
 
-    /**
-     * Constructs a RestaurantController with the specified RestaurantRepository.
-     * @param restaurantRepository Repository to manage restaurant data.
-     */
     public RestaurantController(RestaurantRepository restaurantRepository) {
         this.addRestaurantUseCase = new AddRestaurant(restaurantRepository);
         this.updateRestaurantUseCase = new UpdateRestaurant(restaurantRepository);
@@ -45,11 +38,6 @@ public class RestaurantController {
         this.failureFactory = new OperationResultFailureFactory();
     }
 
-    /**
-     * Adds a restaurant.
-     * @param restaurant The restaurant to add.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult addRestaurant(Restaurant restaurant) {
         try {
             return addRestaurantUseCase.execute(restaurant);
@@ -58,11 +46,6 @@ public class RestaurantController {
         }
     }
 
-    /**
-     * Updates a restaurant.
-     * @param restaurant The restaurant with updated details.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult updateRestaurant(Restaurant restaurant) {
         try {
             return updateRestaurantUseCase.execute(restaurant);
@@ -71,11 +54,6 @@ public class RestaurantController {
         }
     }
 
-    /**
-     * Deletes a restaurant by its ID.
-     * @param id The ID of the restaurant to delete.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult deleteRestaurantById(String id) {
         try {
             boolean result = deleteRestaurantByIdUseCase.execute(id);
@@ -86,10 +64,6 @@ public class RestaurantController {
         }
     }
 
-    /**
-     * Clears all restaurants.
-     * @return OperationResult indicating success or failure.
-     */
     public OperationResult clearAllRestaurants() {
         try {
             boolean result = clearAllRestaurantsUseCase.execute();
@@ -100,28 +74,19 @@ public class RestaurantController {
         }
     }
 
-    /**
-     * Retrieves a restaurant by its ID.
-     * @param id The ID of the restaurant to retrieve.
-     * @return An Optional containing the restaurant, if found.
-     */
     public Optional<Restaurant> getRestaurantById(String id) {
         try {
             return findRestaurantByIdUseCase.execute(id);
         } catch (Exception e) {
-            return Optional.empty();
+            return Optional.empty(); // Handle appropriately or log the error
         }
     }
 
-    /**
-     * Retrieves all restaurants.
-     * @return A list of all restaurants.
-     */
     public List<Restaurant> getAllRestaurants() {
         try {
             return findAllRestaurantsUseCase.execute();
         } catch (Exception e) {
-            return List.of();
+            return List.of(); // Handle appropriately or log the error
         }
     }
 }

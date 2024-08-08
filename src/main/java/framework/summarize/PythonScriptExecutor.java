@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Executes a Python script and handles its output and errors.
+ * Executes a Python script and manages its output and errors.
  */
 public class PythonScriptExecutor implements ScriptExecutor {
 
@@ -22,13 +22,6 @@ public class PythonScriptExecutor implements ScriptExecutor {
         this.scriptPath = scriptPath;
     }
 
-    /**
-     * Executes the Python script with the provided input prompt.
-     *
-     * @param inputPrompt the prompt to be sent to the script
-     * @return the output of the script
-     * @throws Exception if an error occurs during script execution
-     */
     @Override
     public String execute(String inputPrompt) throws Exception {
         File scriptFile = new File(scriptPath);
