@@ -48,6 +48,7 @@ public class SearchViewModel extends ViewModel {
         firePropertyChanged(); // Notify observers about state change
     }
 
+
     /**
      * Sets the zoom level for the map view.
      * @param zoomLevel The new zoom level.

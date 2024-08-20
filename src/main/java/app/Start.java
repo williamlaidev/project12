@@ -63,7 +63,8 @@ public class Start {
             FetchRestaurantPhotoUrl fetchRestaurantPhotoUrl = initializeFetchRestaurantPhotoUrl(envConfigService);
 
             // Initialize Initializer
-            SearchState searchState = new SearchState();
+            SearchState searchState = viewModels.searchViewModel.getState();
+
             Initializer initializer = initializeInitializer(geolocationService, mapImageInteractor, mapFactory, searchState);
             String[] dishTypeList = initializer.getDishTypes();
 
@@ -281,6 +282,7 @@ public class Start {
             this.restaurantViewModel = restaurantViewModel;
             this.viewManagerModel = viewManagerModel;
         }
+
     }
 
     /**
