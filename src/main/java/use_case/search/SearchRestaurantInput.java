@@ -34,6 +34,13 @@ public class SearchRestaurantInput {
         this.dishType = dishType;
     }
 
+    public SearchRestaurantInput(double latitude, double longitude, String distance) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.distance = distance;
+        this.dishType = null;
+    }
+
     /**
      * Returns the latitude of the search center.
      *

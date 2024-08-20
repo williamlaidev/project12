@@ -35,7 +35,7 @@ public class SearchViewInteractorTest {
     public void testAdjustCenter() {
         double latitude = 40.7128;
         double longitude = -74.0060;
-        SearchRestaurantInput input = new SearchRestaurantInput(latitude, longitude, "500", null);
+        SearchRestaurantInput input = new SearchRestaurantInput(latitude, longitude, "500");
 
         searchViewInteractor.adjustCenter(input);
 
