@@ -5,6 +5,7 @@ import entity.DishType;
 import entity.location.Location;
 import entity.map.Map;
 import entity.map.MapFactory;
+import interface_adapter.view.SearchState;
 import org.json.JSONObject;
 
 /**
@@ -19,6 +20,7 @@ public class Initializer {
     private final MapFactory mapFactory;
     private Location currentLocation;
     private Map map;
+    private SearchState searchState;
 
     /**
      * Constructs an Initializer.
@@ -29,11 +31,12 @@ public class Initializer {
      */
     public Initializer(GoogleGeolocationService geolocationService,
                        MapImageInteractor mapImageInteractor,
-                       MapFactory mapFactory) {
+                       MapFactory mapFactory, SearchState searchState) {
         this.geolocationService = geolocationService;
         this.dishTypes = DishType.values();
         this.mapImageInteractor = mapImageInteractor;
         this.mapFactory = mapFactory;
+        this.searchState = searchState;
     }
 
     /**
@@ -53,11 +56,18 @@ public class Initializer {
         int width = 400; // Image width
         int height = 400; // Image height
 
+
+
         this.map = mapFactory.createMap(latitude, longitude, zoom, width, height);
         boolean success = mapImageInteractor.fetchAndSaveMapImage(latitude, longitude, zoom, width, height);
         if (!success) {
             throw new RuntimeException("Failed to fetch and save the map image.");
         }
+        searchState.setMapWidth(width);
+        searchState.setMapHeight(height);
+        searchState.setZoomLevel(zoom);
+        searchState.setCenterLat(latitude);
+        searchState.setCenterLon(longitude);
     }
 
     /**

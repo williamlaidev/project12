@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Presenter class responsible for bridging the use case output with the view model for the search functionality.
@@ -42,18 +44,23 @@ public class SearchPresenter implements SearchOutputBoundary {
     /**
      * Prepares the success view with the search results and updates the view models.
      * @param result The SearchOutputData containing the search results.
-     * @param centerLat The latitude of the map's center.
-     * @param centerLon The longitude of the map's center.
-     * @param mapWidth The width of the map.
-     * @param mapHeight The height of the map.
      */
     @Override
-    public void prepareSuccessView(SearchOutputData result, double centerLat, double centerLon, int mapWidth, int mapHeight) {
+    public void prepareSuccessView(SearchOutputData result) {
         // Update RestaurantViewModel with results
+        List<String> restaurantInfo = result.getRestaurantsInfo();
+        SearchState searchState = searchViewModel.getState();
+
+
         RestaurantState restaurantState = restaurantViewModel.getState();
         restaurantState.setRestaurantsInfo(result.getRestaurantsInfo());
         restaurantViewModel.setState(restaurantState);
         restaurantViewModel.firePropertyChanged();
+
+        double centerLat = searchState.getCenterLat();
+        double centerLon = searchState.getCenterLon();
+        int mapWidth = searchState.getMapWidth();
+        int mapHeight = searchState.getMapHeight();
 
         // Switch to RestaurantView
         viewManagerModel.setActiveView(restaurantViewModel.getViewName());
@@ -73,6 +80,18 @@ public class SearchPresenter implements SearchOutputBoundary {
             }
         });
         searchViewModel.firePropertyChanged();
+    }
+
+    public void prepareFailureView(String error) {
+        logger.error(error);
+    }
+
+    public void prepareFailureView(String error,String distance, Exception e) {
+        logger.error(error, distance, e);
+    }
+
+    public void prepareFailureView(String error,Exception e) {
+        logger.error(error, e.getMessage());
     }
 
     /**
@@ -99,3 +118,4 @@ public class SearchPresenter implements SearchOutputBoundary {
         }
     }
 }
+

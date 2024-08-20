@@ -63,7 +63,8 @@ public class Start {
             FetchRestaurantPhotoUrl fetchRestaurantPhotoUrl = initializeFetchRestaurantPhotoUrl(envConfigService);
 
             // Initialize Initializer
-            Initializer initializer = initializeInitializer(geolocationService, mapImageInteractor, mapFactory);
+            SearchState searchState = new SearchState();
+            Initializer initializer = initializeInitializer(geolocationService, mapImageInteractor, mapFactory, searchState);
             String[] dishTypeList = initializer.getDishTypes();
 
             // Set up search interactor and presenter
@@ -73,7 +74,7 @@ public class Start {
             RestaurantSearchServices restaurantSearchServices = initializeRestaurantSearchServices(envConfigService, searchInteractorAndPresenter.searchPresenter, fetchRestaurantPhotoUrl);
 
             // Set up search controller
-            SearchController searchController = initializeSearchController(initializer, searchInteractorAndPresenter, restaurantSearchServices);
+            SearchController searchController = initializeSearchController(initializer, searchInteractorAndPresenter, restaurantSearchServices, searchInteractorAndPresenter.searchPresenter);
 
 
             // Initialize review repository
@@ -152,8 +153,8 @@ public class Start {
      * @param mapFactory The map factory.
      * @return The Initializer.
      */
-    private static Initializer initializeInitializer(GoogleGeolocationService geolocationService, MapImageInteractor mapImageInteractor, MapFactory mapFactory) {
-        Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
+    private static Initializer initializeInitializer(GoogleGeolocationService geolocationService, MapImageInteractor mapImageInteractor, MapFactory mapFactory, SearchState searchState) {
+        Initializer initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory, searchState);
         try {
             initializer.initializeCurrentLocation();
         } catch (Exception e) {
@@ -205,12 +206,15 @@ public class Start {
      * @param restaurantSearchServices The restaurant search services.
      * @return The SearchController.
      */
-    private static SearchController initializeSearchController(Initializer initializer, SearchInteractorAndPresenter searchInteractorAndPresenter, RestaurantSearchServices restaurantSearchServices) {
+    private static SearchController initializeSearchController(Initializer initializer, SearchInteractorAndPresenter searchInteractorAndPresenter, RestaurantSearchServices restaurantSearchServices, SearchPresenter searchPresenter) {
         SearchRestaurantsByDistance searchRestaurantsByDistance = new SearchRestaurantsByDistance(restaurantSearchServices.restaurantSearchService);
         RestaurantSearchInteractor restaurantSearchInteractor = new RestaurantSearchInteractor(searchRestaurantsByDistance);
+        SearchRestaurantInteractor searchRestaurantInteractor = new SearchRestaurantInteractor(searchPresenter);
         return new SearchController(
                 restaurantSearchInteractor, searchInteractorAndPresenter.searchViewInteractor, searchInteractorAndPresenter.searchPresenter,
-                searchInteractorAndPresenter.searchViewModel, initializer.getMap(), 400, 400);
+                searchInteractorAndPresenter.searchViewModel, initializer.getMap().getCurrentLatitude(), initializer.getMap().getCurrentLongitude(),
+                15, 400, 400,
+                searchRestaurantInteractor);
     }
 
     /**
