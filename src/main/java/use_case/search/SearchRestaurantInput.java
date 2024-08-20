@@ -20,11 +20,25 @@ public class SearchRestaurantInput {
      * @param distance  the search radius, in meters.
      * @param dishType  the type of dish to filter by.
      */
+    public SearchRestaurantInput(double latitude, double longitude, String distance, String dishType) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.distance = distance;
+        this.dishType = DishType.valueOf(dishType.toUpperCase());
+    }
+
     public SearchRestaurantInput(double latitude, double longitude, String distance, DishType dishType) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.distance = distance;
         this.dishType = dishType;
+    }
+
+    public SearchRestaurantInput(double latitude, double longitude, String distance) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.distance = distance;
+        this.dishType = null;
     }
 
     /**

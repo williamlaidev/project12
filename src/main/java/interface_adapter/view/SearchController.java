@@ -1,10 +1,8 @@
 package interface_adapter.view;
 
-import entity.DishType;
-import entity.map.Map;
-import entity.restaurant.Restaurant;
 import use_case.search.RestaurantSearchInteractor;
 import use_case.search.SearchRestaurantInput;
+import use_case.view.SearchRestaurantInteractor;
 import use_case.view.SearchViewInteractor;
 import utils.MapCoordinateToLocation;
 
@@ -25,6 +23,7 @@ public class SearchController {
     private final int mapWidth;
     private final int mapHeight;
     private int zoomLevel;
+    private SearchRestaurantInteractor searchRestaurantInteractorPartTwo;
 
     /**
      * Constructs a SearchController with the given parameters.
@@ -40,18 +39,22 @@ public class SearchController {
                             SearchViewInteractor searchViewInteractor,
                             SearchPresenter searchPresenter,
                             SearchViewModel searchViewModel,
-                            Map map,
+                            double mapLat,
+                            double mapLng,
+                            int zoomLevel,
                             int mapWidth,
-                            int mapHeight) {
+                            int mapHeight,
+                            SearchRestaurantInteractor searchRestaurantInteractorPartTwo) {
         this.searchRestaurantInteractor = searchRestaurantInteractor;
         this.searchViewInteractor = searchViewInteractor;
         this.searchPresenter = searchPresenter;
         this.searchViewModel = searchViewModel;
-        this.centerLat = map.getCurrentLatitude();
-        this.centerLng = map.getCurrentLongitude();
-        this.zoomLevel = map.getZoomLevel();
+        this.centerLat = mapLat;
+        this.centerLng = mapLng;
+        this.zoomLevel = zoomLevel;
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
+        this.searchRestaurantInteractorPartTwo = searchRestaurantInteractorPartTwo;
     }
 
     /**
@@ -69,12 +72,13 @@ public class SearchController {
         double latitude = latLng[0];
         double longitude = latLng[1];
 
-        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
-        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, selectedDishType.toUpperCase());
         int maxRestaurantsToSearch = 50;
         int maxResults = 10;
-        List<Restaurant> results = searchRestaurantInteractor.fetchNearbyRestaurants(inputData, maxRestaurantsToSearch, maxResults);
-        searchViewModel.setRestaurants(results);
+
+        searchRestaurantInteractorPartTwo.execute(inputData, maxRestaurantsToSearch, maxResults, searchRestaurantInteractor);
+
     }
 
     /**
@@ -98,7 +102,7 @@ public class SearchController {
     public void changeCenter(SearchState searchState) {
         String distance = searchState.getDistance();
         String selectedDishType = searchState.getSelectedDishType();
-        DishType dishType = DishType.valueOf(selectedDishType.toUpperCase());
+
 
         Point rightClickPosition = searchState.getMouseRightClickPosition();
 
@@ -108,7 +112,7 @@ public class SearchController {
         this.centerLat = latitude;
         this.centerLng = longitude;
 
-        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, dishType);
+        SearchRestaurantInput inputData = new SearchRestaurantInput(latitude, longitude, distance, selectedDishType.toUpperCase());
 
         searchViewInteractor.adjustCenter(inputData);
     }

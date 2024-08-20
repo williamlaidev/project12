@@ -113,7 +113,7 @@ public class GooglePlacesRestaurantSearchService implements RestaurantSearchServ
         SearchOutputData outputData = new SearchOutputData(restaurants);
 
         // Call prepareSuccessView
-        searchPresenter.prepareSuccessView(outputData, searchInput.getLatitude(), searchInput.getLongitude(), /* mapWidth */ 400, /* mapHeight */ 400);
+        searchPresenter.prepareSuccessView(outputData);
 
         return restaurants;
     }

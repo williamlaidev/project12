@@ -17,6 +17,11 @@ public class SearchState {
     private String selectedDishType;
     private String distanceError;
     private List<Restaurant> restaurants;
+    private double centerLat;
+    private double centerLon;
+    private int mapWidth;
+    private int mapHeight;
+    private int zoomLevel;
 
     /**
      * Constructs a new SearchState by copying the values from another SearchState instance.
@@ -29,6 +34,11 @@ public class SearchState {
         this.selectedDishType = copy.selectedDishType;
         this.distanceError = copy.distanceError;
         this.restaurants = copy.restaurants;
+        this.centerLat = copy.centerLat;
+        this.centerLon = copy.centerLon;
+        this.mapWidth = copy.mapWidth;
+        this.mapHeight = copy.mapHeight;
+        this.zoomLevel = copy.zoomLevel;
     }
 
     /**
@@ -136,6 +146,47 @@ public class SearchState {
      * Returns a string representation of the SearchState.
      * @return A string representation of the current state.
      */
+
+    public double getCenterLat() {
+        return centerLat;
+    }
+
+    public void setCenterLat(double centerLat) {
+        this.centerLat = centerLat;
+    }
+
+    public double getCenterLon() {
+        return centerLon;
+    }
+
+    public void setCenterLon(double centerLon) {
+        this.centerLon = centerLon;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+    public int getZoomLevel() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int zoomLevel) {
+        this.zoomLevel = zoomLevel;
+    }
+
     @Override
     public String toString() {
         return "SearchState{" +

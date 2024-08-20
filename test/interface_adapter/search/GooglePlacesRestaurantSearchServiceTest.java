@@ -79,7 +79,7 @@ public class GooglePlacesRestaurantSearchServiceTest {
     public void testFetchNearbyRestaurantsWithNoResults() throws IOException {
         JSONObject responseJson = new JSONObject().put("results", new JSONArray());
         when(searchGateways.fetchNearbyRestaurants(anyDouble(), anyDouble(), anyInt())).thenReturn(responseJson);
-        SearchRestaurantInput searchInput = new SearchRestaurantInput(37.7749, -122.4194, "500", null);
+        SearchRestaurantInput searchInput = new SearchRestaurantInput(37.7749, -122.4194, "500");
         List<Restaurant> restaurants = service.fetchNearbyRestaurants(searchInput, 10, 5);
         assertTrue(restaurants.isEmpty());
         verify(addRestaurantUseCase, never()).execute(any(Restaurant.class));
@@ -90,7 +90,7 @@ public class GooglePlacesRestaurantSearchServiceTest {
     public void testFetchNearbyRestaurantsWithIOException() throws IOException {
         when(searchGateways.fetchNearbyRestaurants(anyDouble(), anyDouble(), anyInt())).thenThrow(new IOException("Failed to fetch data"));
 
-        SearchRestaurantInput searchInput = new SearchRestaurantInput(37.7749, -122.4194, "500", null);
+        SearchRestaurantInput searchInput = new SearchRestaurantInput(37.7749, -122.4194, "500");
 
         List<Restaurant> restaurants = service.fetchNearbyRestaurants(searchInput, 10, 5);
 

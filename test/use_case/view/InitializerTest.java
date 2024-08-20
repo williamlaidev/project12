@@ -3,6 +3,7 @@ package use_case.view;
 import entity.map.Map;
 import entity.map.MapFactory;
 import framework.search.GoogleGeolocationService;
+import interface_adapter.view.SearchState;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,15 @@ public class InitializerTest {
     private MapImageInteractor mapImageInteractor;
     private MapFactory mapFactory;
     private Initializer initializer;
+    private SearchState searchState;
 
     @BeforeEach
     public void setUp() {
         geolocationService = mock(GoogleGeolocationService.class);
         mapImageInteractor = mock(MapImageInteractor.class);
         mapFactory = mock(MapFactory.class);
-        initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory);
+        searchState = mock(SearchState.class);
+        initializer = new Initializer(geolocationService, mapImageInteractor, mapFactory, searchState);
     }
 
     @Test

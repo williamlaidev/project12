@@ -95,7 +95,7 @@ public class SearchView extends JPanel implements ActionListener, PropertyChange
     }
 
     private void performSearch(ActionEvent event) {
-        SearchState searchState = new SearchState();
+        SearchState searchState = searchViewModel.getState();
         searchState.setMouseLeftClickPosition(Objects.requireNonNullElseGet(mousePosition, () -> new Point(200, 200)));
         searchState.setDistance(distanceInputField.getText());
         searchState.setSelectedDishType((String) dishTypeComboBox.getSelectedItem());
